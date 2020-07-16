@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Alexander Maushammer</Authors>
+    <Company>Alexander Maushammer</Company>
+    <Product>Windows Tool to watch Eth1 Node, Eth2 Beacon Chain and Eth2 Validator</Product>
+    <Copyright>Free</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>Use at own Risk! Do not run other Eth1/Eth2 nodes on the same compupter. It is possible that the Validator Password is exposed in some windows logs, as it is used to call the prism.bat validator in the command line.
+
+Eth2Overwatch is a completly free tool to manage your Eth1, Eth2 Beacon Chain and Eth2 Validator
+Its a windows tool to start/stop/auto restart your processes:
+Eth1: Geth
+Eth2 Beacon Chain and Validator  from prysm labs
+Only tested with Görli Testnet!</Description>
+    <PackageTags>Eth1, Eth2, Beaconchain, Validator</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
+    <PackageReference Include="Nethereum.Geth" Version="3.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Eth2OverwatchSettings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Eth2OverwatchSettings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Eth2OverwatchSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Eth2OverwatchSettings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>
