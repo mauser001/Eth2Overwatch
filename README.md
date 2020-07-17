@@ -24,7 +24,7 @@ It is not possible to run additional Eth1 (geth), Eth2 Beacon Chains or Eth2 Val
   + Installed Geth client (I used https://github.com/ethereum/go-ethereum )
 + Eth2 beacon chain and validator
   + Setup according to https://prylabs.net/participate (including Validator activation)
-
++ .net Core installed on the machine: https://dotnet.microsoft.com/download/dotnet-core/3.1
 
 Latest compiled win10 version can be found at:
 https://github.com/mauser001/Eth2Overwatch/tree/master/LatestRelease
