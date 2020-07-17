@@ -26,6 +26,7 @@ It is not possible to run additional Eth1 (geth), Eth2 Beacon Chains or Eth2 Val
 
 Latest compiled win10 version can be found at:
 https://github.com/mauser001/Eth2Overwatch/tree/master/LatestRelease
+(it is possible that .net Core 3.1 Framework has to be installed)
 
 ## Setup
 Copy the Eth2Overwatch.exe in a folder and start ist.

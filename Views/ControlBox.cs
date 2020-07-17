@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
-using LockMyEthTool.Controllers;
-using System.Net;
-using System.IO;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Timer = System.Threading.Timer;
 
 namespace LockMyEthTool.Views
