@@ -1,6 +1,8 @@
 # Eth2Overwatch - Testnet
 Windows tool to manage processes for eth1 (goerli test) node, eth2 beacon chain (Testnet) and eth2 validator (Testnet)
 
+![alt text](http://maushammer.at/eth2/Eth2Overwatch.png "Screenshot")
+
 ### License:
 MIT - The Program and Code is free to use/modify/copy
 
