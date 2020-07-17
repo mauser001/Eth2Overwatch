@@ -3,8 +3,10 @@ using LockMyEthTool.Models;
 using LockMyEthTool.Views;
 using Nethereum.Web3;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Security;
 
@@ -24,6 +26,9 @@ namespace LockMyEthTool.Controllers
         private string executablePath = "";
         private string keyPath = "";
         private bool hideCommandPrompt = false;
+        private bool useLocalEth1Node = false;
+        private bool useGoerliTestnet = false;
+        private string additionalCommands = "";
 
         public ProcessController(PROCESS_TYPES ProcessType)
         {
@@ -41,6 +46,8 @@ namespace LockMyEthTool.Controllers
                     this.dataDir = Eth2OverwatchSettings.Default.DataDir_Validator;
                     this.executablePath = Eth2OverwatchSettings.Default.ExecutablePath_Validator;
                     this.keyPath = Eth2OverwatchSettings.Default.KeyPath_Validator;
+                    this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_Validator;
+                    this.useGoerliTestnet = Eth2OverwatchSettings.Default.UseGoerliTestnet;
                     try
                     {
                         if (Eth2OverwatchSettings.Default.ValidatorPassword != String.Empty)
@@ -58,12 +65,18 @@ namespace LockMyEthTool.Controllers
                     this.hideCommandPrompt = Eth2OverwatchSettings.Default.HideCommandPrompt_BeaconChain;
                     this.dataDir = Eth2OverwatchSettings.Default.DataDir_BeaconChain;
                     this.executablePath = Eth2OverwatchSettings.Default.ExecutablePath_BeaconChain;
+                    this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_BeaconChain;
+                    this.useLocalEth1Node = Eth2OverwatchSettings.Default.UseLocalEth1Node;
+                    this.useGoerliTestnet = Eth2OverwatchSettings.Default.UseGoerliTestnet;
                     break;
                 case PROCESS_TYPES.ETH_1:
                     this.autoStart = Eth2OverwatchSettings.Default.AutoStart_Eth1;
                     this.hideCommandPrompt = Eth2OverwatchSettings.Default.HideCommandPrompt_Eth1;
                     this.dataDir = Eth2OverwatchSettings.Default.DataDir_Eth1;
                     this.executablePath = Eth2OverwatchSettings.Default.ExecutablePath_Eth1;
+                    this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_Eth1;
+                    this.useLocalEth1Node = Eth2OverwatchSettings.Default.UseLocalEth1Node;
+                    this.useGoerliTestnet = Eth2OverwatchSettings.Default.UseGoerliTestnet;
                     break;
             }
         }
@@ -77,18 +90,22 @@ namespace LockMyEthTool.Controllers
                     Eth2OverwatchSettings.Default.ExecutablePath_Validator = this.executablePath;
                     Eth2OverwatchSettings.Default.KeyPath_Validator = this.keyPath;
                     Eth2OverwatchSettings.Default.HideCommandPrompt_Validator = this.hideCommandPrompt;
+                    Eth2OverwatchSettings.Default.AdditionalCommands_Validator = this.additionalCommands;
+                    Eth2OverwatchSettings.Default.UseGoerliTestnet = this.useGoerliTestnet;
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     Eth2OverwatchSettings.Default.Autostart_BeaconChain = this.autoStart;
                     Eth2OverwatchSettings.Default.DataDir_BeaconChain = this.dataDir;
                     Eth2OverwatchSettings.Default.ExecutablePath_BeaconChain = this.executablePath;
                     Eth2OverwatchSettings.Default.HideCommandPrompt_BeaconChain = this.hideCommandPrompt;
+                    Eth2OverwatchSettings.Default.AdditionalCommands_BeaconChain = this.additionalCommands;
                     break;
                 case PROCESS_TYPES.ETH_1:
                     Eth2OverwatchSettings.Default.AutoStart_Eth1 = this.autoStart;
                     Eth2OverwatchSettings.Default.DataDir_Eth1 = this.dataDir;
                     Eth2OverwatchSettings.Default.ExecutablePath_Eth1 = this.executablePath;
                     Eth2OverwatchSettings.Default.HideCommandPrompt_Eth1 = this.hideCommandPrompt;
+                    Eth2OverwatchSettings.Default.AdditionalCommands_Eth1 = this.additionalCommands;
                     break;
             }
             Eth2OverwatchSettings.Default.Save();
@@ -104,7 +121,8 @@ namespace LockMyEthTool.Controllers
                 return;
             }
 
-            
+            var add = this.additionalCommands.Length > 0 ? " " + this.additionalCommands : "";
+            var goerli = this.useGoerliTestnet && this.SupportsGoerliTestnet() ? " --goerli" : "";
 
             switch (this.ProcessType)
             {
@@ -115,7 +133,7 @@ namespace LockMyEthTool.Controllers
                     this.directory = this.executablePath;
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
-                    this.commands[0] = "prysm validator --datadir=" + this.dataDir + " --keymanageropts=\"{\\\"path\\\":\\\"" + validatorpath + "\\\",\\\"passphrase\\\":\\\"" + Secure.SecureStringToString(this.password) + "\\\"}\"";
+                    this.commands[0] = "prysm validator --datadir=" + this.dataDir + " --keymanageropts=\"{\\\"path\\\":\\\"" + validatorpath + "\\\",\\\"passphrase\\\":\\\"" + Secure.SecureStringToString(this.password) + "\\\"}\"" + goerli + add;
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     this.processIdentifier = "beacon";
@@ -123,14 +141,16 @@ namespace LockMyEthTool.Controllers
                     this.directory = this.executablePath;
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
-                    this.commands[1] = String.Format(@"prysm.bat beacon-chain --http-web3provider=$HOME/Goerli/geth.ipc --datadir=" + this.dataDir);
+                    var connectTo = useLocalEth1Node ? " --http-web3provider=$HOME/Goerli/geth.ipc" : "";
+                    this.commands[1] = String.Format(@"prysm.bat beacon-chain --datadir=" + this.dataDir + connectTo  + goerli + add);
                     break;
                 case PROCESS_TYPES.ETH_1:
                     this.processIdentifier = "geth";
                     this.fileName = "cmd.exe";
                     this.directory = this.executablePath;
                     this.commands = new string[1];
-                    this.commands[0] = String.Format(@"geth --goerli --ipcpath=r=$HOME/Goerli/geth.ipc --rpc --datadir=" + this.dataDir);
+                    var ipc = useLocalEth1Node ? " --ipcpath=r=$HOME/Goerli/geth.ipc --rpc" : "";
+                    this.commands[0] = String.Format(@"geth --datadir=" + this.dataDir + ipc + goerli + add);
                     break;
             }
 
@@ -212,6 +232,49 @@ namespace LockMyEthTool.Controllers
             }
         }
 
+        public string AdditionalCommands
+        {
+            get
+            {
+                return this.additionalCommands;
+            }
+            set
+            {
+
+                this.additionalCommands = value;
+                SaveConfig();
+            }
+        }
+        public bool UseGoerliTestnet
+        {
+            get
+            {
+                return this.useGoerliTestnet;
+            }
+            set
+            {
+                if(!this.SupportsGoerliTestnet())
+                {
+                    return;
+                }
+                this.useGoerliTestnet = value;
+                SaveConfig();
+            }
+        }
+        public bool UseLocalEth1Node
+        {
+            get
+            {
+                return this.useLocalEth1Node;
+            }
+            set
+            {
+
+                this.useLocalEth1Node = value;
+                SaveConfig();
+            }
+        }
+
         public string ExecutablePath
         {
             get
@@ -245,6 +308,8 @@ namespace LockMyEthTool.Controllers
             this.Init();
         }
 
+        private List<string> Logs = new List<string>();
+
         public void Start()
         {
             if(!this.AllConfigsSet())
@@ -265,8 +330,13 @@ namespace LockMyEthTool.Controllers
             this.process.StartInfo.RedirectStandardInput = true;
 
             this.process.OutputDataReceived += (object sender, DataReceivedEventArgs e) =>
-                Trace.WriteLine(this.processIdentifier + " output>>" + e.Data);
-
+            {
+                this.Logs.Add(e.Data);
+                if (this.Logs.Count > 100)
+                {
+                    this.Logs.RemoveAt(0);
+                }
+            };
             this.process.Start();
             this.process.BeginOutputReadLine();
             if (this.commands != null)
@@ -308,11 +378,22 @@ namespace LockMyEthTool.Controllers
             {
 
             }
+            this.Logs = new List<string>();
         }
 
         public bool RequiresPassword()
         {
             return this.ProcessType == PROCESS_TYPES.VALIDATOR;
+        }
+
+        public bool SupportsGoerliTestnet()
+        {
+            return this.ProcessType == PROCESS_TYPES.ETH_1;
+        }
+
+        public bool SupportsEth1Connection()
+        {
+            return this.ProcessType == PROCESS_TYPES.ETH_1 || this.ProcessType == PROCESS_TYPES.BEACON_CHAIN;
         }
 
         public void CheckState(Func<bool, string, string> resultFunction)
@@ -351,7 +432,14 @@ namespace LockMyEthTool.Controllers
                     }
                     catch
                     {
-                        resultFunction(false, "Validator is not working properly");
+                        if(this.Logs.Count > 0)
+                        {
+                            resultFunction(false, String.Join("\n", this.Logs.ToArray()));
+                        }
+                        else
+                        {
+                            resultFunction(false, "Validator is not working properly");
+                        }
                     }
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
@@ -366,7 +454,14 @@ namespace LockMyEthTool.Controllers
                     }
                     catch
                     {
-                        resultFunction(false, "Beacon-Chain is not working properly");
+                        if (this.Logs.Count > 0)
+                        {
+                            resultFunction(false, String.Join("\n", this.Logs.ToArray()));
+                        }
+                        else
+                        {
+                            resultFunction(false, "Beacon-Chain is not working properly");
+                        }
                     }
                     break;
                 case PROCESS_TYPES.ETH_1:
@@ -380,7 +475,14 @@ namespace LockMyEthTool.Controllers
                     }
                     catch
                     {
-                        resultFunction(false, "Last block could not be loaded.");
+                        if (this.Logs.Count > 0)
+                        {
+                            resultFunction(false, String.Join("\n", this.Logs.ToArray()));
+                        }
+                        else
+                        {
+                            resultFunction(false, "Last block could not be loaded.");
+                        }
                     }
                     break;
             }

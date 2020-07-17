@@ -18,6 +18,9 @@ Eth1: Geth
 Eth2 Beacon Chain and Validator  from prysm labs
 Only tested with Görli Testnet!</Description>
     <PackageTags>Eth1, Eth2, Beaconchain, Validator</PackageTags>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Eth2OverwatchKey.pfx</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>

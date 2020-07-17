@@ -26,8 +26,11 @@ namespace LockMyEthTool
         private void InitializeCustomComponents()
         {
             this.ValidatorControlBox = new LockMyEthTool.Views.ControlBox("Validator", new ProcessController(PROCESS_TYPES.VALIDATOR));
+            this.Boxes.Add(this.ValidatorControlBox);
             this.BeaconControlBox = new LockMyEthTool.Views.ControlBox("Beacon", new ProcessController(PROCESS_TYPES.BEACON_CHAIN));
+            this.Boxes.Add(this.BeaconControlBox);
             this.Eth1ControlBox = new LockMyEthTool.Views.ControlBox("Eth 1", new ProcessController(PROCESS_TYPES.ETH_1));
+            this.Boxes.Add(this.Eth1ControlBox);
         }
 
         #region Windows Form Designer generated code
@@ -38,15 +41,18 @@ namespace LockMyEthTool
         /// </summary>
         private void InitializeComponent()
         {
+            this.ConnectWithEth1Check = new System.Windows.Forms.CheckBox();
+            this.UseGoerliCheck = new System.Windows.Forms.CheckBox();
+            this.StartOnStartupCheck = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // ValidatorControlBox
             // 
             this.ValidatorControlBox.BackColor = System.Drawing.SystemColors.Control;
             this.ValidatorControlBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.ValidatorControlBox.Location = new System.Drawing.Point(0, 300);
+            this.ValidatorControlBox.Location = new System.Drawing.Point(0, 320);
             this.ValidatorControlBox.Name = "ValidatorControlBox";
-            this.ValidatorControlBox.Size = new System.Drawing.Size(700, 300);
+            this.ValidatorControlBox.Size = new System.Drawing.Size(700, 320);
             this.ValidatorControlBox.TabIndex = 0;
             // 
             // BeaconControlBox
@@ -55,7 +61,7 @@ namespace LockMyEthTool
             this.BeaconControlBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.BeaconControlBox.Location = new System.Drawing.Point(700, 0);
             this.BeaconControlBox.Name = "BeaconControlBox";
-            this.BeaconControlBox.Size = new System.Drawing.Size(700, 300);
+            this.BeaconControlBox.Size = new System.Drawing.Size(700, 320);
             this.BeaconControlBox.TabIndex = 0;
             // 
             // Eth1ControlBox
@@ -64,8 +70,47 @@ namespace LockMyEthTool
             this.Eth1ControlBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Eth1ControlBox.Location = new System.Drawing.Point(0, 0);
             this.Eth1ControlBox.Name = "Eth1ControlBox";
-            this.Eth1ControlBox.Size = new System.Drawing.Size(700, 300);
+            this.Eth1ControlBox.Size = new System.Drawing.Size(700, 320);
             this.Eth1ControlBox.TabIndex = 0;
+            // 
+            // ConnectWithEth1Check
+            // 
+            this.ConnectWithEth1Check.AutoSize = true;
+            this.ConnectWithEth1Check.Checked = true;
+            this.ConnectWithEth1Check.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ConnectWithEth1Check.Location = new System.Drawing.Point(1247, 587);
+            this.ConnectWithEth1Check.Name = "ConnectWithEth1Check";
+            this.ConnectWithEth1Check.Size = new System.Drawing.Size(153, 19);
+            this.ConnectWithEth1Check.TabIndex = 1;
+            this.ConnectWithEth1Check.Text = "Connect with Eth1 node";
+            this.ConnectWithEth1Check.UseVisualStyleBackColor = true;
+            this.ConnectWithEth1Check.CheckedChanged += new System.EventHandler(this.ConnectWithEth1Check_CheckedChanged);
+            // 
+            // UseGoerliCheck
+            // 
+            this.UseGoerliCheck.AutoSize = true;
+            this.UseGoerliCheck.Checked = true;
+            this.UseGoerliCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.UseGoerliCheck.Location = new System.Drawing.Point(1247, 562);
+            this.UseGoerliCheck.Name = "UseGoerliCheck";
+            this.UseGoerliCheck.Size = new System.Drawing.Size(115, 19);
+            this.UseGoerliCheck.TabIndex = 2;
+            this.UseGoerliCheck.Text = "Use Görli test net (for Eth1)";
+            this.UseGoerliCheck.UseVisualStyleBackColor = true;
+            this.UseGoerliCheck.CheckedChanged += new System.EventHandler(this.UseGoerliCheck_CheckedChanged);
+            // 
+            // StartOnStartupCheck
+            // 
+            this.StartOnStartupCheck.AutoSize = true;
+            this.StartOnStartupCheck.Checked = true;
+            this.StartOnStartupCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.StartOnStartupCheck.Location = new System.Drawing.Point(1247, 612);
+            this.StartOnStartupCheck.Name = "StartOnStartupCheck";
+            this.StartOnStartupCheck.Size = new System.Drawing.Size(143, 19);
+            this.StartOnStartupCheck.TabIndex = 3;
+            this.StartOnStartupCheck.Text = "Start on windows start";
+            this.StartOnStartupCheck.UseVisualStyleBackColor = true;
+            this.StartOnStartupCheck.CheckedChanged += new System.EventHandler(this.StartOnStartupCheck_CheckedChanged);
             // 
             // MainForm
             // 
@@ -73,12 +118,16 @@ namespace LockMyEthTool
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1415, 650);
+            this.Controls.Add(this.StartOnStartupCheck);
+            this.Controls.Add(this.UseGoerliCheck);
+            this.Controls.Add(this.ConnectWithEth1Check);
             this.Controls.Add(this.ValidatorControlBox);
             this.Controls.Add(this.BeaconControlBox);
             this.Controls.Add(this.Eth1ControlBox);
             this.Name = "MainForm";
             this.Text = "Eth2 Overwatch";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -87,6 +136,9 @@ namespace LockMyEthTool
         private ControlBox ValidatorControlBox;
         private ControlBox BeaconControlBox;
         private ControlBox Eth1ControlBox;
+        private System.Windows.Forms.CheckBox ConnectWithEth1Check;
+        private System.Windows.Forms.CheckBox UseGoerliCheck;
+        private System.Windows.Forms.CheckBox StartOnStartupCheck;
     }
 }
 

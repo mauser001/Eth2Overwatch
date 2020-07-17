@@ -44,8 +44,14 @@ namespace LockMyEthTool.Views
             this.DataDirInput.Text = this.Controller.DataDir;
             this.ExecutablePathInput.Text = this.Controller.ExecutablePath;
             this.KeyPathInput.Text = this.Controller.KeyPath;
+            this.AdditionalCommandsInput.Text = this.Controller.AdditionalCommands;
 
             this.StartTimer(1000);
+        }
+
+        public void ConfigChanged()
+        {
+            this.Controller.UpdateConfig();
         }
 
 
@@ -126,7 +132,7 @@ namespace LockMyEthTool.Views
                 }
                 else if(!success)
                 {
-                    this.StopTimer();
+                    this.StartTimer(10000);
                 }
                 return "We dont want to give something back";
             });
@@ -192,6 +198,15 @@ namespace LockMyEthTool.Views
         private void OutputText_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void AdditionalCommandsInput_TextChanged(object sender, EventArgs e)
+        {
+            if (this.Controller.AdditionalCommands != (sender as TextBox).Text)
+            {
+                this.Controller.AdditionalCommands = (sender as TextBox).Text;
+                this.CheckState();
+            }
         }
     }
 }

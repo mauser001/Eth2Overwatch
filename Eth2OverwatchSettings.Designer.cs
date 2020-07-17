@@ -190,5 +190,77 @@ namespace Eth2Overwatch {
                 this["HideCommandPrompt_Eth1"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AdditionalCommands_Validator {
+            get {
+                return ((string)(this["AdditionalCommands_Validator"]));
+            }
+            set {
+                this["AdditionalCommands_Validator"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AdditionalCommands_BeaconChain {
+            get {
+                return ((string)(this["AdditionalCommands_BeaconChain"]));
+            }
+            set {
+                this["AdditionalCommands_BeaconChain"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("--lightkdf --cache 16")]
+        public string AdditionalCommands_Eth1 {
+            get {
+                return ((string)(this["AdditionalCommands_Eth1"]));
+            }
+            set {
+                this["AdditionalCommands_Eth1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseLocalEth1Node {
+            get {
+                return ((bool)(this["UseLocalEth1Node"]));
+            }
+            set {
+                this["UseLocalEth1Node"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseGoerliTestnet {
+            get {
+                return ((bool)(this["UseGoerliTestnet"]));
+            }
+            set {
+                this["UseGoerliTestnet"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UpdateSettings {
+            get {
+                return ((bool)(this["UpdateSettings"]));
+            }
+            set {
+                this["UpdateSettings"] = value;
+            }
+        }
     }
 }

@@ -11,5 +11,7 @@ namespace LockMyEthTool.Views
         void StopProcess();
 
         void CheckState();
+
+        void ConfigChanged();
     }
 }

@@ -43,6 +43,8 @@
             this.ExecutablePathLabel = new System.Windows.Forms.Label();
             this.TitleLabel = new System.Windows.Forms.Label();
             this.HideCommandPromptCheck = new System.Windows.Forms.CheckBox();
+            this.AdditionalCommandsLabel = new System.Windows.Forms.Label();
+            this.AdditionalCommandsInput = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // OutputText
@@ -57,18 +59,18 @@
             // 
             // StartButton
             // 
-            this.StartButton.Location = new System.Drawing.Point(11, 52);
+            this.StartButton.Location = new System.Drawing.Point(19, 45);
             this.StartButton.Name = "StartButton";
-            this.StartButton.Size = new System.Drawing.Size(141, 24);
+            this.StartButton.Size = new System.Drawing.Size(114, 24);
             this.StartButton.TabIndex = 0;
             this.StartButton.UseVisualStyleBackColor = true;
             this.StartButton.Click += new System.EventHandler(this.StartButtonClicked);
             // 
             // StopButton
             // 
-            this.StopButton.Location = new System.Drawing.Point(11, 81);
+            this.StopButton.Location = new System.Drawing.Point(139, 45);
             this.StopButton.Name = "StopButton";
-            this.StopButton.Size = new System.Drawing.Size(141, 24);
+            this.StopButton.Size = new System.Drawing.Size(114, 24);
             this.StopButton.TabIndex = 0;
             this.StopButton.UseVisualStyleBackColor = true;
             this.StopButton.Click += new System.EventHandler(this.StopButtonClicked);
@@ -77,7 +79,7 @@
             // 
             this.AutostartCheck.AutoSize = true;
             this.AutostartCheck.BackColor = System.Drawing.SystemColors.Control;
-            this.AutostartCheck.Location = new System.Drawing.Point(11, 111);
+            this.AutostartCheck.Location = new System.Drawing.Point(11, 73);
             this.AutostartCheck.Name = "AutostartCheck";
             this.AutostartCheck.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.AutostartCheck.Size = new System.Drawing.Size(98, 19);
@@ -168,7 +170,7 @@
             // 
             this.HideCommandPromptCheck.AutoSize = true;
             this.HideCommandPromptCheck.BackColor = System.Drawing.SystemColors.Control;
-            this.HideCommandPromptCheck.Location = new System.Drawing.Point(11, 136);
+            this.HideCommandPromptCheck.Location = new System.Drawing.Point(11, 98);
             this.HideCommandPromptCheck.Name = "HideCommandPromptCheck";
             this.HideCommandPromptCheck.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.HideCommandPromptCheck.Size = new System.Drawing.Size(88, 19);
@@ -177,12 +179,31 @@
             this.HideCommandPromptCheck.UseVisualStyleBackColor = false;
             this.HideCommandPromptCheck.CheckedChanged += new System.EventHandler(this.HideCommandPromptCheck_CheckedChanged);
             // 
+            // AdditionalCommandsLabel
+            // 
+            this.AdditionalCommandsLabel.AutoSize = true;
+            this.AdditionalCommandsLabel.Location = new System.Drawing.Point(11, 288);
+            this.AdditionalCommandsLabel.Name = "AdditionalCommandsLabel";
+            this.AdditionalCommandsLabel.Size = new System.Drawing.Size(125, 15);
+            this.AdditionalCommandsLabel.TabIndex = 13;
+            this.AdditionalCommandsLabel.Text = "Additional commands";
+            // 
+            // AdditionalCommandsInput
+            // 
+            this.AdditionalCommandsInput.Location = new System.Drawing.Point(164, 288);
+            this.AdditionalCommandsInput.Name = "AdditionalCommandsInput";
+            this.AdditionalCommandsInput.Size = new System.Drawing.Size(427, 23);
+            this.AdditionalCommandsInput.TabIndex = 14;
+            this.AdditionalCommandsInput.TextChanged += new System.EventHandler(this.AdditionalCommandsInput_TextChanged);
+            // 
             // ControlBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.AdditionalCommandsInput);
+            this.Controls.Add(this.AdditionalCommandsLabel);
             this.Controls.Add(this.HideCommandPromptCheck);
             this.Controls.Add(this.TitleLabel);
             this.Controls.Add(this.ExecutablePathLabel);
@@ -198,7 +219,7 @@
             this.Controls.Add(this.StopButton);
             this.Controls.Add(this.OutputText);
             this.Name = "ControlBox";
-            this.Size = new System.Drawing.Size(679, 302);
+            this.Size = new System.Drawing.Size(679, 332);
             this.Load += new System.EventHandler(this.ValidatorControlBox_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -221,5 +242,7 @@
         private System.Windows.Forms.Label ExecutablePathLabel;
         private System.Windows.Forms.Label TitleLabel;
         private System.Windows.Forms.CheckBox HideCommandPromptCheck;
+        private System.Windows.Forms.Label AdditionalCommandsLabel;
+        private System.Windows.Forms.TextBox AdditionalCommandsInput;
     }
 }

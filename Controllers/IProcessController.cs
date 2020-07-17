@@ -18,8 +18,9 @@ namespace LockMyEthTool.Views
         void UpdateConfig();
 
         void SetPassword(string pw);
-
         bool RequiresPassword();
+        bool SupportsEth1Connection();
+        bool SupportsGoerliTestnet();
 
         bool CheckPassword();
 
@@ -44,6 +45,21 @@ namespace LockMyEthTool.Views
             set;
         }
         string KeyPath
+        {
+            get;
+            set;
+        }
+        string AdditionalCommands
+        {
+            get;
+            set;
+        }
+        bool UseLocalEth1Node
+        {
+            get;
+            set;
+        }
+        bool UseGoerliTestnet
         {
             get;
             set;
