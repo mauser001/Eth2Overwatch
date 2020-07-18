@@ -36,7 +36,7 @@
             this.PasswordInput = new System.Windows.Forms.TextBox();
             this.PasswordLabel = new System.Windows.Forms.Label();
             this.KeyPathInput = new System.Windows.Forms.TextBox();
-            this.KeyPathILabel = new System.Windows.Forms.Label();
+            this.KeyPathLabel = new System.Windows.Forms.Label();
             this.DataDirInput = new System.Windows.Forms.TextBox();
             this.DataDirLabel = new System.Windows.Forms.Label();
             this.ExecutablePathInput = new System.Windows.Forms.TextBox();
@@ -45,6 +45,9 @@
             this.HideCommandPromptCheck = new System.Windows.Forms.CheckBox();
             this.AdditionalCommandsLabel = new System.Windows.Forms.Label();
             this.AdditionalCommandsInput = new System.Windows.Forms.TextBox();
+            this.KeyPathSelectButton = new System.Windows.Forms.Button();
+            this.ExecutablePathSelectButton = new System.Windows.Forms.Button();
+            this.DataDirSelectButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // OutputText
@@ -114,14 +117,14 @@
             this.KeyPathInput.TabIndex = 5;
             this.KeyPathInput.TextChanged += new System.EventHandler(this.KeyPathInput_TextChanged);
             // 
-            // KeyPathILabel
+            // KeyPathLabel
             // 
-            this.KeyPathILabel.AutoSize = true;
-            this.KeyPathILabel.Location = new System.Drawing.Point(11, 201);
-            this.KeyPathILabel.Name = "KeyPathILabel";
-            this.KeyPathILabel.Size = new System.Drawing.Size(72, 15);
-            this.KeyPathILabel.TabIndex = 6;
-            this.KeyPathILabel.Text = "Key file path";
+            this.KeyPathLabel.AutoSize = true;
+            this.KeyPathLabel.Location = new System.Drawing.Point(11, 201);
+            this.KeyPathLabel.Name = "KeyPathLabel";
+            this.KeyPathLabel.Size = new System.Drawing.Size(72, 15);
+            this.KeyPathLabel.TabIndex = 6;
+            this.KeyPathLabel.Text = "Key file path";
             // 
             // DataDirInput
             // 
@@ -140,6 +143,16 @@
             this.DataDirLabel.TabIndex = 8;
             this.DataDirLabel.Text = "Data Path";
             // 
+            // DataDirSelectButton
+            // 
+            this.DataDirSelectButton.Location = new System.Drawing.Point(598, 260);
+            this.DataDirSelectButton.Name = "DataDirSelectButton";
+            this.DataDirSelectButton.Size = new System.Drawing.Size(75, 23);
+            this.DataDirSelectButton.TabIndex = 17;
+            this.DataDirSelectButton.Text = "Select";
+            this.DataDirSelectButton.UseVisualStyleBackColor = true;
+            this.DataDirSelectButton.Click += new System.EventHandler(this.DataDirSelectButton_Click);
+            // 
             // ExecutablePathInput
             // 
             this.ExecutablePathInput.Location = new System.Drawing.Point(164, 230);
@@ -156,6 +169,16 @@
             this.ExecutablePathLabel.Size = new System.Drawing.Size(125, 15);
             this.ExecutablePathLabel.TabIndex = 10;
             this.ExecutablePathLabel.Text = "Executable folder path";
+            // 
+            // ExecutablePathSelectButton
+            // 
+            this.ExecutablePathSelectButton.Location = new System.Drawing.Point(598, 230);
+            this.ExecutablePathSelectButton.Name = "ExecutablePathSelectButton";
+            this.ExecutablePathSelectButton.Size = new System.Drawing.Size(75, 23);
+            this.ExecutablePathSelectButton.TabIndex = 16;
+            this.ExecutablePathSelectButton.Text = "Select";
+            this.ExecutablePathSelectButton.UseVisualStyleBackColor = true;
+            this.ExecutablePathSelectButton.Click += new System.EventHandler(this.ExecutablePathSelectButton_Click);
             // 
             // TitleLabel
             // 
@@ -196,12 +219,25 @@
             this.AdditionalCommandsInput.TabIndex = 14;
             this.AdditionalCommandsInput.TextChanged += new System.EventHandler(this.AdditionalCommandsInput_TextChanged);
             // 
+            // KeyPathSelectButton
+            // 
+            this.KeyPathSelectButton.Location = new System.Drawing.Point(598, 201);
+            this.KeyPathSelectButton.Name = "KeyPathSelectButton";
+            this.KeyPathSelectButton.Size = new System.Drawing.Size(75, 23);
+            this.KeyPathSelectButton.TabIndex = 15;
+            this.KeyPathSelectButton.Text = "Select";
+            this.KeyPathSelectButton.UseVisualStyleBackColor = true;
+            this.KeyPathSelectButton.Click += new System.EventHandler(this.KeyPathSelectButton_Click);
+            // 
             // ControlBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.DataDirSelectButton);
+            this.Controls.Add(this.ExecutablePathSelectButton);
+            this.Controls.Add(this.KeyPathSelectButton);
             this.Controls.Add(this.AdditionalCommandsInput);
             this.Controls.Add(this.AdditionalCommandsLabel);
             this.Controls.Add(this.HideCommandPromptCheck);
@@ -210,7 +246,7 @@
             this.Controls.Add(this.ExecutablePathInput);
             this.Controls.Add(this.DataDirLabel);
             this.Controls.Add(this.DataDirInput);
-            this.Controls.Add(this.KeyPathILabel);
+            this.Controls.Add(this.KeyPathLabel);
             this.Controls.Add(this.KeyPathInput);
             this.Controls.Add(this.PasswordLabel);
             this.Controls.Add(this.PasswordInput);
@@ -235,7 +271,7 @@
         private System.Windows.Forms.TextBox PasswordInput;
         private System.Windows.Forms.Label PasswordLabel;
         private System.Windows.Forms.TextBox KeyPathInput;
-        private System.Windows.Forms.Label KeyPathILabel;
+        private System.Windows.Forms.Label KeyPathLabel;
         private System.Windows.Forms.TextBox DataDirInput;
         private System.Windows.Forms.Label DataDirLabel;
         private System.Windows.Forms.TextBox ExecutablePathInput;
@@ -244,5 +280,8 @@
         private System.Windows.Forms.CheckBox HideCommandPromptCheck;
         private System.Windows.Forms.Label AdditionalCommandsLabel;
         private System.Windows.Forms.TextBox AdditionalCommandsInput;
+        private System.Windows.Forms.Button KeyPathSelectButton;
+        private System.Windows.Forms.Button ExecutablePathSelectButton;
+        private System.Windows.Forms.Button DataDirSelectButton;
     }
 }

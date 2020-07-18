@@ -24,7 +24,7 @@ namespace LockMyEthTool.Views
             this.TitleLabel.Text = this.ControlName;
             this.StartButton.Text = "Start " + this.ControlName;
             this.StopButton.Text = "Stop " + this.ControlName;
-            this.PasswordInput.Visible = this.PasswordLabel.Visible = this.KeyPathInput.Visible = this.KeyPathILabel.Visible = this.Controller.RequiresPassword();
+            this.PasswordInput.Visible = this.PasswordLabel.Visible = this.KeyPathInput.Visible = this.KeyPathLabel.Visible = this.KeyPathSelectButton.Visible = this.Controller.RequiresPassword();
             if(this.Controller.RequiresPassword())
             {
                 if(this.Controller.CheckPassword())
@@ -170,6 +170,20 @@ namespace LockMyEthTool.Views
             }
         }
 
+        private void KeyPathSelectButton_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    this.Controller.KeyPath = this.KeyPathInput.Text = fbd.SelectedPath;
+                    this.CheckState();
+                }
+            }
+        }
+
         private void DataDirInput_TextChanged(object sender, EventArgs e)
         {
             if (this.Controller.DataDir != (sender as TextBox).Text)
@@ -179,12 +193,41 @@ namespace LockMyEthTool.Views
             }
         }
 
+        private void DataDirSelectButton_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    this.Controller.DataDir = this.DataDirInput.Text = fbd.SelectedPath;
+                    this.CheckState();
+                }
+            }
+
+        }
+
         private void ExecutablePathInput_TextChanged(object sender, EventArgs e)
         {
             if(this.Controller.ExecutablePath != (sender as TextBox).Text)
             {
                 this.Controller.ExecutablePath = (sender as TextBox).Text;
                 this.CheckState();
+            }
+        }
+
+        private void ExecutablePathSelectButton_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    this.Controller.ExecutablePath = this.ExecutablePathInput.Text = fbd.SelectedPath;
+                    this.CheckState();
+                }
             }
         }
 
