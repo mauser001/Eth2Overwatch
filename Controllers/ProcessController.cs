@@ -18,6 +18,7 @@ namespace LockMyEthTool.Controllers
         private string fileName;
         private string directory = null;
         private string[] commands;
+        private string arguments = null;
         private string processIdentifier = null;
         private SecureString password = null;
         private bool autoStart = false;
@@ -28,6 +29,7 @@ namespace LockMyEthTool.Controllers
         private bool useLocalEth1Node = false;
         private bool useGoerliTestnet = false;
         private string additionalCommands = "";
+        private bool logOutput = true;
 
         public ProcessController(PROCESS_TYPES ProcessType)
         {
@@ -153,6 +155,40 @@ namespace LockMyEthTool.Controllers
                     break;
             }
 
+        }
+
+        public void DownloadExecutable(string path)
+        {
+            switch (this.ProcessType)
+            {
+                case PROCESS_TYPES.BEACON_CHAIN:
+                    this.processIdentifier = "no identifier";
+                    this.fileName = "cmd.exe";
+                    this.directory = path;
+                    this.commands = new string[3];
+                    this.commands[0] = Directory.Exists(path+ @"\prysm") ? "cd prysm" : String.Format(@"mkdir prysm && cd prysm");
+                    this.commands[1] = String.Format(@"reg add HKCU\Console / v VirtualTerminalLevel / t REG_DWORD / d 1");
+                    this.commands[2] = String.Format(@"curl https://raw.githubusercontent.com/prysmaticlabs/prysm/master/prysm.bat --output prysm.bat");
+                    this.Start(true, true);
+                    break;
+            }
+        }
+
+        public void GenerateKeys()
+        {
+            switch (this.ProcessType)
+            {
+                case PROCESS_TYPES.VALIDATOR:
+                    this.logOutput = false;
+                    this.processIdentifier = "no identifier";
+                    this.fileName = this.ExecutablePath + "\\prysm.bat";
+                    this.directory = this.ExecutablePath;
+                    string validatorpath = this.keyPath.Replace("\\", "\\\\");
+                    this.commands = null;
+                    this.arguments = "validator accounts create --keystore-path=" + this.keyPath;
+                    this.Start(true, true);
+                    break;
+            }
         }
 
         public bool CheckPassword()
@@ -309,35 +345,48 @@ namespace LockMyEthTool.Controllers
 
         private List<string> Logs = new List<string>();
 
-        public void Start()
+        public void Start(bool skipCheck = false, bool showCommandPrompt = false)
         {
-            if(!this.AllConfigsSet())
+            if(skipCheck != true && !this.AllConfigsSet())
             {
                 return;
             }
             this.Stop();
             this.process = new Process(); // Declare New Process
             this.process.StartInfo.FileName = this.fileName;
+            if(this.arguments != null)
+            {
+                this.process.StartInfo.Arguments = this.arguments;
+            }
             if (this.directory != null)
             {
                 this.process.StartInfo.WorkingDirectory = this.directory;
             }
 
             this.process.StartInfo.UseShellExecute = false;
-            this.process.StartInfo.CreateNoWindow = this.hideCommandPrompt;
-            this.process.StartInfo.RedirectStandardOutput = true;
-            this.process.StartInfo.RedirectStandardInput = true;
-
-            this.process.OutputDataReceived += (object sender, DataReceivedEventArgs e) =>
+            this.process.StartInfo.CreateNoWindow = showCommandPrompt == false && this.hideCommandPrompt;
+            if(this.commands != null)
             {
-                this.Logs.Add(e.Data);
-                if (this.Logs.Count > 100)
+                this.process.StartInfo.RedirectStandardInput = true;
+            }
+
+            if(this.logOutput)
+            {
+                this.process.StartInfo.RedirectStandardOutput = true;
+                this.process.OutputDataReceived += (object sender, DataReceivedEventArgs e) =>
                 {
-                    this.Logs.RemoveAt(0);
-                }
-            };
+                    this.Logs.Add(e.Data);
+                    if (this.Logs.Count > 100)
+                    {
+                        this.Logs.RemoveAt(0);
+                    }
+                };
+            }
             this.process.Start();
-            this.process.BeginOutputReadLine();
+            if (this.logOutput)
+            {
+                this.process.BeginOutputReadLine();
+            }
             if (this.commands != null)
             {
                 using StreamWriter sw = process.StandardInput;
@@ -393,6 +442,11 @@ namespace LockMyEthTool.Controllers
         public bool SupportsEth1Connection()
         {
             return this.ProcessType == PROCESS_TYPES.ETH_1 || this.ProcessType == PROCESS_TYPES.BEACON_CHAIN;
+        }
+
+        public string GetLogText()
+        {
+            return String.Join("\n", this.Logs.ToArray());
         }
 
         public void CheckState(Func<bool, string, string> resultFunction)

@@ -10,5 +10,8 @@
     <Compile Update="Views\ControlBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Views\InitialEth2SetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

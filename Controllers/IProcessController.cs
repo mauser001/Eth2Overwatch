@@ -10,12 +10,18 @@ namespace LockMyEthTool.Views
     }
     public interface IProcessController
     {
-        void Start();
+        void Start(bool skipCheck = false, bool showCommandPrompt = false);
         void Stop();
 
         void CheckState(Func<bool, string, string> resultFunction);
 
+        string GetLogText();
+
         void UpdateConfig();
+
+        void DownloadExecutable(string path);
+
+        void GenerateKeys();
 
         void SetPassword(string pw);
         bool RequiresPassword();

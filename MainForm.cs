@@ -1,4 +1,5 @@
 ﻿using Eth2Overwatch;
+using Eth2Overwatch.Views;
 using LockMyEthTool.Views;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,11 @@ namespace LockMyEthTool
         {
             Eth2OverwatchSettings.Default.UseLocalEth1Node = (sender as CheckBox).Checked;
             Eth2OverwatchSettings.Default.Save();
+            UpdateBoxConfigs();
+        }
+
+        private void UpdateBoxConfigs()
+        {
             this.Boxes.ForEach((box) =>
             {
                 box.ConfigChanged();
@@ -69,6 +75,15 @@ namespace LockMyEthTool
                 rk.SetValue(AppName, Application.ExecutablePath);
             else
                 rk.DeleteValue(AppName, false);
+        }
+
+        private void InitialEth2SetupButton_Click(object sender, EventArgs e)
+        {
+            using (InitialEth2SetupForm frm = new InitialEth2SetupForm())
+            {
+                DialogResult res = frm.ShowDialog(this);
+                this.UpdateBoxConfigs();
+            }
         }
     }
 }

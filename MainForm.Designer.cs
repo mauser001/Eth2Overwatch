@@ -44,7 +44,48 @@ namespace LockMyEthTool
             this.ConnectWithEth1Check = new System.Windows.Forms.CheckBox();
             this.UseGoerliCheck = new System.Windows.Forms.CheckBox();
             this.StartOnStartupCheck = new System.Windows.Forms.CheckBox();
+            this.InitialEth2SetupButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
+            // 
+            // ConnectWithEth1Check
+            // 
+            this.ConnectWithEth1Check.AutoSize = true;
+            this.ConnectWithEth1Check.Checked = true;
+            this.ConnectWithEth1Check.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ConnectWithEth1Check.Location = new System.Drawing.Point(12, 37);
+            this.ConnectWithEth1Check.Name = "ConnectWithEth1Check";
+            this.ConnectWithEth1Check.Size = new System.Drawing.Size(153, 19);
+            this.ConnectWithEth1Check.TabIndex = 1;
+            this.ConnectWithEth1Check.Text = "Connect with Eth1 node";
+            this.ConnectWithEth1Check.UseVisualStyleBackColor = true;
+            this.ConnectWithEth1Check.CheckedChanged += new System.EventHandler(this.ConnectWithEth1Check_CheckedChanged);
+            // 
+            // UseGoerliCheck
+            // 
+            this.UseGoerliCheck.AutoSize = true;
+            this.UseGoerliCheck.Checked = true;
+            this.UseGoerliCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.UseGoerliCheck.Location = new System.Drawing.Point(12, 12);
+            this.UseGoerliCheck.Name = "UseGoerliCheck";
+            this.UseGoerliCheck.Size = new System.Drawing.Size(167, 19);
+            this.UseGoerliCheck.TabIndex = 2;
+            this.UseGoerliCheck.Text = "Use Görli test net (for Eth1)";
+            this.UseGoerliCheck.UseVisualStyleBackColor = true;
+            this.UseGoerliCheck.CheckedChanged += new System.EventHandler(this.UseGoerliCheck_CheckedChanged);
+            // 
+            // StartOnStartupCheck
+            // 
+            this.StartOnStartupCheck.AutoSize = true;
+            this.StartOnStartupCheck.Checked = true;
+            this.StartOnStartupCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.StartOnStartupCheck.Location = new System.Drawing.Point(12, 62);
+            this.StartOnStartupCheck.Name = "StartOnStartupCheck";
+            this.StartOnStartupCheck.Size = new System.Drawing.Size(143, 19);
+            this.StartOnStartupCheck.TabIndex = 3;
+            this.StartOnStartupCheck.Text = "Start on windows start";
+            this.StartOnStartupCheck.Visible = false;
+            this.StartOnStartupCheck.UseVisualStyleBackColor = true;
+            this.StartOnStartupCheck.CheckedChanged += new System.EventHandler(this.StartOnStartupCheck_CheckedChanged);
             // 
             // ValidatorControlBox
             // 
@@ -68,49 +109,20 @@ namespace LockMyEthTool
             // 
             this.Eth1ControlBox.BackColor = System.Drawing.SystemColors.Control;
             this.Eth1ControlBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Eth1ControlBox.Location = new System.Drawing.Point(0, 0);
+            this.Eth1ControlBox.Location = new System.Drawing.Point(700, 320);
             this.Eth1ControlBox.Name = "Eth1ControlBox";
             this.Eth1ControlBox.Size = new System.Drawing.Size(700, 320);
             this.Eth1ControlBox.TabIndex = 0;
             // 
-            // ConnectWithEth1Check
+            // InitialEth2SetupButton
             // 
-            this.ConnectWithEth1Check.AutoSize = true;
-            this.ConnectWithEth1Check.Checked = true;
-            this.ConnectWithEth1Check.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ConnectWithEth1Check.Location = new System.Drawing.Point(1247, 587);
-            this.ConnectWithEth1Check.Name = "ConnectWithEth1Check";
-            this.ConnectWithEth1Check.Size = new System.Drawing.Size(153, 19);
-            this.ConnectWithEth1Check.TabIndex = 1;
-            this.ConnectWithEth1Check.Text = "Connect with Eth1 node";
-            this.ConnectWithEth1Check.UseVisualStyleBackColor = true;
-            this.ConnectWithEth1Check.CheckedChanged += new System.EventHandler(this.ConnectWithEth1Check_CheckedChanged);
-            // 
-            // UseGoerliCheck
-            // 
-            this.UseGoerliCheck.AutoSize = true;
-            this.UseGoerliCheck.Checked = true;
-            this.UseGoerliCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.UseGoerliCheck.Location = new System.Drawing.Point(1247, 562);
-            this.UseGoerliCheck.Name = "UseGoerliCheck";
-            this.UseGoerliCheck.Size = new System.Drawing.Size(115, 19);
-            this.UseGoerliCheck.TabIndex = 2;
-            this.UseGoerliCheck.Text = "Use Görli test net (for Eth1)";
-            this.UseGoerliCheck.UseVisualStyleBackColor = true;
-            this.UseGoerliCheck.CheckedChanged += new System.EventHandler(this.UseGoerliCheck_CheckedChanged);
-            // 
-            // StartOnStartupCheck
-            // 
-            this.StartOnStartupCheck.AutoSize = true;
-            this.StartOnStartupCheck.Checked = true;
-            this.StartOnStartupCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.StartOnStartupCheck.Location = new System.Drawing.Point(1247, 612);
-            this.StartOnStartupCheck.Name = "StartOnStartupCheck";
-            this.StartOnStartupCheck.Size = new System.Drawing.Size(143, 19);
-            this.StartOnStartupCheck.TabIndex = 3;
-            this.StartOnStartupCheck.Text = "Start on windows start";
-            this.StartOnStartupCheck.UseVisualStyleBackColor = true;
-            this.StartOnStartupCheck.CheckedChanged += new System.EventHandler(this.StartOnStartupCheck_CheckedChanged);
+            this.InitialEth2SetupButton.Location = new System.Drawing.Point(12, 276);
+            this.InitialEth2SetupButton.Name = "InitialEth2SetupButton";
+            this.InitialEth2SetupButton.Size = new System.Drawing.Size(124, 23);
+            this.InitialEth2SetupButton.TabIndex = 4;
+            this.InitialEth2SetupButton.Text = "Initial Eth2 Setup";
+            this.InitialEth2SetupButton.UseVisualStyleBackColor = true;
+            this.InitialEth2SetupButton.Click += new System.EventHandler(this.InitialEth2SetupButton_Click);
             // 
             // MainForm
             // 
@@ -118,6 +130,7 @@ namespace LockMyEthTool
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1415, 650);
+            this.Controls.Add(this.InitialEth2SetupButton);
             this.Controls.Add(this.StartOnStartupCheck);
             this.Controls.Add(this.UseGoerliCheck);
             this.Controls.Add(this.ConnectWithEth1Check);
@@ -139,6 +152,7 @@ namespace LockMyEthTool
         private System.Windows.Forms.CheckBox ConnectWithEth1Check;
         private System.Windows.Forms.CheckBox UseGoerliCheck;
         private System.Windows.Forms.CheckBox StartOnStartupCheck;
+        private System.Windows.Forms.Button InitialEth2SetupButton;
     }
 }
 

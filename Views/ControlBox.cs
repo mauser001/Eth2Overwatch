@@ -24,7 +24,6 @@ namespace LockMyEthTool.Views
             this.TitleLabel.Text = this.ControlName;
             this.StartButton.Text = "Start " + this.ControlName;
             this.StopButton.Text = "Stop " + this.ControlName;
-            this.PasswordInput.Visible = this.PasswordLabel.Visible = this.KeyPathInput.Visible = this.KeyPathLabel.Visible = this.KeyPathSelectButton.Visible = this.Controller.RequiresPassword();
             if(this.Controller.RequiresPassword())
             {
                 if(this.Controller.CheckPassword())
@@ -32,19 +31,43 @@ namespace LockMyEthTool.Views
                     this.PasswordInput.Text = "***";
                 }
             }
-            this.AutostartCheck.Checked = this.Controller.Autostart;
-            this.HideCommandPromptCheck.Checked = this.Controller.HideCommandPrompt;
-            this.DataDirInput.Text = this.Controller.DataDir;
-            this.ExecutablePathInput.Text = this.Controller.ExecutablePath;
-            this.KeyPathInput.Text = this.Controller.KeyPath;
-            this.AdditionalCommandsInput.Text = this.Controller.AdditionalCommands;
-
+            this.UpdateControls();
             this.StartTimer(1000);
+        }
+
+        private void UpdateControls()
+        {
+            if (this.InvokeRequired)
+            {
+                Action act = () =>
+                {
+                    this.AutostartCheck.Checked = this.Controller.Autostart;
+                    this.HideCommandPromptCheck.Checked = this.Controller.HideCommandPrompt;
+                    this.DataDirInput.Text = this.Controller.DataDir;
+                    this.ExecutablePathInput.Text = this.Controller.ExecutablePath;
+                    this.KeyPathInput.Text = this.Controller.KeyPath;
+                    this.AdditionalCommandsInput.Text = this.Controller.AdditionalCommands;
+                    this.PasswordInput.Visible = this.PasswordLabel.Visible = this.KeyPathInput.Visible = this.KeyPathLabel.Visible = this.KeyPathSelectButton.Visible = this.Controller.RequiresPassword();
+                };
+                this.Invoke(act);
+            }
+            else
+            {
+                this.AutostartCheck.Checked = this.Controller.Autostart;
+                this.HideCommandPromptCheck.Checked = this.Controller.HideCommandPrompt;
+                this.DataDirInput.Text = this.Controller.DataDir;
+                this.ExecutablePathInput.Text = this.Controller.ExecutablePath;
+                this.KeyPathInput.Text = this.Controller.KeyPath;
+                this.AdditionalCommandsInput.Text = this.Controller.AdditionalCommands;
+                this.PasswordInput.Visible = this.PasswordLabel.Visible = this.KeyPathInput.Visible = this.KeyPathLabel.Visible = this.KeyPathSelectButton.Visible = this.Controller.RequiresPassword();
+            }
         }
 
         public void ConfigChanged()
         {
             this.Controller.UpdateConfig();
+            this.UpdateControls();
+            this.StartTimer(1000);
         }
 
 
@@ -63,10 +86,10 @@ namespace LockMyEthTool.Views
         {
             StopTimer();
             var autoEvent = new AutoResetEvent(false);
-            stateTimer = new Timer(CheckState, autoEvent, ms, ms);
+            stateTimer = new Timer(TaskCheckState, autoEvent, ms, ms);
         }
 
-        private void CheckState(Object stateInfo)
+        private void TaskCheckState(Object stateInfo)
         {
             this.StartTimer(20000); // we alwas want to restart the timer because it got stuck after some time in auto-loop
             Task.Run(() =>
