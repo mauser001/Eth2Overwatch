@@ -7,11 +7,13 @@ Windows tool to manage processes for eth1 (goerli test) node, eth2 beacon chain 
 MIT - The Program and Code is free to use/modify/copy
 
 ### Disclaimer: 
-This is my first C# winforms project.
+This is my first C# winforms project. (But more then a decade Web frontend developer) 
 
 I do not take any responsability for any damage/problems caused by the Eth2Overwatch tool. But I do my best to awoid them!
 
-It is not possible to run additional Eth1 (geth), Eth2 Beacon Chains or Eth2 Validators on the same machine as this programm kills all geth/beacon-chain/validator processes before starting new ones.
+It is not possible to run more then one Eth1 (geth), Eth2 Beacon Chains or Eth2 Validators on the same machine as this programm kills all geth/beacon-chain/validator processes before starting new ones.
+
+If find any spelling errors in the readme -> I write code - not books ;-)
 
 ### Framework and tools used
 + Visiual Studio 2019 Prview.
@@ -22,8 +24,7 @@ It is not possible to run additional Eth1 (geth), Eth2 Beacon Chains or Eth2 Val
 ### Requirements/Prerequisites:
 + Eth1 node
   + Installed Geth client (I used https://github.com/ethereum/go-ethereum )
-+ Eth2 beacon chain and validator
-  + Setup according to https://prylabs.net/participate (including Validator activation)
++ Eth2 Validator activation @ https://prylabs.net/participate (after you have done the 'Initial Eth2 setup with this tool)
 + .net Core installed on the machine: https://dotnet.microsoft.com/download/dotnet-core/3.1
 
 Latest compiled win10 version can be found at:
@@ -31,15 +32,28 @@ https://github.com/mauser001/Eth2Overwatch/tree/master/LatestRelease
 (it is possible that .net Core 3.1 Framework has to be installed)
 
 ## Setup
-Copy the Eth2Overwatch.exe in a folder and start ist.
+Download the Eth2Overwatch.exe in a folder and start ist.
 
 ### Setting
++ ##### Initial Eth2 Setup (can also be downloaded to accquire updates)
+  + Press the "Initial Eth2 setup" btton
+  + Select a folder wehre the prysm.bat file should be stored
+  + Press "2. Download prysm.bat" to download the file
+    + If you check 'Delete existing files' all content in the prysm folder will be deletet. This is recomended for updates!
+  + After the prysm.bat file is successfully downloaded, select a folder where you want to store the Validator key files.
+  + Click on 'Create validator keys' to create the keys.
+    + You will be prompted for a password - This is your Validator password - Remember it - you will need it to connet to with your validator.
+    + After you entered the password, copy the whole cmd output somewere save (ctr a, right mouse to copy).
+      + The Deposit Data is needed to connect your node with prysm labs
+      + With you public key you can later check the state of your validator @ https://beaconscan.com/
+    + When you saved all data, you can now close the Initial popup.
+    + Start your Eth2 Beacon chain and validator
+    + Goto https://prylabs.net/participate to connect your validator
 + ##### Global: 
   + Use Görli test net: (atm. only for Eth1, as Eth2 is only on test net). If you deactive this checkbox you could run the eth1 main net node.
   + Connect with Eth1 node. 
     + Checked: Local Eth1 client and Eth2 Beacon Chain are connected
     + Not checked: Eth2 Beacon Chain Connects to default Eth Chain (https://goerli.prylabs.net)
-  + Start on windows start (Program sets win registry to be started on startup) ... not working atm.
 + ##### Eth1
   + Start Eth1: Stops all existing Eth1 (geth) processes and starts a new one
   + Stop Eth1: Stops all existing Eth1 (geth) processes 
@@ -90,6 +104,7 @@ Copy the Eth2Overwatch.exe in a folder and start ist.
 + Creating a new Validator account
 + More complex status checking
 + Displaying of stats
++ Start on windows start (Program sets win registry to be started on startup) 
 
 ### Known issues/bugs:
 + Start on Windows Startup does not work

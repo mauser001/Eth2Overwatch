@@ -157,7 +157,7 @@ namespace LockMyEthTool.Controllers
 
         }
 
-        public void DownloadExecutable(string path)
+        public void DownloadExecutable(string path, bool deleteExistingContent)
         {
             switch (this.ProcessType)
             {
@@ -165,10 +165,20 @@ namespace LockMyEthTool.Controllers
                     this.processIdentifier = "no identifier";
                     this.fileName = "cmd.exe";
                     this.directory = path;
-                    this.commands = new string[3];
-                    this.commands[0] = Directory.Exists(path+ @"\prysm") ? "cd prysm" : String.Format(@"mkdir prysm && cd prysm");
-                    this.commands[1] = String.Format(@"reg add HKCU\Console / v VirtualTerminalLevel / t REG_DWORD / d 1");
-                    this.commands[2] = String.Format(@"curl https://raw.githubusercontent.com/prysmaticlabs/prysm/master/prysm.bat --output prysm.bat");
+                    bool pathExistis = Directory.Exists(path + @"\prysm");
+                    if(!pathExistis)
+                    {
+                        deleteExistingContent = false;
+                    }
+                    this.commands = new string[deleteExistingContent ? 4 : 3];
+                    int cout = 0;
+                    if (deleteExistingContent)
+                    {
+                        this.commands[cout++] = "rmdir /q /s prysm";
+                    }
+                    this.commands[cout++] = pathExistis && !deleteExistingContent ? "cd prysm" : String.Format(@"mkdir prysm && cd prysm");
+                    this.commands[cout++] = String.Format(@"reg add HKCU\Console / v VirtualTerminalLevel / t REG_DWORD / d 1");
+                    this.commands[cout++] = String.Format(@"curl https://raw.githubusercontent.com/prysmaticlabs/prysm/master/prysm.bat --output prysm.bat");
                     this.Start(true, true);
                     break;
             }
@@ -393,7 +403,7 @@ namespace LockMyEthTool.Controllers
                 foreach (string command in this.commands)
                 {
                     sw.WriteLine(command);
-                    //System.Threading.Thread.Sleep(20000);
+                    System.Threading.Thread.Sleep(500);
                 }
             }
         }

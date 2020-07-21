@@ -39,6 +39,19 @@ namespace Eth2Overwatch.Views
             {
                 this.ValidatorKeyPathInput.Text = ValidatorController.KeyPath;
             }
+
+            // Create the ToolTip and associate with the Form container.
+            ToolTip toolTip1 = new ToolTip();
+
+            // Set up the delays for the ToolTip.
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 500;
+            toolTip1.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip1.ShowAlways = true;
+
+            // Set up the ToolTip text for the Button and Checkbox.
+            toolTip1.SetToolTip(this.DeleteExistingFilesCheck, "If checked the prym folder and all its files will be delete before downloading the file");
         }
 
         private void PickPrysmFolderButton_Click(object sender, EventArgs e)
@@ -167,7 +180,7 @@ namespace Eth2Overwatch.Views
                 this.UpdateText("Invalid folder path", Color.Red);
                 return;
             }
-            this.BeaconController.DownloadExecutable(this.PickPrysmFolderInput.Text);
+            this.BeaconController.DownloadExecutable(this.PickPrysmFolderInput.Text, this.DeleteExistingFilesCheck.Checked);
             this.StartTimer(1000);
         }
 

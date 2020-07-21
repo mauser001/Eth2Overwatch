@@ -19,7 +19,7 @@ namespace LockMyEthTool.Views
 
         void UpdateConfig();
 
-        void DownloadExecutable(string path);
+        void DownloadExecutable(string path, bool deleteExistingContent);
 
         void GenerateKeys();
 

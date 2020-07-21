@@ -45,6 +45,7 @@
             this.ValidatorKeyPathSelect = new System.Windows.Forms.Button();
             this.PickValidatorKeyPathLabel = new System.Windows.Forms.Label();
             this.ValidatorKeyPathInput = new System.Windows.Forms.TextBox();
+            this.DeleteExistingFilesCheck = new System.Windows.Forms.CheckBox();
             KeyDescription = new System.Windows.Forms.TextBox();
             this.ValidatorGroup.SuspendLayout();
             this.SuspendLayout();
@@ -113,7 +114,7 @@
             // ShowDownlaodedPrysm
             // 
             this.ShowDownlaodedPrysm.AutoSize = true;
-            this.ShowDownlaodedPrysm.Location = new System.Drawing.Point(211, 87);
+            this.ShowDownlaodedPrysm.Location = new System.Drawing.Point(321, 126);
             this.ShowDownlaodedPrysm.Name = "ShowDownlaodedPrysm";
             this.ShowDownlaodedPrysm.Size = new System.Drawing.Size(164, 15);
             this.ShowDownlaodedPrysm.TabIndex = 5;
@@ -122,7 +123,7 @@
             // 
             // ShowInExplorerButton
             // 
-            this.ShowInExplorerButton.Location = new System.Drawing.Point(381, 83);
+            this.ShowInExplorerButton.Location = new System.Drawing.Point(491, 122);
             this.ShowInExplorerButton.Name = "ShowInExplorerButton";
             this.ShowInExplorerButton.Size = new System.Drawing.Size(103, 22);
             this.ShowInExplorerButton.TabIndex = 6;
@@ -136,7 +137,7 @@
             this.BeaconChainIsReadyLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.BeaconChainIsReadyLabel.Location = new System.Drawing.Point(13, 126);
             this.BeaconChainIsReadyLabel.Name = "BeaconChainIsReadyLabel";
-            this.BeaconChainIsReadyLabel.Size = new System.Drawing.Size(296, 21);
+            this.BeaconChainIsReadyLabel.Size = new System.Drawing.Size(293, 21);
             this.BeaconChainIsReadyLabel.TabIndex = 7;
             this.BeaconChainIsReadyLabel.Text = "Executable (prysm.bat) for the Beacon Chain is ready.";
             this.BeaconChainIsReadyLabel.UseCompatibleTextRendering = true;
@@ -217,11 +218,22 @@
             this.ValidatorKeyPathInput.TabIndex = 1;
             this.ValidatorKeyPathInput.TextChanged += new System.EventHandler(this.ValidatorKeyPathInput_TextChanged);
             // 
+            // DeleteExistingFilesCheck
+            // 
+            this.DeleteExistingFilesCheck.AutoSize = true;
+            this.DeleteExistingFilesCheck.Location = new System.Drawing.Point(189, 83);
+            this.DeleteExistingFilesCheck.Name = "DeleteExistingFilesCheck";
+            this.DeleteExistingFilesCheck.Size = new System.Drawing.Size(127, 19);
+            this.DeleteExistingFilesCheck.TabIndex = 10;
+            this.DeleteExistingFilesCheck.Text = "Delete existing files";
+            this.DeleteExistingFilesCheck.UseVisualStyleBackColor = true;
+            // 
             // InitialEth2SetupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1189, 450);
+            this.Controls.Add(this.DeleteExistingFilesCheck);
             this.Controls.Add(this.ValidatorGroup);
             this.Controls.Add(this.CloseButton);
             this.Controls.Add(this.BeaconChainIsReadyLabel);
@@ -259,5 +271,6 @@
         private System.Windows.Forms.Button CreateValidatorKeysButton;
         private System.Windows.Forms.TextBox KeyDescription;
         private System.Windows.Forms.LinkLabel GotoPrysmLink;
+        private System.Windows.Forms.CheckBox DeleteExistingFilesCheck;
     }
 }

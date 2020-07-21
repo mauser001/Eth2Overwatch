@@ -21,6 +21,9 @@ Only tested with Görli Testnet!</Description>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Eth2OverwatchKey.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+    <Version>1.0.0-Beta.2</Version>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
