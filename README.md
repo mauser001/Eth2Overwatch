@@ -54,6 +54,7 @@ Download the Eth2Overwatch.exe in a folder and start ist.
   + Connect with Eth1 node. 
     + Checked: Local Eth1 client and Eth2 Beacon Chain are connected
     + Not checked: Eth2 Beacon Chain Connects to default Eth Chain (https://goerli.prylabs.net)
+  + Start on Windows start: If checked the Eth2Overseer starts after win. login.
 + ##### Eth1
   + Start Eth1: Stops all existing Eth1 (geth) processes and starts a new one
   + Stop Eth1: Stops all existing Eth1 (geth) processes 
@@ -104,7 +105,6 @@ Download the Eth2Overwatch.exe in a folder and start ist.
 + Creating a new Validator account
 + More complex status checking
 + Displaying of stats
-+ Start on windows start (Program sets win registry to be started on startup) 
 
 ### Known issues/bugs:
 + Start on Windows Startup does not work

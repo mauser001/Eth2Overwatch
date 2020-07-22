@@ -4,10 +4,7 @@ using LockMyEthTool.Views;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Timer = System.Threading.Timer;
 
 namespace LockMyEthTool
 {
@@ -43,6 +40,14 @@ namespace LockMyEthTool
             this.UseGoerliCheck.Checked = Eth2OverwatchSettings.Default.UseGoerliTestnet;
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             this.StartOnStartupCheck.Checked = rk.GetValue(this.AppName) != null;
+            if(this.StartOnStartupCheck.Checked)
+            {
+                // If the .exe is moved we store a the new path in the autostart regex
+                if(this.AppName != Process.GetCurrentProcess().MainModule.FileName)
+                {
+                    this.SetAutoStart(true);
+                }
+            }
         }
 
         private void ConnectWithEth1Check_CheckedChanged(object sender, EventArgs e)
@@ -68,13 +73,20 @@ namespace LockMyEthTool
 
         private void StartOnStartupCheck_CheckedChanged(object sender, EventArgs e)
         {
-            Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.CurrentUser.OpenSubKey
-           ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            this.SetAutoStart((sender as CheckBox).Checked);
+        }
 
-            if ((sender as CheckBox).Checked)
-                rk.SetValue(AppName, Application.ExecutablePath);
-            else
-                rk.DeleteValue(AppName, false);
+        private void SetAutoStart(bool check)
+        {
+            if (!Debugger.IsAttached)
+            {
+                Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                if (check)
+                    rk.SetValue(AppName, Process.GetCurrentProcess().MainModule.FileName);
+                else
+                    rk.DeleteValue(AppName, false);
+
+            }
         }
 
         private void InitialEth2SetupButton_Click(object sender, EventArgs e)

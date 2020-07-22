@@ -83,7 +83,7 @@ namespace LockMyEthTool
             this.StartOnStartupCheck.Size = new System.Drawing.Size(143, 19);
             this.StartOnStartupCheck.TabIndex = 3;
             this.StartOnStartupCheck.Text = "Start on windows start";
-            this.StartOnStartupCheck.Visible = false;
+            this.StartOnStartupCheck.Visible = true;
             this.StartOnStartupCheck.UseVisualStyleBackColor = true;
             this.StartOnStartupCheck.CheckedChanged += new System.EventHandler(this.StartOnStartupCheck_CheckedChanged);
             // 
