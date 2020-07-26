@@ -41,11 +41,39 @@ namespace LockMyEthTool
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ConnectWithEth1Check = new System.Windows.Forms.CheckBox();
             this.UseGoerliCheck = new System.Windows.Forms.CheckBox();
             this.StartOnStartupCheck = new System.Windows.Forms.CheckBox();
             this.InitialEth2SetupButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
+            // 
+            // ValidatorControlBox
+            // 
+            this.ValidatorControlBox.BackColor = System.Drawing.SystemColors.Control;
+            this.ValidatorControlBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ValidatorControlBox.Location = new System.Drawing.Point(0, 320);
+            this.ValidatorControlBox.Name = "ValidatorControlBox";
+            this.ValidatorControlBox.Size = new System.Drawing.Size(700, 320);
+            this.ValidatorControlBox.TabIndex = 0;
+            // 
+            // BeaconControlBox
+            // 
+            this.BeaconControlBox.BackColor = System.Drawing.SystemColors.Control;
+            this.BeaconControlBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.BeaconControlBox.Location = new System.Drawing.Point(700, 0);
+            this.BeaconControlBox.Name = "BeaconControlBox";
+            this.BeaconControlBox.Size = new System.Drawing.Size(700, 320);
+            this.BeaconControlBox.TabIndex = 0;
+            // 
+            // Eth1ControlBox
+            // 
+            this.Eth1ControlBox.BackColor = System.Drawing.SystemColors.Control;
+            this.Eth1ControlBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Eth1ControlBox.Location = new System.Drawing.Point(700, 320);
+            this.Eth1ControlBox.Name = "Eth1ControlBox";
+            this.Eth1ControlBox.Size = new System.Drawing.Size(700, 320);
+            this.Eth1ControlBox.TabIndex = 0;
             // 
             // ConnectWithEth1Check
             // 
@@ -83,36 +111,8 @@ namespace LockMyEthTool
             this.StartOnStartupCheck.Size = new System.Drawing.Size(143, 19);
             this.StartOnStartupCheck.TabIndex = 3;
             this.StartOnStartupCheck.Text = "Start on windows start";
-            this.StartOnStartupCheck.Visible = true;
             this.StartOnStartupCheck.UseVisualStyleBackColor = true;
             this.StartOnStartupCheck.CheckedChanged += new System.EventHandler(this.StartOnStartupCheck_CheckedChanged);
-            // 
-            // ValidatorControlBox
-            // 
-            this.ValidatorControlBox.BackColor = System.Drawing.SystemColors.Control;
-            this.ValidatorControlBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.ValidatorControlBox.Location = new System.Drawing.Point(0, 320);
-            this.ValidatorControlBox.Name = "ValidatorControlBox";
-            this.ValidatorControlBox.Size = new System.Drawing.Size(700, 320);
-            this.ValidatorControlBox.TabIndex = 0;
-            // 
-            // BeaconControlBox
-            // 
-            this.BeaconControlBox.BackColor = System.Drawing.SystemColors.Control;
-            this.BeaconControlBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.BeaconControlBox.Location = new System.Drawing.Point(700, 0);
-            this.BeaconControlBox.Name = "BeaconControlBox";
-            this.BeaconControlBox.Size = new System.Drawing.Size(700, 320);
-            this.BeaconControlBox.TabIndex = 0;
-            // 
-            // Eth1ControlBox
-            // 
-            this.Eth1ControlBox.BackColor = System.Drawing.SystemColors.Control;
-            this.Eth1ControlBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Eth1ControlBox.Location = new System.Drawing.Point(700, 320);
-            this.Eth1ControlBox.Name = "Eth1ControlBox";
-            this.Eth1ControlBox.Size = new System.Drawing.Size(700, 320);
-            this.Eth1ControlBox.TabIndex = 0;
             // 
             // InitialEth2SetupButton
             // 
@@ -137,6 +137,8 @@ namespace LockMyEthTool
             this.Controls.Add(this.ValidatorControlBox);
             this.Controls.Add(this.BeaconControlBox);
             this.Controls.Add(this.Eth1ControlBox);
+            this.DoubleBuffered = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "Eth2 Overwatch";
             this.ResumeLayout(false);

@@ -19,8 +19,8 @@ namespace Eth2Overwatch.Views
 {
     public partial class InitialEth2SetupForm : Form
     {
-        private IProcessController BeaconController = new ProcessController(PROCESS_TYPES.BEACON_CHAIN);
-        private IProcessController ValidatorController = new ProcessController(PROCESS_TYPES.VALIDATOR);
+        private readonly IProcessController BeaconController = new ProcessController(PROCESS_TYPES.BEACON_CHAIN);
+        private readonly IProcessController ValidatorController = new ProcessController(PROCESS_TYPES.VALIDATOR);
         private bool prysmDownloaded = false;
         private bool generateKeysActive = false;
 
@@ -41,14 +41,15 @@ namespace Eth2Overwatch.Views
             }
 
             // Create the ToolTip and associate with the Form container.
-            ToolTip toolTip1 = new ToolTip();
-
-            // Set up the delays for the ToolTip.
-            toolTip1.AutoPopDelay = 5000;
-            toolTip1.InitialDelay = 500;
-            toolTip1.ReshowDelay = 500;
-            // Force the ToolTip text to be displayed whether or not the form is active.
-            toolTip1.ShowAlways = true;
+            ToolTip toolTip1 = new ToolTip
+            {
+                // Set up the delays for the ToolTip.
+                AutoPopDelay = 5000,
+                InitialDelay = 500,
+                ReshowDelay = 500,
+                // Force the ToolTip text to be displayed whether or not the form is active.
+                ShowAlways = true
+            };
 
             // Set up the ToolTip text for the Button and Checkbox.
             toolTip1.SetToolTip(this.DeleteExistingFilesCheck, "If checked the prym folder and all its files will be delete before downloading the file");
@@ -56,14 +57,12 @@ namespace Eth2Overwatch.Views
 
         private void PickPrysmFolderButton_Click(object sender, EventArgs e)
         {
-            using (var fbd = new FolderBrowserDialog())
-            {
-                DialogResult result = fbd.ShowDialog();
+            using var fbd = new FolderBrowserDialog();
+            DialogResult result = fbd.ShowDialog();
 
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                {
-                    this.PickPrysmFolderInput.Text = fbd.SelectedPath;
-                }
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                this.PickPrysmFolderInput.Text = fbd.SelectedPath;
             }
         }
 
@@ -190,9 +189,11 @@ namespace Eth2Overwatch.Views
             string folderPath = this.PickPrysmFolderInput.Text + @"\prysm";
             if (Directory.Exists(folderPath))
             {
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.Arguments = folderPath;
-                startInfo.FileName = "explorer.exe";
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    Arguments = folderPath,
+                    FileName = "explorer.exe"
+                };
                 Process.Start(startInfo);
             }
             else
@@ -257,14 +258,12 @@ namespace Eth2Overwatch.Views
 
         private void ValidatorKeyPathSelect_Click(object sender, EventArgs e)
         {
-            using (var fbd = new FolderBrowserDialog())
-            {
-                DialogResult result = fbd.ShowDialog();
+            using var fbd = new FolderBrowserDialog();
+            DialogResult result = fbd.ShowDialog();
 
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                {
-                    this.ValidatorKeyPathInput.Text = fbd.SelectedPath;
-                }
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                this.ValidatorKeyPathInput.Text = fbd.SelectedPath;
             }
         }
 

@@ -193,7 +193,6 @@ namespace LockMyEthTool.Controllers
                     this.processIdentifier = "no identifier";
                     this.fileName = this.ExecutablePath + "\\prysm.bat";
                     this.directory = this.ExecutablePath;
-                    string validatorpath = this.keyPath.Replace("\\", "\\\\");
                     this.commands = null;
                     this.arguments = "validator accounts create --keystore-path=" + this.keyPath;
                     this.Start(true, true);
@@ -208,22 +207,32 @@ namespace LockMyEthTool.Controllers
 
         private bool CheckKeyPath()
         {
-            return !this.RequiresPassword() || this.keyPath != String.Empty;
+            return !this.RequiresPassword() || !String.IsNullOrWhiteSpace(this.keyPath) && Directory.Exists(this.keyPath);
         }
 
         private bool CheckDataDir()
         {
-            return this.dataDir != String.Empty;
+            return !String.IsNullOrWhiteSpace(this.dataDir) && Directory.Exists(this.dataDir);
         }
 
         private bool CheckExecutablePath()
         {
-            return this.executablePath != String.Empty;
+            return !String.IsNullOrWhiteSpace(this.executablePath) && Directory.Exists(this.executablePath);
+        }
+
+        private string GetExecutableFileName()
+        {
+            return this.ProcessType == PROCESS_TYPES.ETH_1 ? "geth.exe" : "prysm.bat";
+        }
+
+        private bool CheckExecutable()
+        {
+            return this.CheckExecutablePath() && File.Exists(this.executablePath + @"\" + this.GetExecutableFileName());
         }
 
         public bool AllConfigsSet()
         {
-            return CheckDataDir() && CheckExecutablePath() && CheckKeyPath() && CheckPassword();
+            return this.CheckDataDir() && this.CheckExecutable() && this.CheckKeyPath() && this.CheckPassword();
         }
 
         public void SetPassword(string pw)
@@ -474,6 +483,11 @@ namespace LockMyEthTool.Controllers
             else if (!this.CheckExecutablePath())
             {
                 resultFunction(false, "ExecutablePath required");
+                return;
+            }
+            else if (!this.CheckExecutable())
+            {
+                resultFunction(false, "Exacutlable not found: " + this.GetExecutableFileName());
                 return;
             }
             else if (!this.CheckKeyPath())

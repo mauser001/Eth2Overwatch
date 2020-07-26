@@ -11,6 +11,7 @@ namespace LockMyEthTool.Views
     {
         private readonly IProcessController Controller = null;
         private readonly string ControlName;
+        private int retryCount = 0;
         public ControlBox(string Name, IProcessController Controller)
         {
             this.ControlName = Name;
@@ -112,6 +113,7 @@ namespace LockMyEthTool.Views
         private void AutostartCheck_CheckedChanged(object sender, EventArgs e)
         {
             this.Controller.Autostart = (sender as CheckBox).Checked;
+            this.CheckState();
         }
 
         private void HideCommandPromptCheck_CheckedChanged(object sender, EventArgs e)
@@ -142,12 +144,16 @@ namespace LockMyEthTool.Views
             this.Controller.CheckState((bool success, string result) =>
             {
                 this.UpdateText(result, success ? Color.LightGreen : Color.Red);
-                if (!success && this.AutostartCheck.Checked)
+                if (!success && this.AutostartCheck.Checked && this.retryCount <= 0)
                 {
                     this.StartProcess();
                 }
                 else if(!success)
                 {
+                    if(this.retryCount> 0)
+                    {
+                        this.retryCount--;
+                    }
                     this.StartTimer(10000);
                 }
                 return "We dont want to give something back";
@@ -157,6 +163,7 @@ namespace LockMyEthTool.Views
 
         public void StartProcess()
         {
+            this.retryCount = 3;
             this.StartTimer(10000);
             this.UpdateText("Start Process", Color.Beige);
             this.Controller.Start();
@@ -195,15 +202,13 @@ namespace LockMyEthTool.Views
 
         private void KeyPathSelectButton_Click(object sender, EventArgs e)
         {
-            using (var fbd = new FolderBrowserDialog())
-            {
-                DialogResult result = fbd.ShowDialog();
+            using var fbd = new FolderBrowserDialog();
+            DialogResult result = fbd.ShowDialog();
 
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                {
-                    this.Controller.KeyPath = this.KeyPathInput.Text = fbd.SelectedPath;
-                    this.CheckState();
-                }
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                this.Controller.KeyPath = this.KeyPathInput.Text = fbd.SelectedPath;
+                this.CheckState();
             }
         }
 
@@ -218,15 +223,13 @@ namespace LockMyEthTool.Views
 
         private void DataDirSelectButton_Click(object sender, EventArgs e)
         {
-            using (var fbd = new FolderBrowserDialog())
-            {
-                DialogResult result = fbd.ShowDialog();
+            using var fbd = new FolderBrowserDialog();
+            DialogResult result = fbd.ShowDialog();
 
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                {
-                    this.Controller.DataDir = this.DataDirInput.Text = fbd.SelectedPath;
-                    this.CheckState();
-                }
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                this.Controller.DataDir = this.DataDirInput.Text = fbd.SelectedPath;
+                this.CheckState();
             }
 
         }
@@ -242,15 +245,13 @@ namespace LockMyEthTool.Views
 
         private void ExecutablePathSelectButton_Click(object sender, EventArgs e)
         {
-            using (var fbd = new FolderBrowserDialog())
-            {
-                DialogResult result = fbd.ShowDialog();
+            using var fbd = new FolderBrowserDialog();
+            DialogResult result = fbd.ShowDialog();
 
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                {
-                    this.Controller.ExecutablePath = this.ExecutablePathInput.Text = fbd.SelectedPath;
-                    this.CheckState();
-                }
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                this.Controller.ExecutablePath = this.ExecutablePathInput.Text = fbd.SelectedPath;
+                this.CheckState();
             }
         }
 

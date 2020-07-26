@@ -6,3 +6,7 @@
 #### Version 1.0.0-Beta.3
 + Features
     + Auto start after windows login added
+    + Added Icon
++ Fixes
+    + Check if executables and folder exists
+    + minor code improvements

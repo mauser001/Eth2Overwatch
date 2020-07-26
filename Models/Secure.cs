@@ -66,6 +66,10 @@ namespace LockMyEthTool.Models
             IntPtr valuePtr = IntPtr.Zero;
             try
             {
+                if(value == null)
+                {
+                    return "";
+                }
                 valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
                 return Marshal.PtrToStringUni(valuePtr);
             }

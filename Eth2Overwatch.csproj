@@ -24,6 +24,7 @@ Only tested with Görli Testnet!</Description>
     <Version>1.0.0-Beta.2</Version>
     <AssemblyVersion>1.0.0.1</AssemblyVersion>
     <FileVersion>1.0.0.1</FileVersion>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
