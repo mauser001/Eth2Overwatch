@@ -24,6 +24,7 @@ namespace LockMyEthTool.Controllers
         private bool autoStart = false;
         private string dataDir = "";
         private string executablePath = "";
+        private string walletPath = "";
         private string keyPath = "";
         private bool hideCommandPrompt = false;
         private bool useLocalEth1Node = false;
@@ -44,10 +45,11 @@ namespace LockMyEthTool.Controllers
                 case PROCESS_TYPES.VALIDATOR:
                     this.autoStart = Eth2OverwatchSettings.Default.Autostart_Validator;
                     this.hideCommandPrompt = Eth2OverwatchSettings.Default.HideCommandPrompt_Validator;
-                    this.dataDir = Eth2OverwatchSettings.Default.DataDir_Validator;
                     this.executablePath = Eth2OverwatchSettings.Default.ExecutablePath_Validator;
                     this.keyPath = Eth2OverwatchSettings.Default.KeyPath_Validator;
+                    this.walletPath = Eth2OverwatchSettings.Default.WalletPath_Validator;
                     this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_Validator;
+
                     this.useGoerliTestnet = Eth2OverwatchSettings.Default.UseGoerliTestnet;
                     try
                     {
@@ -87,12 +89,12 @@ namespace LockMyEthTool.Controllers
             {
                 case PROCESS_TYPES.VALIDATOR:
                     Eth2OverwatchSettings.Default.Autostart_Validator = this.autoStart;
-                    Eth2OverwatchSettings.Default.DataDir_Validator = this.dataDir;
                     Eth2OverwatchSettings.Default.ExecutablePath_Validator = this.executablePath;
                     Eth2OverwatchSettings.Default.KeyPath_Validator = this.keyPath;
                     Eth2OverwatchSettings.Default.HideCommandPrompt_Validator = this.hideCommandPrompt;
                     Eth2OverwatchSettings.Default.AdditionalCommands_Validator = this.additionalCommands;
                     Eth2OverwatchSettings.Default.UseGoerliTestnet = this.useGoerliTestnet;
+                    Eth2OverwatchSettings.Default.WalletPath_Validator= this.walletPath;
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     Eth2OverwatchSettings.Default.Autostart_BeaconChain = this.autoStart;
@@ -134,7 +136,9 @@ namespace LockMyEthTool.Controllers
                     this.directory = this.executablePath;
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
-                    this.commands[0] = "prysm validator --datadir=" + this.dataDir + " --keymanageropts=\"{\\\"path\\\":\\\"" + validatorpath + "\\\",\\\"passphrase\\\":\\\"" + Secure.SecureStringToString(this.password) + "\\\"}\"" + goerli + add;
+                    this.commands[0] = "prysm validator --wallet-dir=" + this.walletPath + " --passwords-dir=" + this.keyPath + add;
+
+                    //prysm validator --wallet-dir=G:\\Ethereum\\Goerli\\Wallet --passwords-dir=G:\\Ethereum\\Goerli\\Password
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     this.processIdentifier = "beacon";
@@ -143,7 +147,7 @@ namespace LockMyEthTool.Controllers
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
                     var connectTo = useLocalEth1Node ? " --http-web3provider=$HOME/Goerli/geth.ipc" : "";
-                    this.commands[1] = String.Format(@"prysm.bat beacon-chain --datadir=" + this.dataDir + connectTo  + goerli + add);
+                    this.commands[1] = String.Format(@"prysm.bat beacon-chain --datadir=" + this.dataDir + connectTo + add);
                     break;
                 case PROCESS_TYPES.ETH_1:
                     this.processIdentifier = "geth";
@@ -184,7 +188,7 @@ namespace LockMyEthTool.Controllers
             }
         }
 
-        public void GenerateKeys()
+        public void ImportKeys(string medallaKeyPath)
         {
             switch (this.ProcessType)
             {
@@ -194,15 +198,16 @@ namespace LockMyEthTool.Controllers
                     this.fileName = this.ExecutablePath + "\\prysm.bat";
                     this.directory = this.ExecutablePath;
                     this.commands = null;
-                    this.arguments = "validator accounts create --keystore-path=" + this.keyPath;
+                    //prysm.bat validator accounts-v2 import --keys-dir=G:\\Ethereum\\Goerli\\eth2Test --wallet-dir=G:\\Ethereum\\Goerli\\Wallet --passwords-dir=G:\\Ethereum\\Goerli\\Password\\
+                    this.arguments = "validator accounts-v2 import --keys-dir=" + medallaKeyPath + " --wallet-dir=" + this.walletPath + " --passwords-dir=" + this.keyPath;
                     this.Start(true, true);
                     break;
             }
         }
 
-        public bool CheckPassword()
+        public bool CheckWalletPath()
         {
-            return !this.RequiresPassword() || this.password != null;
+            return !this.RequiresWalletPath() || !String.IsNullOrWhiteSpace(this.walletPath) && Directory.Exists(this.walletPath);
         }
 
         private bool CheckKeyPath()
@@ -212,7 +217,7 @@ namespace LockMyEthTool.Controllers
 
         private bool CheckDataDir()
         {
-            return !String.IsNullOrWhiteSpace(this.dataDir) && Directory.Exists(this.dataDir);
+            return !this.RequiresDataDir() || !String.IsNullOrWhiteSpace(this.dataDir) && Directory.Exists(this.dataDir);
         }
 
         private bool CheckExecutablePath()
@@ -232,7 +237,7 @@ namespace LockMyEthTool.Controllers
 
         public bool AllConfigsSet()
         {
-            return this.CheckDataDir() && this.CheckExecutable() && this.CheckKeyPath() && this.CheckPassword();
+            return this.CheckDataDir() && this.CheckExecutable() && this.CheckKeyPath() && this.CheckWalletPath();
         }
 
         public void SetPassword(string pw)
@@ -355,6 +360,21 @@ namespace LockMyEthTool.Controllers
                 this.keyPath = value;
                 SaveConfig();
             }
+            
+        }
+
+        public string WalletPath
+        {
+            get
+            {
+                return this.walletPath;
+            }
+            set
+            {
+
+                this.walletPath = value;
+                SaveConfig();
+            }
         }
 
         public void UpdateConfig()
@@ -447,8 +467,17 @@ namespace LockMyEthTool.Controllers
             }
             this.Logs = new List<string>();
         }
+        
+        public bool RequiresDataDir()
+        {
+            return this.ProcessType == PROCESS_TYPES.BEACON_CHAIN || this.ProcessType == PROCESS_TYPES.ETH_1;
+        }
 
         public bool RequiresPassword()
+        {
+            return this.ProcessType == PROCESS_TYPES.VALIDATOR;
+        }
+        public bool RequiresWalletPath()
         {
             return this.ProcessType == PROCESS_TYPES.VALIDATOR;
         }
@@ -470,12 +499,7 @@ namespace LockMyEthTool.Controllers
 
         public void CheckState(Func<bool, string, string> resultFunction)
         {
-            if (!this.CheckPassword())
-            {
-                resultFunction(false, "Password required");
-                return;
-            }
-            else if (!this.CheckDataDir())
+            if (!this.CheckDataDir())
             {
                 resultFunction(false, "DataDir required");
                 return;

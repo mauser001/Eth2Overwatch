@@ -10,3 +10,7 @@
 + Fixes
     + Check if executables and folder exists
     + minor code improvements
+#### Version 1.0.1-Beta.1
++ Changes
+  + Added medalla testnet support
+    + Including the import of medalla validator account

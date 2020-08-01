@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nethereum.Contracts;
+using System;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,13 +26,6 @@ namespace LockMyEthTool.Views
             this.TitleLabel.Text = this.ControlName;
             this.StartButton.Text = "Start " + this.ControlName;
             this.StopButton.Text = "Stop " + this.ControlName;
-            if(this.Controller.RequiresPassword())
-            {
-                if(this.Controller.CheckPassword())
-                {
-                    this.PasswordInput.Text = "***";
-                }
-            }
             this.UpdateControls();
             this.StartTimer(1000);
         }
@@ -42,26 +36,28 @@ namespace LockMyEthTool.Views
             {
                 Action act = () =>
                 {
-                    this.AutostartCheck.Checked = this.Controller.Autostart;
-                    this.HideCommandPromptCheck.Checked = this.Controller.HideCommandPrompt;
-                    this.DataDirInput.Text = this.Controller.DataDir;
-                    this.ExecutablePathInput.Text = this.Controller.ExecutablePath;
-                    this.KeyPathInput.Text = this.Controller.KeyPath;
-                    this.AdditionalCommandsInput.Text = this.Controller.AdditionalCommands;
-                    this.PasswordInput.Visible = this.PasswordLabel.Visible = this.KeyPathInput.Visible = this.KeyPathLabel.Visible = this.KeyPathSelectButton.Visible = this.Controller.RequiresPassword();
+                    this.SetInitStates();
                 };
                 this.Invoke(act);
             }
             else
             {
-                this.AutostartCheck.Checked = this.Controller.Autostart;
-                this.HideCommandPromptCheck.Checked = this.Controller.HideCommandPrompt;
-                this.DataDirInput.Text = this.Controller.DataDir;
-                this.ExecutablePathInput.Text = this.Controller.ExecutablePath;
-                this.KeyPathInput.Text = this.Controller.KeyPath;
-                this.AdditionalCommandsInput.Text = this.Controller.AdditionalCommands;
-                this.PasswordInput.Visible = this.PasswordLabel.Visible = this.KeyPathInput.Visible = this.KeyPathLabel.Visible = this.KeyPathSelectButton.Visible = this.Controller.RequiresPassword();
+                this.SetInitStates();
             }
+        }
+
+        private void SetInitStates()
+        {
+            this.AutostartCheck.Checked = this.Controller.Autostart;
+            this.HideCommandPromptCheck.Checked = this.Controller.HideCommandPrompt;
+            this.DataDirInput.Text = this.Controller.DataDir;
+            this.ExecutablePathInput.Text = this.Controller.ExecutablePath;
+            this.KeyPathInput.Text = this.Controller.KeyPath;
+            this.AdditionalCommandsInput.Text = this.Controller.AdditionalCommands;
+            this.WalletDirInput.Text = this.Controller.WalletPath;
+            this.KeyPathInput.Visible = this.KeyPathLabel.Visible = this.KeyPathSelectButton.Visible = this.Controller.RequiresPassword();
+            this.DataDirInput.Visible = this.DataDirLabel.Visible = this.DataDirSelectButton.Visible = this.Controller.RequiresDataDir();
+            this.WalletDirInput.Visible = this.WalletDirLabel.Visible = this.WalletDirSelectButton.Visible = this.Controller.RequiresWalletPath();
         }
 
         public void ConfigChanged()
@@ -182,15 +178,6 @@ namespace LockMyEthTool.Views
 
         }
 
-        private void PasswordInput_TextChanged(object sender, EventArgs e)
-        {
-            if((sender as TextBox).Text != "***")
-            {
-                this.Controller.SetPassword((sender as TextBox).Text);
-                this.CheckState();
-            }
-        }
-
         private void KeyPathInput_TextChanged(object sender, EventArgs e)
         {
             if(this.Controller.KeyPath != (sender as TextBox).Text)
@@ -221,6 +208,15 @@ namespace LockMyEthTool.Views
             }
         }
 
+        private void WalletDirInput_TextChanged(object sender, EventArgs e)
+        {
+            if (this.Controller.WalletPath != (sender as TextBox).Text)
+            {
+                this.Controller.WalletPath = (sender as TextBox).Text;
+                this.CheckState();
+            }
+        }
+
         private void DataDirSelectButton_Click(object sender, EventArgs e)
         {
             using var fbd = new FolderBrowserDialog();
@@ -229,6 +225,19 @@ namespace LockMyEthTool.Views
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
                 this.Controller.DataDir = this.DataDirInput.Text = fbd.SelectedPath;
+                this.CheckState();
+            }
+
+        }
+
+        private void WalletDirSelectButton_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            DialogResult result = fbd.ShowDialog();
+
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                this.Controller.WalletPath = this.WalletDirInput.Text = fbd.SelectedPath;
                 this.CheckState();
             }
 

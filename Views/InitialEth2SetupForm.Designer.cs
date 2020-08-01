@@ -40,11 +40,17 @@
             this.BeaconChainIsReadyLabel = new System.Windows.Forms.Label();
             this.CloseButton = new System.Windows.Forms.Button();
             this.ValidatorGroup = new System.Windows.Forms.GroupBox();
-            this.GotoPrysmLink = new System.Windows.Forms.LinkLabel();
-            this.CreateValidatorKeysButton = new System.Windows.Forms.Button();
-            this.ValidatorKeyPathSelect = new System.Windows.Forms.Button();
-            this.PickValidatorKeyPathLabel = new System.Windows.Forms.Label();
-            this.ValidatorKeyPathInput = new System.Windows.Forms.TextBox();
+            this.PickWalletFolderSelect = new System.Windows.Forms.Button();
+            this.PickWalletFolderInput = new System.Windows.Forms.TextBox();
+            this.PickWalletFolder = new System.Windows.Forms.Label();
+            this.KeyFileSelect = new System.Windows.Forms.Button();
+            this.KeyFileFolderInput = new System.Windows.Forms.TextBox();
+            this.complete = new System.Windows.Forms.LinkLabel();
+            this.PickMedallaKeyFilesLabel = new System.Windows.Forms.Label();
+            this.CreatePasswordFilesButton = new System.Windows.Forms.Button();
+            this.PasswordFilePathSelect = new System.Windows.Forms.Button();
+            this.PickPasswordFilePathLabel = new System.Windows.Forms.Label();
+            this.PasswordFilePathInput = new System.Windows.Forms.TextBox();
             this.DeleteExistingFilesCheck = new System.Windows.Forms.CheckBox();
             KeyDescription = new System.Windows.Forms.TextBox();
             this.ValidatorGroup.SuspendLayout();
@@ -55,11 +61,11 @@
             KeyDescription.BackColor = System.Drawing.SystemColors.Window;
             KeyDescription.Enabled = false;
             KeyDescription.ForeColor = System.Drawing.Color.Red;
-            KeyDescription.Location = new System.Drawing.Point(14, 112);
+            KeyDescription.Location = new System.Drawing.Point(15, 244);
             KeyDescription.Multiline = true;
             KeyDescription.Name = "KeyDescription";
             KeyDescription.ReadOnly = true;
-            KeyDescription.Size = new System.Drawing.Size(532, 55);
+            KeyDescription.Size = new System.Drawing.Size(532, 56);
             KeyDescription.TabIndex = 5;
             KeyDescription.Text = resources.GetString("KeyDescription.Text");
             // 
@@ -145,7 +151,7 @@
             // 
             // CloseButton
             // 
-            this.CloseButton.Location = new System.Drawing.Point(1104, 415);
+            this.CloseButton.Location = new System.Drawing.Point(1102, 490);
             this.CloseButton.Name = "CloseButton";
             this.CloseButton.Size = new System.Drawing.Size(75, 23);
             this.CloseButton.TabIndex = 8;
@@ -155,68 +161,127 @@
             // 
             // ValidatorGroup
             // 
-            this.ValidatorGroup.Controls.Add(this.GotoPrysmLink);
+            this.ValidatorGroup.Controls.Add(this.PickWalletFolderSelect);
+            this.ValidatorGroup.Controls.Add(this.PickWalletFolderInput);
+            this.ValidatorGroup.Controls.Add(this.PickWalletFolder);
+            this.ValidatorGroup.Controls.Add(this.KeyFileSelect);
+            this.ValidatorGroup.Controls.Add(this.KeyFileFolderInput);
+            this.ValidatorGroup.Controls.Add(this.complete);
+            this.ValidatorGroup.Controls.Add(this.PickMedallaKeyFilesLabel);
             this.ValidatorGroup.Controls.Add(KeyDescription);
-            this.ValidatorGroup.Controls.Add(this.CreateValidatorKeysButton);
-            this.ValidatorGroup.Controls.Add(this.ValidatorKeyPathSelect);
-            this.ValidatorGroup.Controls.Add(this.PickValidatorKeyPathLabel);
-            this.ValidatorGroup.Controls.Add(this.ValidatorKeyPathInput);
+            this.ValidatorGroup.Controls.Add(this.CreatePasswordFilesButton);
+            this.ValidatorGroup.Controls.Add(this.PasswordFilePathSelect);
+            this.ValidatorGroup.Controls.Add(this.PickPasswordFilePathLabel);
+            this.ValidatorGroup.Controls.Add(this.PasswordFilePathInput);
             this.ValidatorGroup.Enabled = false;
             this.ValidatorGroup.Location = new System.Drawing.Point(22, 193);
             this.ValidatorGroup.Name = "ValidatorGroup";
-            this.ValidatorGroup.Size = new System.Drawing.Size(569, 205);
+            this.ValidatorGroup.Size = new System.Drawing.Size(569, 320);
             this.ValidatorGroup.TabIndex = 9;
             this.ValidatorGroup.TabStop = false;
-            this.ValidatorGroup.Text = "Validator Setup";
+            this.ValidatorGroup.Text = "Validator Setup (from Medalla launchpad";
             // 
-            // GotoPrysmLink
+            // PickWalletFolderSelect
             // 
-            this.GotoPrysmLink.AutoSize = true;
-            this.GotoPrysmLink.Location = new System.Drawing.Point(14, 174);
-            this.GotoPrysmLink.Name = "GotoPrysmLink";
-            this.GotoPrysmLink.Size = new System.Drawing.Size(551, 15);
-            this.GotoPrysmLink.TabIndex = 6;
-            this.GotoPrysmLink.TabStop = true;
-            this.GotoPrysmLink.Text = "5. When you have the keys atart the beacon chain and validator and then goto prys" +
-    "m labs for activation";
-            this.GotoPrysmLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GotoPrysmLink_LinkClicked);
+            this.PickWalletFolderSelect.Location = new System.Drawing.Point(360, 127);
+            this.PickWalletFolderSelect.Name = "PickWalletFolderSelect";
+            this.PickWalletFolderSelect.Size = new System.Drawing.Size(75, 23);
+            this.PickWalletFolderSelect.TabIndex = 12;
+            this.PickWalletFolderSelect.Text = "Select";
+            this.PickWalletFolderSelect.UseVisualStyleBackColor = true;
+            this.PickWalletFolderSelect.Click += new System.EventHandler(this.PickWalletFolderButton_Click);
             // 
-            // CreateValidatorKeysButton
+            // PickWalletFolderInput
             // 
-            this.CreateValidatorKeysButton.Location = new System.Drawing.Point(15, 80);
-            this.CreateValidatorKeysButton.Name = "CreateValidatorKeysButton";
-            this.CreateValidatorKeysButton.Size = new System.Drawing.Size(180, 23);
-            this.CreateValidatorKeysButton.TabIndex = 4;
-            this.CreateValidatorKeysButton.Text = "4. Create validator keys";
-            this.CreateValidatorKeysButton.UseVisualStyleBackColor = true;
-            this.CreateValidatorKeysButton.Click += new System.EventHandler(this.CreateValidatorKeysButton_Click);
+            this.PickWalletFolderInput.Location = new System.Drawing.Point(15, 127);
+            this.PickWalletFolderInput.Name = "PickWalletFolderInput";
+            this.PickWalletFolderInput.Size = new System.Drawing.Size(338, 23);
+            this.PickWalletFolderInput.TabIndex = 11;
+            this.PickWalletFolderInput.TextChanged += new System.EventHandler(this.PasswordFilePathInput_TextChanged);
             // 
-            // ValidatorKeyPathSelect
+            // PickWalletFolder
             // 
-            this.ValidatorKeyPathSelect.Location = new System.Drawing.Point(360, 41);
-            this.ValidatorKeyPathSelect.Name = "ValidatorKeyPathSelect";
-            this.ValidatorKeyPathSelect.Size = new System.Drawing.Size(75, 23);
-            this.ValidatorKeyPathSelect.TabIndex = 3;
-            this.ValidatorKeyPathSelect.Text = "Select";
-            this.ValidatorKeyPathSelect.UseVisualStyleBackColor = true;
-            this.ValidatorKeyPathSelect.Click += new System.EventHandler(this.ValidatorKeyPathSelect_Click);
+            this.PickWalletFolder.AutoSize = true;
+            this.PickWalletFolder.Location = new System.Drawing.Point(15, 108);
+            this.PickWalletFolder.Name = "PickWalletFolder";
+            this.PickWalletFolder.Size = new System.Drawing.Size(271, 15);
+            this.PickWalletFolder.TabIndex = 10;
+            this.PickWalletFolder.Text = "5. Pick a folder where your wallet should be stored";
             // 
-            // PickValidatorKeyPathLabel
+            // KeyFileSelect
             // 
-            this.PickValidatorKeyPathLabel.AutoSize = true;
-            this.PickValidatorKeyPathLabel.Location = new System.Drawing.Point(15, 23);
-            this.PickValidatorKeyPathLabel.Name = "PickValidatorKeyPathLabel";
-            this.PickValidatorKeyPathLabel.Size = new System.Drawing.Size(229, 15);
-            this.PickValidatorKeyPathLabel.TabIndex = 2;
-            this.PickValidatorKeyPathLabel.Text = "3. Pick a folder to store your validator keys";
+            this.KeyFileSelect.Location = new System.Drawing.Point(360, 72);
+            this.KeyFileSelect.Name = "KeyFileSelect";
+            this.KeyFileSelect.Size = new System.Drawing.Size(75, 23);
+            this.KeyFileSelect.TabIndex = 9;
+            this.KeyFileSelect.Text = "Select";
+            this.KeyFileSelect.UseVisualStyleBackColor = true;
+            this.KeyFileSelect.Click += new System.EventHandler(this.KeyFileSelect_Click);
             // 
-            // ValidatorKeyPathInput
+            // KeyFileFolderInput
             // 
-            this.ValidatorKeyPathInput.Location = new System.Drawing.Point(15, 41);
-            this.ValidatorKeyPathInput.Name = "ValidatorKeyPathInput";
-            this.ValidatorKeyPathInput.Size = new System.Drawing.Size(338, 23);
-            this.ValidatorKeyPathInput.TabIndex = 1;
-            this.ValidatorKeyPathInput.TextChanged += new System.EventHandler(this.ValidatorKeyPathInput_TextChanged);
+            this.KeyFileFolderInput.Location = new System.Drawing.Point(15, 72);
+            this.KeyFileFolderInput.Name = "KeyFileFolderInput";
+            this.KeyFileFolderInput.Size = new System.Drawing.Size(338, 23);
+            this.KeyFileFolderInput.TabIndex = 8;
+            this.KeyFileFolderInput.TextChanged += new System.EventHandler(this.PasswordFilePathInput_TextChanged);
+            // 
+            // complete
+            // 
+            this.complete.AutoSize = true;
+            this.complete.Location = new System.Drawing.Point(15, 23);
+            this.complete.Name = "complete";
+            this.complete.Size = new System.Drawing.Size(156, 15);
+            this.complete.TabIndex = 7;
+            this.complete.TabStop = true;
+            this.complete.Text = "3. Complete Eth2 launchpad";
+            this.complete.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GotoLaunchpadLink_LinkClicked);
+            // 
+            // PickMedallaKeyFilesLabel
+            // 
+            this.PickMedallaKeyFilesLabel.AutoSize = true;
+            this.PickMedallaKeyFilesLabel.Location = new System.Drawing.Point(15, 54);
+            this.PickMedallaKeyFilesLabel.Name = "PickMedallaKeyFilesLabel";
+            this.PickMedallaKeyFilesLabel.Size = new System.Drawing.Size(245, 15);
+            this.PickMedallaKeyFilesLabel.TabIndex = 6;
+            this.PickMedallaKeyFilesLabel.Text = "4. Pick folder containing the Medalla key files";
+            // 
+            // CreatePasswordFilesButton
+            // 
+            this.CreatePasswordFilesButton.Location = new System.Drawing.Point(15, 213);
+            this.CreatePasswordFilesButton.Name = "CreatePasswordFilesButton";
+            this.CreatePasswordFilesButton.Size = new System.Drawing.Size(180, 24);
+            this.CreatePasswordFilesButton.TabIndex = 4;
+            this.CreatePasswordFilesButton.Text = "7. Import Medalla account";
+            this.CreatePasswordFilesButton.UseVisualStyleBackColor = true;
+            this.CreatePasswordFilesButton.Click += new System.EventHandler(this.CreatePasswordFilesButton_Click);
+            // 
+            // PasswordFilePathSelect
+            // 
+            this.PasswordFilePathSelect.Location = new System.Drawing.Point(359, 179);
+            this.PasswordFilePathSelect.Name = "PasswordFilePathSelect";
+            this.PasswordFilePathSelect.Size = new System.Drawing.Size(75, 24);
+            this.PasswordFilePathSelect.TabIndex = 3;
+            this.PasswordFilePathSelect.Text = "Select";
+            this.PasswordFilePathSelect.UseVisualStyleBackColor = true;
+            this.PasswordFilePathSelect.Click += new System.EventHandler(this.PasswordFilePathSelect_Click);
+            // 
+            // PickPasswordFilePathLabel
+            // 
+            this.PickPasswordFilePathLabel.AutoSize = true;
+            this.PickPasswordFilePathLabel.Location = new System.Drawing.Point(15, 161);
+            this.PickPasswordFilePathLabel.Name = "PickPasswordFilePathLabel";
+            this.PickPasswordFilePathLabel.Size = new System.Drawing.Size(226, 15);
+            this.PickPasswordFilePathLabel.TabIndex = 2;
+            this.PickPasswordFilePathLabel.Text = "6. Pick a folder to store your password file";
+            // 
+            // PasswordFilePathInput
+            // 
+            this.PasswordFilePathInput.Location = new System.Drawing.Point(15, 179);
+            this.PasswordFilePathInput.Name = "PasswordFilePathInput";
+            this.PasswordFilePathInput.Size = new System.Drawing.Size(338, 23);
+            this.PasswordFilePathInput.TabIndex = 1;
+            this.PasswordFilePathInput.TextChanged += new System.EventHandler(this.PasswordFilePathInput_TextChanged);
             // 
             // DeleteExistingFilesCheck
             // 
@@ -232,7 +297,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1189, 450);
+            this.ClientSize = new System.Drawing.Size(1189, 525);
             this.Controls.Add(this.DeleteExistingFilesCheck);
             this.Controls.Add(this.ValidatorGroup);
             this.Controls.Add(this.CloseButton);
@@ -265,12 +330,18 @@
         private System.Windows.Forms.Label BeaconChainIsReadyLabel;
         private System.Windows.Forms.Button CloseButton;
         private System.Windows.Forms.GroupBox ValidatorGroup;
-        private System.Windows.Forms.Label PickValidatorKeyPathLabel;
-        private System.Windows.Forms.TextBox ValidatorKeyPathInput;
-        private System.Windows.Forms.Button ValidatorKeyPathSelect;
-        private System.Windows.Forms.Button CreateValidatorKeysButton;
+        private System.Windows.Forms.Label PickPasswordFilePathLabel;
+        private System.Windows.Forms.TextBox PasswordFilePathInput;
+        private System.Windows.Forms.Button PasswordFilePathSelect;
+        private System.Windows.Forms.Button CreatePasswordFilesButton;
         private System.Windows.Forms.TextBox KeyDescription;
-        private System.Windows.Forms.LinkLabel GotoPrysmLink;
         private System.Windows.Forms.CheckBox DeleteExistingFilesCheck;
+        private System.Windows.Forms.LinkLabel complete;
+        private System.Windows.Forms.Label PickMedallaKeyFilesLabel;
+        private System.Windows.Forms.Button KeyFileSelect;
+        private System.Windows.Forms.TextBox KeyFileFolderInput;
+        private System.Windows.Forms.Button PickWalletFolderSelect;
+        private System.Windows.Forms.TextBox PickWalletFolderInput;
+        private System.Windows.Forms.Label PickWalletFolder;
     }
 }

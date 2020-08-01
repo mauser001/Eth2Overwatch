@@ -14,9 +14,6 @@
     <Setting Name="AutoStart_Eth1" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="DataDir_Validator" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="DataDir_BeaconChain" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -61,6 +58,9 @@
     </Setting>
     <Setting Name="UpdateSettings" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="WalletPath_Validator" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

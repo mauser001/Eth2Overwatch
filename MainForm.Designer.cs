@@ -87,6 +87,7 @@ namespace LockMyEthTool
             this.ConnectWithEth1Check.Text = "Connect with Eth1 node";
             this.ConnectWithEth1Check.UseVisualStyleBackColor = true;
             this.ConnectWithEth1Check.CheckedChanged += new System.EventHandler(this.ConnectWithEth1Check_CheckedChanged);
+            this.ConnectWithEth1Check.Enabled = false;
             // 
             // UseGoerliCheck
             // 
@@ -118,9 +119,9 @@ namespace LockMyEthTool
             // 
             this.InitialEth2SetupButton.Location = new System.Drawing.Point(12, 276);
             this.InitialEth2SetupButton.Name = "InitialEth2SetupButton";
-            this.InitialEth2SetupButton.Size = new System.Drawing.Size(124, 23);
+            this.InitialEth2SetupButton.Size = new System.Drawing.Size(424, 23);
             this.InitialEth2SetupButton.TabIndex = 4;
-            this.InitialEth2SetupButton.Text = "Initial Eth2 Setup";
+            this.InitialEth2SetupButton.Text = "Initial Eth2 Setup (Download prysm and import medalla validator keys)";
             this.InitialEth2SetupButton.UseVisualStyleBackColor = true;
             this.InitialEth2SetupButton.Click += new System.EventHandler(this.InitialEth2SetupButton_Click);
             // 

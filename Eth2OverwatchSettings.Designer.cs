@@ -74,18 +74,6 @@ namespace Eth2Overwatch {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DataDir_Validator {
-            get {
-                return ((string)(this["DataDir_Validator"]));
-            }
-            set {
-                this["DataDir_Validator"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DataDir_BeaconChain {
             get {
                 return ((string)(this["DataDir_BeaconChain"]));
@@ -260,6 +248,18 @@ namespace Eth2Overwatch {
             }
             set {
                 this["UpdateSettings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string WalletPath_Validator {
+            get {
+                return ((string)(this["WalletPath_Validator"]));
+            }
+            set {
+                this["WalletPath_Validator"] = value;
             }
         }
     }

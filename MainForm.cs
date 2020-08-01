@@ -20,6 +20,7 @@ namespace LockMyEthTool
             if (Eth2OverwatchSettings.Default.UpdateSettings)
             {
                 Eth2OverwatchSettings.Default.Upgrade();
+                Eth2OverwatchSettings.Default.UseLocalEth1Node = false;
                 Eth2OverwatchSettings.Default.UpdateSettings = false;
                 Eth2OverwatchSettings.Default.Save();
             }

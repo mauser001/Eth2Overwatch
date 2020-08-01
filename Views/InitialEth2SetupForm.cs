@@ -37,7 +37,7 @@ namespace Eth2Overwatch.Views
             }
             if (!String.IsNullOrWhiteSpace(ValidatorController.KeyPath))
             {
-                this.ValidatorKeyPathInput.Text = ValidatorController.KeyPath;
+                this.PasswordFilePathInput.Text = ValidatorController.KeyPath;
             }
 
             // Create the ToolTip and associate with the Form container.
@@ -228,59 +228,76 @@ namespace Eth2Overwatch.Views
             this.Close();
         }
 
-        private void ValidatorKeyPathInput_TextChanged(object sender, EventArgs e)
+        private void PasswordFilePathInput_TextChanged(object sender, EventArgs e)
         {
             if(!this.PrysmDownloaded)
             {
                 return;
             }
-            CheckValidatorKeyFolder();
+            CheckPasswordFileFolder();
         }
 
-        private bool CheckValidatorKeyFolder()
-        {
-            if (String.IsNullOrWhiteSpace(this.ValidatorKeyPathInput.Text))
+        private bool CheckPasswordFileFolder()
+        {            
+            if (String.IsNullOrWhiteSpace(this.KeyFileFolderInput.Text))
+            {
+                this.UpdateText("Please pick the folder containing the medalla key files", Color.Red);
+            }
+            else if (!Directory.Exists(this.KeyFileFolderInput.Text))
+            {
+                this.UpdateText("Please pick a valid folder containing the medalla key files", Color.Red);
+            }
+            else if (String.IsNullOrWhiteSpace(this.PasswordFilePathInput.Text))
             {
                 this.UpdateText("Please enter a validator key file folder", Color.Red);
             }
-            else if (!Directory.Exists(this.ValidatorKeyPathInput.Text))
+            else if (!Directory.Exists(this.PasswordFilePathInput.Text))
             {
                 this.UpdateText("Please enter a valid validator key file folder", Color.Red);
             }
+            else if (String.IsNullOrWhiteSpace(this.PickWalletFolderInput.Text))
+            {
+                this.UpdateText("Please pick a folder where your wallet should be stored", Color.Red);
+            }
+            else if (!Directory.Exists(this.PickWalletFolderInput.Text))
+            {
+                this.UpdateText("Please pick a valid folder where your wallet should be stored", Color.Red);
+            }
             else
             {
-                this.UpdateText("Ready to create keys", Color.Beige);
-                this.ValidatorController.KeyPath = this.ValidatorKeyPathInput.Text;
+                this.UpdateText("Ready to import", Color.Beige);
+                this.ValidatorController.KeyPath = this.PasswordFilePathInput.Text;
+                this.ValidatorController.WalletPath = this.PickWalletFolderInput.Text;
                 return true;
             }
             return false;
         }
 
-        private void ValidatorKeyPathSelect_Click(object sender, EventArgs e)
+        private void PasswordFilePathSelect_Click(object sender, EventArgs e)
         {
             using var fbd = new FolderBrowserDialog();
             DialogResult result = fbd.ShowDialog();
 
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
-                this.ValidatorKeyPathInput.Text = fbd.SelectedPath;
+                this.PasswordFilePathInput.Text = fbd.SelectedPath;
             }
         }
 
-        private void CreateValidatorKeysButton_Click(object sender, EventArgs e)
+        private void CreatePasswordFilesButton_Click(object sender, EventArgs e)
         {
-            if(CheckValidatorKeyFolder())
+            if(CheckPasswordFileFolder())
             {
-                this.ValidatorController.GenerateKeys();
+                this.ValidatorController.ImportKeys(this.KeyFileFolderInput.Text);
                 this.generateKeysActive = true;
 
                 this.StartTimer(1000);
             }
         }
 
-        private void GotoPrysmLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void GotoLaunchpadLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            string url = "https://prylabs.net/participate";
+            string url = "https://medalla.launchpad.ethereum.org/overview";
             try
             {
                 Process.Start(url);
@@ -304,6 +321,28 @@ namespace Eth2Overwatch.Views
                 {
                     throw;
                 }
+            }
+        }
+
+        private void KeyFileSelect_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            DialogResult result = fbd.ShowDialog();
+
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                this.KeyFileFolderInput.Text = fbd.SelectedPath;
+            }
+        }
+
+        private void PickWalletFolderButton_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            DialogResult result = fbd.ShowDialog();
+
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                this.PickWalletFolderInput.Text = fbd.SelectedPath;
             }
         }
     }

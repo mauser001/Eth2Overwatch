@@ -21,14 +21,16 @@ namespace LockMyEthTool.Views
 
         void DownloadExecutable(string path, bool deleteExistingContent);
 
-        void GenerateKeys();
+        void ImportKeys(string medallaKeyPath);
 
         void SetPassword(string pw);
         bool RequiresPassword();
+
+        bool RequiresDataDir();
+
+        bool RequiresWalletPath();
         bool SupportsEth1Connection();
         bool SupportsGoerliTestnet();
-
-        bool CheckPassword();
 
         bool Autostart
         {
@@ -51,6 +53,11 @@ namespace LockMyEthTool.Views
             set;
         }
         string KeyPath
+        {
+            get;
+            set;
+        }
+        string WalletPath
         {
             get;
             set;

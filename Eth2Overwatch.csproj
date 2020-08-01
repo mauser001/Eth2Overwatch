@@ -15,15 +15,14 @@
 Eth2Overwatch is a completly free tool to manage your Eth1, Eth2 Beacon Chain and Eth2 Validator
 Its a windows tool to start/stop/auto restart your processes:
 Eth1: Geth
-Eth2 Beacon Chain and Validator  from prysm labs
-Only tested with Görli Testnet!</Description>
+Eth2 Beacon Chain and Validator  from prysm labs with the medalla testnet</Description>
     <PackageTags>Eth1, Eth2, Beaconchain, Validator</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Eth2OverwatchKey.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <Version>1.0.0-Beta.2</Version>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
-    <FileVersion>1.0.0.1</FileVersion>
+    <Version>1.0.1-Beta.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 

@@ -33,12 +33,12 @@
             this.StartButton = new System.Windows.Forms.Button();
             this.StopButton = new System.Windows.Forms.Button();
             this.AutostartCheck = new System.Windows.Forms.CheckBox();
-            this.PasswordInput = new System.Windows.Forms.TextBox();
-            this.PasswordLabel = new System.Windows.Forms.Label();
             this.KeyPathInput = new System.Windows.Forms.TextBox();
             this.KeyPathLabel = new System.Windows.Forms.Label();
             this.DataDirInput = new System.Windows.Forms.TextBox();
             this.DataDirLabel = new System.Windows.Forms.Label();
+            this.WalletDirInput = new System.Windows.Forms.TextBox();
+            this.WalletDirLabel = new System.Windows.Forms.Label();
             this.ExecutablePathInput = new System.Windows.Forms.TextBox();
             this.ExecutablePathLabel = new System.Windows.Forms.Label();
             this.TitleLabel = new System.Windows.Forms.Label();
@@ -48,6 +48,7 @@
             this.KeyPathSelectButton = new System.Windows.Forms.Button();
             this.ExecutablePathSelectButton = new System.Windows.Forms.Button();
             this.DataDirSelectButton = new System.Windows.Forms.Button();
+            this.WalletDirSelectButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // OutputText
@@ -90,24 +91,6 @@
             this.AutostartCheck.Text = "Auto restart";
             this.AutostartCheck.UseVisualStyleBackColor = false;
             this.AutostartCheck.CheckedChanged += new System.EventHandler(this.AutostartCheck_CheckedChanged);
-            // 
-            // PasswordInput
-            // 
-            this.PasswordInput.Location = new System.Drawing.Point(80, 163);
-            this.PasswordInput.Name = "PasswordInput";
-            this.PasswordInput.PasswordChar = '*';
-            this.PasswordInput.Size = new System.Drawing.Size(163, 23);
-            this.PasswordInput.TabIndex = 3;
-            this.PasswordInput.TextChanged += new System.EventHandler(this.PasswordInput_TextChanged);
-            // 
-            // PasswordLabel
-            // 
-            this.PasswordLabel.AutoSize = true;
-            this.PasswordLabel.Location = new System.Drawing.Point(11, 163);
-            this.PasswordLabel.Name = "PasswordLabel";
-            this.PasswordLabel.Size = new System.Drawing.Size(63, 15);
-            this.PasswordLabel.TabIndex = 4;
-            this.PasswordLabel.Text = "Password: ";
             // 
             // KeyPathInput
             // 
@@ -152,6 +135,33 @@
             this.DataDirSelectButton.Text = "Select";
             this.DataDirSelectButton.UseVisualStyleBackColor = true;
             this.DataDirSelectButton.Click += new System.EventHandler(this.DataDirSelectButton_Click);
+            // 
+            // WalletDirInput
+            // 
+            this.WalletDirInput.Location = new System.Drawing.Point(164, 259);
+            this.WalletDirInput.Name = "WalletDirInput";
+            this.WalletDirInput.Size = new System.Drawing.Size(427, 23);
+            this.WalletDirInput.TabIndex = 7;
+            this.WalletDirInput.TextChanged += new System.EventHandler(this.WalletDirInput_TextChanged);
+            // 
+            // WalletDirLabel
+            // 
+            this.WalletDirLabel.AutoSize = true;
+            this.WalletDirLabel.Location = new System.Drawing.Point(11, 259);
+            this.WalletDirLabel.Name = "WalletDirLabel";
+            this.WalletDirLabel.Size = new System.Drawing.Size(58, 15);
+            this.WalletDirLabel.TabIndex = 8;
+            this.WalletDirLabel.Text = "Wallet Path";
+            // 
+            // WalletDirSelectButton
+            // 
+            this.WalletDirSelectButton.Location = new System.Drawing.Point(598, 260);
+            this.WalletDirSelectButton.Name = "WalletDirSelectButton";
+            this.WalletDirSelectButton.Size = new System.Drawing.Size(75, 23);
+            this.WalletDirSelectButton.TabIndex = 17;
+            this.WalletDirSelectButton.Text = "Select";
+            this.WalletDirSelectButton.UseVisualStyleBackColor = true;
+            this.WalletDirSelectButton.Click += new System.EventHandler(this.WalletDirSelectButton_Click);
             // 
             // ExecutablePathInput
             // 
@@ -235,6 +245,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.WalletDirSelectButton);
             this.Controls.Add(this.DataDirSelectButton);
             this.Controls.Add(this.ExecutablePathSelectButton);
             this.Controls.Add(this.KeyPathSelectButton);
@@ -244,12 +255,12 @@
             this.Controls.Add(this.TitleLabel);
             this.Controls.Add(this.ExecutablePathLabel);
             this.Controls.Add(this.ExecutablePathInput);
+            this.Controls.Add(this.WalletDirLabel);
+            this.Controls.Add(this.WalletDirInput);
             this.Controls.Add(this.DataDirLabel);
             this.Controls.Add(this.DataDirInput);
             this.Controls.Add(this.KeyPathLabel);
             this.Controls.Add(this.KeyPathInput);
-            this.Controls.Add(this.PasswordLabel);
-            this.Controls.Add(this.PasswordInput);
             this.Controls.Add(this.AutostartCheck);
             this.Controls.Add(this.StartButton);
             this.Controls.Add(this.StopButton);
@@ -268,12 +279,12 @@
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.Button StopButton;
         private System.Windows.Forms.RichTextBox OutputText;
-        private System.Windows.Forms.TextBox PasswordInput;
-        private System.Windows.Forms.Label PasswordLabel;
         private System.Windows.Forms.TextBox KeyPathInput;
         private System.Windows.Forms.Label KeyPathLabel;
         private System.Windows.Forms.TextBox DataDirInput;
         private System.Windows.Forms.Label DataDirLabel;
+        private System.Windows.Forms.TextBox WalletDirInput;
+        private System.Windows.Forms.Label WalletDirLabel;
         private System.Windows.Forms.TextBox ExecutablePathInput;
         private System.Windows.Forms.Label ExecutablePathLabel;
         private System.Windows.Forms.Label TitleLabel;
@@ -283,5 +294,6 @@
         private System.Windows.Forms.Button KeyPathSelectButton;
         private System.Windows.Forms.Button ExecutablePathSelectButton;
         private System.Windows.Forms.Button DataDirSelectButton;
+        private System.Windows.Forms.Button WalletDirSelectButton;
     }
 }
