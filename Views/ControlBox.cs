@@ -159,7 +159,7 @@ namespace LockMyEthTool.Views
 
         public void StartProcess()
         {
-            this.retryCount = 3;
+            this.retryCount = 20;
             this.StartTimer(10000);
             this.UpdateText("Start Process", Color.Beige);
             this.Controller.Start();
@@ -189,12 +189,11 @@ namespace LockMyEthTool.Views
 
         private void KeyPathSelectButton_Click(object sender, EventArgs e)
         {
-            using var fbd = new FolderBrowserDialog();
+            using var fbd = new OpenFileDialog();
             DialogResult result = fbd.ShowDialog();
-
-            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.FileName))
             {
-                this.Controller.KeyPath = this.KeyPathInput.Text = fbd.SelectedPath;
+                this.Controller.KeyPath = this.KeyPathInput.Text = fbd.FileName;
                 this.CheckState();
             }
         }

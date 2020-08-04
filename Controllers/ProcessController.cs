@@ -136,7 +136,7 @@ namespace LockMyEthTool.Controllers
                     this.directory = this.executablePath;
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
-                    this.commands[0] = "prysm validator --wallet-dir=" + this.walletPath + " --passwords-dir=" + this.keyPath + add;
+                    this.commands[0] = "prysm validator --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + add;
 
                     //prysm validator --wallet-dir=G:\\Ethereum\\Goerli\\Wallet --passwords-dir=G:\\Ethereum\\Goerli\\Password
                     break;
@@ -199,7 +199,7 @@ namespace LockMyEthTool.Controllers
                     this.directory = this.ExecutablePath;
                     this.commands = null;
                     //prysm.bat validator accounts-v2 import --keys-dir=G:\\Ethereum\\Goerli\\eth2Test --wallet-dir=G:\\Ethereum\\Goerli\\Wallet --passwords-dir=G:\\Ethereum\\Goerli\\Password\\
-                    this.arguments = "validator accounts-v2 import --keys-dir=" + medallaKeyPath + " --wallet-dir=" + this.walletPath + " --passwords-dir=" + this.keyPath;
+                    this.arguments = "validator accounts-v2 import --keys-dir=" + medallaKeyPath + " --wallet-dir=" + this.walletPath;
                     this.Start(true, true);
                     break;
             }
@@ -212,7 +212,7 @@ namespace LockMyEthTool.Controllers
 
         private bool CheckKeyPath()
         {
-            return !this.RequiresPassword() || !String.IsNullOrWhiteSpace(this.keyPath) && Directory.Exists(this.keyPath);
+            return !this.RequiresPassword() || !String.IsNullOrWhiteSpace(this.keyPath) && File.Exists(this.keyPath);
         }
 
         private bool CheckDataDir()

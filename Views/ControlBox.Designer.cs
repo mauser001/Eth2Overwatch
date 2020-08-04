@@ -105,9 +105,9 @@
             this.KeyPathLabel.AutoSize = true;
             this.KeyPathLabel.Location = new System.Drawing.Point(11, 201);
             this.KeyPathLabel.Name = "KeyPathLabel";
-            this.KeyPathLabel.Size = new System.Drawing.Size(72, 15);
+            this.KeyPathLabel.Size = new System.Drawing.Size(125, 15);
             this.KeyPathLabel.TabIndex = 6;
-            this.KeyPathLabel.Text = "Key file path";
+            this.KeyPathLabel.Text = "Plaintext password file";
             // 
             // DataDirInput
             // 
@@ -126,16 +126,6 @@
             this.DataDirLabel.TabIndex = 8;
             this.DataDirLabel.Text = "Data Path";
             // 
-            // DataDirSelectButton
-            // 
-            this.DataDirSelectButton.Location = new System.Drawing.Point(598, 260);
-            this.DataDirSelectButton.Name = "DataDirSelectButton";
-            this.DataDirSelectButton.Size = new System.Drawing.Size(75, 23);
-            this.DataDirSelectButton.TabIndex = 17;
-            this.DataDirSelectButton.Text = "Select";
-            this.DataDirSelectButton.UseVisualStyleBackColor = true;
-            this.DataDirSelectButton.Click += new System.EventHandler(this.DataDirSelectButton_Click);
-            // 
             // WalletDirInput
             // 
             this.WalletDirInput.Location = new System.Drawing.Point(164, 259);
@@ -149,19 +139,9 @@
             this.WalletDirLabel.AutoSize = true;
             this.WalletDirLabel.Location = new System.Drawing.Point(11, 259);
             this.WalletDirLabel.Name = "WalletDirLabel";
-            this.WalletDirLabel.Size = new System.Drawing.Size(58, 15);
+            this.WalletDirLabel.Size = new System.Drawing.Size(67, 15);
             this.WalletDirLabel.TabIndex = 8;
             this.WalletDirLabel.Text = "Wallet Path";
-            // 
-            // WalletDirSelectButton
-            // 
-            this.WalletDirSelectButton.Location = new System.Drawing.Point(598, 260);
-            this.WalletDirSelectButton.Name = "WalletDirSelectButton";
-            this.WalletDirSelectButton.Size = new System.Drawing.Size(75, 23);
-            this.WalletDirSelectButton.TabIndex = 17;
-            this.WalletDirSelectButton.Text = "Select";
-            this.WalletDirSelectButton.UseVisualStyleBackColor = true;
-            this.WalletDirSelectButton.Click += new System.EventHandler(this.WalletDirSelectButton_Click);
             // 
             // ExecutablePathInput
             // 
@@ -179,16 +159,6 @@
             this.ExecutablePathLabel.Size = new System.Drawing.Size(125, 15);
             this.ExecutablePathLabel.TabIndex = 10;
             this.ExecutablePathLabel.Text = "Executable folder path";
-            // 
-            // ExecutablePathSelectButton
-            // 
-            this.ExecutablePathSelectButton.Location = new System.Drawing.Point(598, 230);
-            this.ExecutablePathSelectButton.Name = "ExecutablePathSelectButton";
-            this.ExecutablePathSelectButton.Size = new System.Drawing.Size(75, 23);
-            this.ExecutablePathSelectButton.TabIndex = 16;
-            this.ExecutablePathSelectButton.Text = "Select";
-            this.ExecutablePathSelectButton.UseVisualStyleBackColor = true;
-            this.ExecutablePathSelectButton.Click += new System.EventHandler(this.ExecutablePathSelectButton_Click);
             // 
             // TitleLabel
             // 
@@ -238,6 +208,36 @@
             this.KeyPathSelectButton.Text = "Select";
             this.KeyPathSelectButton.UseVisualStyleBackColor = true;
             this.KeyPathSelectButton.Click += new System.EventHandler(this.KeyPathSelectButton_Click);
+            // 
+            // ExecutablePathSelectButton
+            // 
+            this.ExecutablePathSelectButton.Location = new System.Drawing.Point(598, 230);
+            this.ExecutablePathSelectButton.Name = "ExecutablePathSelectButton";
+            this.ExecutablePathSelectButton.Size = new System.Drawing.Size(75, 23);
+            this.ExecutablePathSelectButton.TabIndex = 16;
+            this.ExecutablePathSelectButton.Text = "Select";
+            this.ExecutablePathSelectButton.UseVisualStyleBackColor = true;
+            this.ExecutablePathSelectButton.Click += new System.EventHandler(this.ExecutablePathSelectButton_Click);
+            // 
+            // DataDirSelectButton
+            // 
+            this.DataDirSelectButton.Location = new System.Drawing.Point(598, 260);
+            this.DataDirSelectButton.Name = "DataDirSelectButton";
+            this.DataDirSelectButton.Size = new System.Drawing.Size(75, 23);
+            this.DataDirSelectButton.TabIndex = 17;
+            this.DataDirSelectButton.Text = "Select";
+            this.DataDirSelectButton.UseVisualStyleBackColor = true;
+            this.DataDirSelectButton.Click += new System.EventHandler(this.DataDirSelectButton_Click);
+            // 
+            // WalletDirSelectButton
+            // 
+            this.WalletDirSelectButton.Location = new System.Drawing.Point(598, 260);
+            this.WalletDirSelectButton.Name = "WalletDirSelectButton";
+            this.WalletDirSelectButton.Size = new System.Drawing.Size(75, 23);
+            this.WalletDirSelectButton.TabIndex = 17;
+            this.WalletDirSelectButton.Text = "Select";
+            this.WalletDirSelectButton.UseVisualStyleBackColor = true;
+            this.WalletDirSelectButton.Click += new System.EventHandler(this.WalletDirSelectButton_Click);
             // 
             // ControlBox
             // 

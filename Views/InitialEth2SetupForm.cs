@@ -35,10 +35,6 @@ namespace Eth2Overwatch.Views
                     this.UpdateText("prysm.bat is already downloaded", Color.Green);
                 }
             }
-            if (!String.IsNullOrWhiteSpace(ValidatorController.KeyPath))
-            {
-                this.PasswordFilePathInput.Text = ValidatorController.KeyPath;
-            }
 
             // Create the ToolTip and associate with the Form container.
             ToolTip toolTip1 = new ToolTip
@@ -136,6 +132,7 @@ namespace Eth2Overwatch.Views
             else if (this.CheckPrysmBat())
             {
                 this.UpdateText("prysm.bat sucessfully downloaded", Color.Green);
+                Thread.Sleep(2000);
                 BeaconController.Stop();
                 return;
             }
@@ -247,14 +244,6 @@ namespace Eth2Overwatch.Views
             {
                 this.UpdateText("Please pick a valid folder containing the medalla key files", Color.Red);
             }
-            else if (String.IsNullOrWhiteSpace(this.PasswordFilePathInput.Text))
-            {
-                this.UpdateText("Please enter a validator key file folder", Color.Red);
-            }
-            else if (!Directory.Exists(this.PasswordFilePathInput.Text))
-            {
-                this.UpdateText("Please enter a valid validator key file folder", Color.Red);
-            }
             else if (String.IsNullOrWhiteSpace(this.PickWalletFolderInput.Text))
             {
                 this.UpdateText("Please pick a folder where your wallet should be stored", Color.Red);
@@ -266,22 +255,10 @@ namespace Eth2Overwatch.Views
             else
             {
                 this.UpdateText("Ready to import", Color.Beige);
-                this.ValidatorController.KeyPath = this.PasswordFilePathInput.Text;
                 this.ValidatorController.WalletPath = this.PickWalletFolderInput.Text;
                 return true;
             }
             return false;
-        }
-
-        private void PasswordFilePathSelect_Click(object sender, EventArgs e)
-        {
-            using var fbd = new FolderBrowserDialog();
-            DialogResult result = fbd.ShowDialog();
-
-            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-            {
-                this.PasswordFilePathInput.Text = fbd.SelectedPath;
-            }
         }
 
         private void CreatePasswordFilesButton_Click(object sender, EventArgs e)

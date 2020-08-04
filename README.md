@@ -47,7 +47,6 @@ Download the Eth2Overwatch.exe in a folder and start ist.
     + Complete the Medalla lauchpad account creation: https://medalla.launchpad.ethereum.org/overview
     + Pick the folder where you store your medalla keys
     + Pick a folder where to store your wallet
-    + Pick a folder where to store your password (clear text)
     + Click on 'Import Medalla account' to import the account
     + Enter your medalla key password.
     + If you get the message, that at least 1 account was imported then your are good to go.
@@ -87,7 +86,7 @@ Download the Eth2Overwatch.exe in a folder and start ist.
   + Start Validator: Stops all existing Validator (validator) processes and starts a new one
   + Stop Validator: Stops all existing Validator chain (validator) processes 
   + Autostart: Starts the Validator Process (if not started) on Start of this Programm
-  + Password file path: Path where the validator password files are stored.
+  + Password path: Path to a textfile holding your wallet password (plaintext).
   + Hide cmd:
     + Checked: Process runs in the background
     + Not checked: cmd window running the Validator process will be visible

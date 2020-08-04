@@ -87,7 +87,7 @@ namespace LockMyEthTool
             this.ConnectWithEth1Check.Text = "Connect with Eth1 node";
             this.ConnectWithEth1Check.UseVisualStyleBackColor = true;
             this.ConnectWithEth1Check.CheckedChanged += new System.EventHandler(this.ConnectWithEth1Check_CheckedChanged);
-            this.ConnectWithEth1Check.Enabled = false;
+            //this.ConnectWithEth1Check.Enabled = false;
             // 
             // UseGoerliCheck
             // 

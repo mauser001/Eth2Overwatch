@@ -14,3 +14,6 @@
 + Changes
   + Added medalla testnet support
     + Including the import of medalla validator account
+#### Version 1.0.1-Beta.2
++ Bugfix
+  + Addapted changes from prysm v18

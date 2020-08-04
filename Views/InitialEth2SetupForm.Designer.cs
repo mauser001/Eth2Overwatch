@@ -48,9 +48,6 @@
             this.complete = new System.Windows.Forms.LinkLabel();
             this.PickMedallaKeyFilesLabel = new System.Windows.Forms.Label();
             this.CreatePasswordFilesButton = new System.Windows.Forms.Button();
-            this.PasswordFilePathSelect = new System.Windows.Forms.Button();
-            this.PickPasswordFilePathLabel = new System.Windows.Forms.Label();
-            this.PasswordFilePathInput = new System.Windows.Forms.TextBox();
             this.DeleteExistingFilesCheck = new System.Windows.Forms.CheckBox();
             KeyDescription = new System.Windows.Forms.TextBox();
             this.ValidatorGroup.SuspendLayout();
@@ -170,9 +167,6 @@
             this.ValidatorGroup.Controls.Add(this.PickMedallaKeyFilesLabel);
             this.ValidatorGroup.Controls.Add(KeyDescription);
             this.ValidatorGroup.Controls.Add(this.CreatePasswordFilesButton);
-            this.ValidatorGroup.Controls.Add(this.PasswordFilePathSelect);
-            this.ValidatorGroup.Controls.Add(this.PickPasswordFilePathLabel);
-            this.ValidatorGroup.Controls.Add(this.PasswordFilePathInput);
             this.ValidatorGroup.Enabled = false;
             this.ValidatorGroup.Location = new System.Drawing.Point(22, 193);
             this.ValidatorGroup.Name = "ValidatorGroup";
@@ -248,40 +242,13 @@
             // 
             // CreatePasswordFilesButton
             // 
-            this.CreatePasswordFilesButton.Location = new System.Drawing.Point(15, 213);
+            this.CreatePasswordFilesButton.Location = new System.Drawing.Point(15, 170);
             this.CreatePasswordFilesButton.Name = "CreatePasswordFilesButton";
             this.CreatePasswordFilesButton.Size = new System.Drawing.Size(180, 24);
             this.CreatePasswordFilesButton.TabIndex = 4;
             this.CreatePasswordFilesButton.Text = "7. Import Medalla account";
             this.CreatePasswordFilesButton.UseVisualStyleBackColor = true;
             this.CreatePasswordFilesButton.Click += new System.EventHandler(this.CreatePasswordFilesButton_Click);
-            // 
-            // PasswordFilePathSelect
-            // 
-            this.PasswordFilePathSelect.Location = new System.Drawing.Point(359, 179);
-            this.PasswordFilePathSelect.Name = "PasswordFilePathSelect";
-            this.PasswordFilePathSelect.Size = new System.Drawing.Size(75, 24);
-            this.PasswordFilePathSelect.TabIndex = 3;
-            this.PasswordFilePathSelect.Text = "Select";
-            this.PasswordFilePathSelect.UseVisualStyleBackColor = true;
-            this.PasswordFilePathSelect.Click += new System.EventHandler(this.PasswordFilePathSelect_Click);
-            // 
-            // PickPasswordFilePathLabel
-            // 
-            this.PickPasswordFilePathLabel.AutoSize = true;
-            this.PickPasswordFilePathLabel.Location = new System.Drawing.Point(15, 161);
-            this.PickPasswordFilePathLabel.Name = "PickPasswordFilePathLabel";
-            this.PickPasswordFilePathLabel.Size = new System.Drawing.Size(226, 15);
-            this.PickPasswordFilePathLabel.TabIndex = 2;
-            this.PickPasswordFilePathLabel.Text = "6. Pick a folder to store your password file";
-            // 
-            // PasswordFilePathInput
-            // 
-            this.PasswordFilePathInput.Location = new System.Drawing.Point(15, 179);
-            this.PasswordFilePathInput.Name = "PasswordFilePathInput";
-            this.PasswordFilePathInput.Size = new System.Drawing.Size(338, 23);
-            this.PasswordFilePathInput.TabIndex = 1;
-            this.PasswordFilePathInput.TextChanged += new System.EventHandler(this.PasswordFilePathInput_TextChanged);
             // 
             // DeleteExistingFilesCheck
             // 
@@ -330,9 +297,6 @@
         private System.Windows.Forms.Label BeaconChainIsReadyLabel;
         private System.Windows.Forms.Button CloseButton;
         private System.Windows.Forms.GroupBox ValidatorGroup;
-        private System.Windows.Forms.Label PickPasswordFilePathLabel;
-        private System.Windows.Forms.TextBox PasswordFilePathInput;
-        private System.Windows.Forms.Button PasswordFilePathSelect;
         private System.Windows.Forms.Button CreatePasswordFilesButton;
         private System.Windows.Forms.TextBox KeyDescription;
         private System.Windows.Forms.CheckBox DeleteExistingFilesCheck;
