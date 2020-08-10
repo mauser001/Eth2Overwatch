@@ -137,8 +137,6 @@ namespace LockMyEthTool.Controllers
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
                     this.commands[0] = "prysm validator --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + add;
-
-                    //prysm validator --wallet-dir=G:\\Ethereum\\Goerli\\Wallet --passwords-dir=G:\\Ethereum\\Goerli\\Password
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     this.processIdentifier = "beacon";
@@ -146,7 +144,7 @@ namespace LockMyEthTool.Controllers
                     this.directory = this.executablePath;
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
-                    var connectTo = useLocalEth1Node ? " --http-web3provider=$HOME/Goerli/geth.ipc" : "";
+                    var connectTo = useLocalEth1Node ? " --http-web3provider=http://127.0.0.1:8545/" : "";
                     this.commands[1] = String.Format(@"prysm.bat beacon-chain --datadir=" + this.dataDir + connectTo + add);
                     break;
                 case PROCESS_TYPES.ETH_1:
@@ -154,7 +152,7 @@ namespace LockMyEthTool.Controllers
                     this.fileName = "cmd.exe";
                     this.directory = this.executablePath;
                     this.commands = new string[1];
-                    var ipc = useLocalEth1Node ? " --ipcpath=r=$HOME/Goerli/geth.ipc --rpc" : "";
+                    var ipc = useLocalEth1Node ? " --ipcpath=http://127.0.0.1:8545/ --rpc" : "";
                     this.commands[0] = String.Format(@"geth --datadir=" + this.dataDir + ipc + goerli + add);
                     break;
             }
@@ -198,7 +196,6 @@ namespace LockMyEthTool.Controllers
                     this.fileName = this.ExecutablePath + "\\prysm.bat";
                     this.directory = this.ExecutablePath;
                     this.commands = null;
-                    //prysm.bat validator accounts-v2 import --keys-dir=G:\\Ethereum\\Goerli\\eth2Test --wallet-dir=G:\\Ethereum\\Goerli\\Wallet --passwords-dir=G:\\Ethereum\\Goerli\\Password\\
                     this.arguments = "validator accounts-v2 import --keys-dir=" + medallaKeyPath + " --wallet-dir=" + this.walletPath;
                     this.Start(true, true);
                     break;
