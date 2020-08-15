@@ -10,7 +10,7 @@ namespace LockMyEthTool.Views
     }
     public interface IProcessController
     {
-        void Start(bool skipCheck = false, bool showCommandPrompt = false);
+        void Start(bool skipCheck = false, bool showCommandPrompt = false, bool dontStop = false);
         void Stop();
 
         void CheckState(Func<bool, string, string> resultFunction);
@@ -19,7 +19,7 @@ namespace LockMyEthTool.Views
 
         void UpdateConfig();
 
-        void DownloadExecutable(string path, bool deleteExistingContent);
+        void DownloadExecutable(string path = null);
 
         void ImportKeys(string medallaKeyPath);
 
@@ -31,6 +31,10 @@ namespace LockMyEthTool.Views
         bool RequiresWalletPath();
         bool SupportsEth1Connection();
         bool SupportsGoerliTestnet();
+        string GetPrysmVersion();
+        string GetLastVersion();
+
+        bool CheckExecutable(string path = null);
 
         bool Autostart
         {

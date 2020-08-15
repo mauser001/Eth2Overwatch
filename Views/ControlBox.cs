@@ -13,6 +13,7 @@ namespace LockMyEthTool.Views
         private readonly IProcessController Controller = null;
         private readonly string ControlName;
         private int retryCount = 0;
+        private int successCounter = 0;
         public ControlBox(string Name, IProcessController Controller)
         {
             this.ControlName = Name;
@@ -119,19 +120,22 @@ namespace LockMyEthTool.Views
 
         private void UpdateText(string text, Color backgroundColor)
         {
-            if (this.OutputText.InvokeRequired)
+            if (this.InvokeRequired)
             {
                 Action act = () =>
                 {
-                    this.OutputText.Text = text;
-                    this.OutputText.BackColor = backgroundColor;
+                    this.StateOutput.Text = text;
+                    this.StateOutput.BackColor = backgroundColor;
+                    this.OutputText.Text = this.Controller.GetLogText();
+                    
                 };
-                this.OutputText.Invoke(act);
+                this.Invoke(act);
             }
             else
             {
-                this.OutputText.Text = text;
-                this.OutputText.BackColor = backgroundColor;
+                this.StateOutput.Text = text;
+                this.StateOutput.BackColor = backgroundColor;
+                this.OutputText.Text = this.Controller.GetLogText();
             }
         }
 
@@ -140,19 +144,43 @@ namespace LockMyEthTool.Views
             this.Controller.CheckState((bool success, string result) =>
             {
                 this.UpdateText(result, success ? Color.LightGreen : Color.Red);
-                if (!success && this.AutostartCheck.Checked && this.retryCount <= 0)
+                if (result != null && result.IndexOf("Executable download complete") >= 0)
                 {
                     this.StartProcess();
                 }
-                else if(!success)
+                else if (!success && this.AutostartCheck.Checked && this.retryCount <= 0)
                 {
-                    if(this.retryCount> 0)
+                    this.StartProcess();
+                }
+                else if (!success)
+                {
+                    if (this.retryCount > 0)
                     {
                         this.retryCount--;
                     }
+
+                    if (this.Controller.GetLastVersion() != this.Controller.GetPrysmVersion())
+                    {
+                        this.Controller.Stop();
+                        this.Controller.DownloadExecutable();
+                    }
                     this.StartTimer(10000);
                 }
-                return "We dont want to give something back";
+                else if (success && this.successCounter > 60)
+                {
+                    this.retryCount = 20;
+                    this.successCounter = 0;
+                    if (this.Controller.GetLastVersion() != this.Controller.GetPrysmVersion())
+                    {
+                        this.Controller.Stop();
+                        this.Controller.DownloadExecutable();
+                    }
+                }
+                else if (success)
+                {
+                    this.successCounter++;
+                }
+                return "";
             });
         }
 

@@ -1,9 +1,16 @@
 # Eth2Overwatch - Changelog
-#### Version 1.0.0-Beta.2
+
+#### Version 1.0.2-Beta.1
++ Refactoring 
+  + Loading and executing the validator/beacon chain directly and not via the prysm.bat
++ Feature
+  + Checking now if latest version is downloaded and if not download them
+
+#### Version 1.0.1-Beta.2
 + Features
   + Folder Selection Buttons added
   + Initial Setup for Eth2 beacon chain and validator added
-#### Version 1.0.0-Beta.3
+#### Version 1.0.1-Beta.2
 + Features
     + Auto start after windows login added
     + Added Icon

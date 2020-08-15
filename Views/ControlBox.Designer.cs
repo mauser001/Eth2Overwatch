@@ -49,14 +49,15 @@
             this.ExecutablePathSelectButton = new System.Windows.Forms.Button();
             this.DataDirSelectButton = new System.Windows.Forms.Button();
             this.WalletDirSelectButton = new System.Windows.Forms.Button();
+            this.StateOutput = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // OutputText
             // 
-            this.OutputText.Location = new System.Drawing.Point(265, 45);
+            this.OutputText.Location = new System.Drawing.Point(276, 73);
             this.OutputText.Name = "OutputText";
             this.OutputText.ReadOnly = true;
-            this.OutputText.Size = new System.Drawing.Size(397, 142);
+            this.OutputText.Size = new System.Drawing.Size(397, 114);
             this.OutputText.TabIndex = 1;
             this.OutputText.Text = "";
             this.OutputText.TextChanged += new System.EventHandler(this.OutputText_TextChanged);
@@ -239,12 +240,22 @@
             this.WalletDirSelectButton.UseVisualStyleBackColor = true;
             this.WalletDirSelectButton.Click += new System.EventHandler(this.WalletDirSelectButton_Click);
             // 
+            // StateOutput
+            // 
+            this.StateOutput.Location = new System.Drawing.Point(276, 11);
+            this.StateOutput.Name = "StateOutput";
+            this.StateOutput.ReadOnly = true;
+            this.StateOutput.Size = new System.Drawing.Size(397, 56);
+            this.StateOutput.TabIndex = 18;
+            this.StateOutput.Text = "";
+            // 
             // ControlBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.StateOutput);
             this.Controls.Add(this.WalletDirSelectButton);
             this.Controls.Add(this.DataDirSelectButton);
             this.Controls.Add(this.ExecutablePathSelectButton);
@@ -295,5 +306,6 @@
         private System.Windows.Forms.Button ExecutablePathSelectButton;
         private System.Windows.Forms.Button DataDirSelectButton;
         private System.Windows.Forms.Button WalletDirSelectButton;
+        private System.Windows.Forms.RichTextBox StateOutput;
     }
 }

@@ -33,7 +33,7 @@
             this.PickPrysmFolderILabel = new System.Windows.Forms.Label();
             this.PickPrysmFolderInput = new System.Windows.Forms.TextBox();
             this.PickPrysmFolderButton = new System.Windows.Forms.Button();
-            this.DownloadButton = new System.Windows.Forms.Button();
+            this.DownloadBeaconButton = new System.Windows.Forms.Button();
             this.OutputText = new System.Windows.Forms.TextBox();
             this.ShowDownlaodedPrysm = new System.Windows.Forms.Label();
             this.ShowInExplorerButton = new System.Windows.Forms.Button();
@@ -48,7 +48,8 @@
             this.complete = new System.Windows.Forms.LinkLabel();
             this.PickMedallaKeyFilesLabel = new System.Windows.Forms.Label();
             this.CreatePasswordFilesButton = new System.Windows.Forms.Button();
-            this.DeleteExistingFilesCheck = new System.Windows.Forms.CheckBox();
+            this.DownloadValidatorButton = new System.Windows.Forms.Button();
+            this.ValidatorReadyLabel = new System.Windows.Forms.Label();
             KeyDescription = new System.Windows.Forms.TextBox();
             this.ValidatorGroup.SuspendLayout();
             this.SuspendLayout();
@@ -94,16 +95,16 @@
             this.PickPrysmFolderButton.UseVisualStyleBackColor = true;
             this.PickPrysmFolderButton.Click += new System.EventHandler(this.PickPrysmFolderButton_Click);
             // 
-            // DownloadButton
+            // DownloadBeaconButton
             // 
-            this.DownloadButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.DownloadButton.Location = new System.Drawing.Point(13, 83);
-            this.DownloadButton.Name = "DownloadButton";
-            this.DownloadButton.Size = new System.Drawing.Size(159, 23);
-            this.DownloadButton.TabIndex = 3;
-            this.DownloadButton.Text = "2. Download prym.bat";
-            this.DownloadButton.UseVisualStyleBackColor = true;
-            this.DownloadButton.Click += new System.EventHandler(this.DownloadButton_Click);
+            this.DownloadBeaconButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DownloadBeaconButton.Location = new System.Drawing.Point(13, 83);
+            this.DownloadBeaconButton.Name = "DownloadBeaconButton";
+            this.DownloadBeaconButton.Size = new System.Drawing.Size(239, 23);
+            this.DownloadBeaconButton.TabIndex = 3;
+            this.DownloadBeaconButton.Text = "2. Download beacon chain executables";
+            this.DownloadBeaconButton.UseVisualStyleBackColor = true;
+            this.DownloadBeaconButton.Click += new System.EventHandler(this.DownloadButton_Click);
             // 
             // OutputText
             // 
@@ -117,16 +118,16 @@
             // ShowDownlaodedPrysm
             // 
             this.ShowDownlaodedPrysm.AutoSize = true;
-            this.ShowDownlaodedPrysm.Location = new System.Drawing.Point(321, 126);
+            this.ShowDownlaodedPrysm.Location = new System.Drawing.Point(309, 169);
             this.ShowDownlaodedPrysm.Name = "ShowDownlaodedPrysm";
-            this.ShowDownlaodedPrysm.Size = new System.Drawing.Size(164, 15);
+            this.ShowDownlaodedPrysm.Size = new System.Drawing.Size(173, 15);
             this.ShowDownlaodedPrysm.TabIndex = 5;
             this.ShowDownlaodedPrysm.Tag = "";
-            this.ShowDownlaodedPrysm.Text = "Show downloaded prysm.bat:";
+            this.ShowDownlaodedPrysm.Text = "Show downloaded executables:";
             // 
             // ShowInExplorerButton
             // 
-            this.ShowInExplorerButton.Location = new System.Drawing.Point(491, 122);
+            this.ShowInExplorerButton.Location = new System.Drawing.Point(488, 165);
             this.ShowInExplorerButton.Name = "ShowInExplorerButton";
             this.ShowInExplorerButton.Size = new System.Drawing.Size(103, 22);
             this.ShowInExplorerButton.TabIndex = 6;
@@ -138,11 +139,11 @@
             // 
             this.BeaconChainIsReadyLabel.AutoSize = true;
             this.BeaconChainIsReadyLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.BeaconChainIsReadyLabel.Location = new System.Drawing.Point(13, 126);
+            this.BeaconChainIsReadyLabel.Location = new System.Drawing.Point(13, 110);
             this.BeaconChainIsReadyLabel.Name = "BeaconChainIsReadyLabel";
-            this.BeaconChainIsReadyLabel.Size = new System.Drawing.Size(293, 21);
+            this.BeaconChainIsReadyLabel.Size = new System.Drawing.Size(228, 21);
             this.BeaconChainIsReadyLabel.TabIndex = 7;
-            this.BeaconChainIsReadyLabel.Text = "Executable (prysm.bat) for the Beacon Chain is ready.";
+            this.BeaconChainIsReadyLabel.Text = "Executable for the Beacon Chain is ready.";
             this.BeaconChainIsReadyLabel.UseCompatibleTextRendering = true;
             this.BeaconChainIsReadyLabel.Visible = false;
             // 
@@ -250,29 +251,42 @@
             this.CreatePasswordFilesButton.UseVisualStyleBackColor = true;
             this.CreatePasswordFilesButton.Click += new System.EventHandler(this.CreatePasswordFilesButton_Click);
             // 
-            // DeleteExistingFilesCheck
+            // DownloadValidatorButton
             // 
-            this.DeleteExistingFilesCheck.AutoSize = true;
-            this.DeleteExistingFilesCheck.Location = new System.Drawing.Point(189, 83);
-            this.DeleteExistingFilesCheck.Name = "DeleteExistingFilesCheck";
-            this.DeleteExistingFilesCheck.Size = new System.Drawing.Size(127, 19);
-            this.DeleteExistingFilesCheck.TabIndex = 10;
-            this.DeleteExistingFilesCheck.Text = "Delete existing files";
-            this.DeleteExistingFilesCheck.UseVisualStyleBackColor = true;
+            this.DownloadValidatorButton.Location = new System.Drawing.Point(12, 134);
+            this.DownloadValidatorButton.Name = "DownloadValidatorButton";
+            this.DownloadValidatorButton.Size = new System.Drawing.Size(240, 23);
+            this.DownloadValidatorButton.TabIndex = 11;
+            this.DownloadValidatorButton.Text = "3. Download validator exaecutables";
+            this.DownloadValidatorButton.UseVisualStyleBackColor = true;
+            this.DownloadValidatorButton.Click += new System.EventHandler(this.DownloadValidatorButton_Click);
+            // 
+            // ValidatorReadyLabel
+            // 
+            this.ValidatorReadyLabel.AutoSize = true;
+            this.ValidatorReadyLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.ValidatorReadyLabel.Location = new System.Drawing.Point(13, 163);
+            this.ValidatorReadyLabel.Name = "ValidatorReadyLabel";
+            this.ValidatorReadyLabel.Size = new System.Drawing.Size(203, 21);
+            this.ValidatorReadyLabel.TabIndex = 12;
+            this.ValidatorReadyLabel.Text = "Executable for the Validator is ready.";
+            this.ValidatorReadyLabel.UseCompatibleTextRendering = true;
+            this.ValidatorReadyLabel.Visible = false;
             // 
             // InitialEth2SetupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1189, 525);
-            this.Controls.Add(this.DeleteExistingFilesCheck);
+            this.Controls.Add(this.ValidatorReadyLabel);
+            this.Controls.Add(this.DownloadValidatorButton);
             this.Controls.Add(this.ValidatorGroup);
             this.Controls.Add(this.CloseButton);
             this.Controls.Add(this.BeaconChainIsReadyLabel);
             this.Controls.Add(this.ShowDownlaodedPrysm);
             this.Controls.Add(this.ShowInExplorerButton);
             this.Controls.Add(this.OutputText);
-            this.Controls.Add(this.DownloadButton);
+            this.Controls.Add(this.DownloadBeaconButton);
             this.Controls.Add(this.PickPrysmFolderButton);
             this.Controls.Add(this.PickPrysmFolderInput);
             this.Controls.Add(this.PickPrysmFolderILabel);
@@ -290,7 +304,7 @@
         private System.Windows.Forms.Label PickPrysmFolderILabel;
         private System.Windows.Forms.TextBox PickPrysmFolderInput;
         private System.Windows.Forms.Button PickPrysmFolderButton;
-        private System.Windows.Forms.Button DownloadButton;
+        private System.Windows.Forms.Button DownloadBeaconButton;
         private System.Windows.Forms.TextBox OutputText;
         private System.Windows.Forms.Label ShowDownlaodedPrysm;
         private System.Windows.Forms.Button ShowInExplorerButton;
@@ -299,7 +313,6 @@
         private System.Windows.Forms.GroupBox ValidatorGroup;
         private System.Windows.Forms.Button CreatePasswordFilesButton;
         private System.Windows.Forms.TextBox KeyDescription;
-        private System.Windows.Forms.CheckBox DeleteExistingFilesCheck;
         private System.Windows.Forms.LinkLabel complete;
         private System.Windows.Forms.Label PickMedallaKeyFilesLabel;
         private System.Windows.Forms.Button KeyFileSelect;
@@ -307,5 +320,7 @@
         private System.Windows.Forms.Button PickWalletFolderSelect;
         private System.Windows.Forms.TextBox PickWalletFolderInput;
         private System.Windows.Forms.Label PickWalletFolder;
+        private System.Windows.Forms.Button DownloadValidatorButton;
+        private System.Windows.Forms.Label ValidatorReadyLabel;
     }
 }

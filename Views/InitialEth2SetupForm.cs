@@ -30,9 +30,17 @@ namespace Eth2Overwatch.Views
             if(!String.IsNullOrWhiteSpace(BeaconController.ExecutablePath) && BeaconController.ExecutablePath.IndexOf(@"\prysm") > 0)
             {
                 this.PickPrysmFolderInput.Text = BeaconController.ExecutablePath.Substring(0, BeaconController.ExecutablePath.IndexOf(@"\prysm"));
-                if(this.CheckPrysmBat())
+                if(this.CheckBeaconChain() && this.CheckValidator())
                 {
-                    this.UpdateText("prysm.bat is already downloaded", Color.Green);
+                    this.UpdateText("Validator and Beaconchain executables are already downloaded", Color.Green);
+                }
+                else if (this.CheckValidator())
+                {
+                    this.UpdateText("Validator executables are already downloaded you can download the beacon chain executables", Color.Green);
+                }
+                else if(this.CheckBeaconChain())
+                {
+                    this.UpdateText("Beaconchain executables are already downloaded you can download the beacon chain executables", Color.Green);
                 }
             }
 
@@ -47,8 +55,6 @@ namespace Eth2Overwatch.Views
                 ShowAlways = true
             };
 
-            // Set up the ToolTip text for the Button and Checkbox.
-            toolTip1.SetToolTip(this.DeleteExistingFilesCheck, "If checked the prym folder and all its files will be delete before downloading the file");
         }
 
         private void PickPrysmFolderButton_Click(object sender, EventArgs e)
@@ -62,7 +68,7 @@ namespace Eth2Overwatch.Views
             }
         }
 
-        private bool PrysmDownloaded
+        private bool ValidatorDownloaded
         {
             get
             {
@@ -93,13 +99,46 @@ namespace Eth2Overwatch.Views
             }
         }
 
-        private bool CheckPrysmBat()
+        private bool CheckBeaconChain()
         {
-            if (File.Exists(this.PickPrysmFolderInput.Text + @"\prysm\prysm.bat"))
+            if (BeaconController.CheckExecutable(this.PickPrysmFolderInput.Text + @"\prysm"))
             {
                 BeaconController.ExecutablePath = this.PickPrysmFolderInput.Text + @"\prysm";
-                ValidatorController.ExecutablePath = BeaconController.ExecutablePath;
-                this.PrysmDownloaded = true;
+                if (this.BeaconChainIsReadyLabel.InvokeRequired)
+                {
+                    Action act = () =>
+                    {
+                        this.BeaconChainIsReadyLabel.Visible = true;
+                    };
+                    this.BeaconChainIsReadyLabel.Invoke(act);
+                }
+                else
+                {
+                    this.BeaconChainIsReadyLabel.Visible = true;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private bool CheckValidator()
+        {
+            if (ValidatorController.CheckExecutable(this.PickPrysmFolderInput.Text + @"\prysm"))
+            {
+                ValidatorController.ExecutablePath = this.PickPrysmFolderInput.Text + @"\prysm";
+                if (this.ValidatorReadyLabel.InvokeRequired)
+                {
+                    Action act = () =>
+                    {
+                        this.ValidatorReadyLabel.Visible = true;
+                    };
+                    this.ValidatorReadyLabel.Invoke(act);
+                }
+                else
+                {
+                    this.ValidatorReadyLabel.Visible = true;
+                }
+                this.ValidatorDownloaded = true;
                 return true;
             }
             return false;
@@ -129,11 +168,14 @@ namespace Eth2Overwatch.Views
             {
 
             }
-            else if (this.CheckPrysmBat())
+            else if (this.CheckValidator())
             {
-                this.UpdateText("prysm.bat sucessfully downloaded", Color.Green);
-                Thread.Sleep(2000);
-                BeaconController.Stop();
+                this.UpdateText("Validator Executables sucessfully downloaded", Color.Green);
+                return;
+            }
+            else if (this.CheckBeaconChain())
+            {
+                this.UpdateText("Beacon chain Executables sucessfully downloaded", Color.Green);
                 return;
             }
             this.StartTimer(1000);
@@ -176,7 +218,20 @@ namespace Eth2Overwatch.Views
                 this.UpdateText("Invalid folder path", Color.Red);
                 return;
             }
-            this.BeaconController.DownloadExecutable(this.PickPrysmFolderInput.Text, this.DeleteExistingFilesCheck.Checked);
+
+            this.UpdateText("Downloading Beacon chain executables now!", Color.Beige);
+            this.BeaconController.DownloadExecutable(this.PickPrysmFolderInput.Text);
+            this.StartTimer(1000);
+        }
+        private void DownloadValidatorButton_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists(this.PickPrysmFolderInput.Text))
+            {
+                this.UpdateText("Invalid folder path", Color.Red);
+                return;
+            }
+            this.UpdateText("Downloading Validator executables now!", Color.Beige);
+            this.ValidatorController.DownloadExecutable(this.PickPrysmFolderInput.Text);
             this.StartTimer(1000);
         }
 
@@ -202,7 +257,7 @@ namespace Eth2Overwatch.Views
 
         private void PickPrysmFolderInput_TextChanged(object sender, EventArgs e)
         {
-            if (this.CheckPrysmBat())
+            if (this.CheckBeaconChain())
             {
                 this.UpdateText("prysm.bat is already downloaded", Color.Green);
             }
@@ -227,7 +282,7 @@ namespace Eth2Overwatch.Views
 
         private void PasswordFilePathInput_TextChanged(object sender, EventArgs e)
         {
-            if(!this.PrysmDownloaded)
+            if(!this.ValidatorDownloaded)
             {
                 return;
             }

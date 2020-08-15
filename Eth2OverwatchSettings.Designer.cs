@@ -12,7 +12,7 @@ namespace Eth2Overwatch {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.0.0")]
     internal sealed partial class Eth2OverwatchSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Eth2OverwatchSettings defaultInstance = ((Eth2OverwatchSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Eth2OverwatchSettings())));
@@ -260,6 +260,18 @@ namespace Eth2Overwatch {
             }
             set {
                 this["WalletPath_Validator"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastPrysmVersion {
+            get {
+                return ((string)(this["LastPrysmVersion"]));
+            }
+            set {
+                this["LastPrysmVersion"] = value;
             }
         }
     }

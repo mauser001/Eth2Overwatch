@@ -31,6 +31,9 @@ namespace LockMyEthTool.Controllers
         private bool useGoerliTestnet = false;
         private string additionalCommands = "";
         private bool logOutput = true;
+        private string latestVersion = "";
+        private string filePrefix = "";
+        private bool downloadingExecutables = false;
 
         public ProcessController(PROCESS_TYPES ProcessType)
         {
@@ -43,6 +46,7 @@ namespace LockMyEthTool.Controllers
             switch (this.ProcessType)
             {
                 case PROCESS_TYPES.VALIDATOR:
+                    this.filePrefix = "validator";
                     this.autoStart = Eth2OverwatchSettings.Default.Autostart_Validator;
                     this.hideCommandPrompt = Eth2OverwatchSettings.Default.HideCommandPrompt_Validator;
                     this.executablePath = Eth2OverwatchSettings.Default.ExecutablePath_Validator;
@@ -62,8 +66,10 @@ namespace LockMyEthTool.Controllers
                     {
                         this.password = null;
                     }
+                    this.GetPrysmVersion();                   
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
+                    this.filePrefix = "beacon";
                     this.autoStart = Eth2OverwatchSettings.Default.Autostart_BeaconChain;
                     this.hideCommandPrompt = Eth2OverwatchSettings.Default.HideCommandPrompt_BeaconChain;
                     this.dataDir = Eth2OverwatchSettings.Default.DataDir_BeaconChain;
@@ -71,6 +77,7 @@ namespace LockMyEthTool.Controllers
                     this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_BeaconChain;
                     this.useLocalEth1Node = Eth2OverwatchSettings.Default.UseLocalEth1Node;
                     this.useGoerliTestnet = Eth2OverwatchSettings.Default.UseGoerliTestnet;
+                    this.GetPrysmVersion();
                     break;
                 case PROCESS_TYPES.ETH_1:
                     this.autoStart = Eth2OverwatchSettings.Default.AutoStart_Eth1;
@@ -132,11 +139,10 @@ namespace LockMyEthTool.Controllers
                 case PROCESS_TYPES.VALIDATOR:
                     this.processIdentifier = "validator";
                     this.fileName = "cmd.exe";
-                    string validatorpath =  this.keyPath.Replace("\\", "\\\\");
                     this.directory = this.executablePath;
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
-                    this.commands[0] = "prysm validator --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + add;
+                    this.commands[0] = String.Format(this.getExecutables()[0] + " --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + add);
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     this.processIdentifier = "beacon";
@@ -145,7 +151,7 @@ namespace LockMyEthTool.Controllers
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
                     var connectTo = useLocalEth1Node ? " --http-web3provider=http://127.0.0.1:8545/" : "";
-                    this.commands[1] = String.Format(@"prysm.bat beacon-chain --datadir=" + this.dataDir + connectTo + add);
+                    this.commands[1] = String.Format(this.getExecutables()[0] + @" --datadir=" + this.dataDir + connectTo + add);
                     break;
                 case PROCESS_TYPES.ETH_1:
                     this.processIdentifier = "geth";
@@ -159,30 +165,77 @@ namespace LockMyEthTool.Controllers
 
         }
 
-        public void DownloadExecutable(string path, bool deleteExistingContent)
+        public string GetLastVersion()
         {
-            switch (this.ProcessType)
+            return this.latestVersion;
+        }
+
+        public string GetPrysmVersion()
+        {
+            if(this.ProcessType == PROCESS_TYPES.ETH_1)
             {
-                case PROCESS_TYPES.BEACON_CHAIN:
-                    this.processIdentifier = "no identifier";
-                    this.fileName = "cmd.exe";
-                    this.directory = path;
-                    bool pathExistis = Directory.Exists(path + @"\prysm");
-                    if(!pathExistis)
+                return "";
+            }
+
+            try
+            {
+                HttpWebRequest webRequest = HttpWebRequest.CreateHttp("https://prysmaticlabs.com/releases/latest");
+
+                HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
+                StreamReader streamReader = new StreamReader(webResponse.GetResponseStream());
+
+                this.latestVersion = streamReader.ReadToEnd().Replace("\n", "");
+                Eth2OverwatchSettings.Default.LastPrysmVersion = this.latestVersion;
+            }
+            catch
+            {
+                this.latestVersion = Eth2OverwatchSettings.Default.LastPrysmVersion;
+            }
+            return this.latestVersion;
+        }
+
+        public void DownloadExecutable(string path = null)
+        {
+            this.Logs = new List<string>();
+            if (this.ProcessType != PROCESS_TYPES.ETH_1)
+            {
+                this.downloadingExecutables = true;
+                if(path == null)
+                {
+                    path = this.executablePath;
+                }
+                else
+                {
+                    path = path + @"\prysm";
+                }
+                bool pathExistis = Directory.Exists(path);
+                if(!pathExistis)
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                int count = 0;
+                foreach (string fileName in this.RequiredFiles())
+                {
+                    using (WebClient webClient = new WebClient())
                     {
-                        deleteExistingContent = false;
+                        webClient.DownloadFileCompleted += new System.ComponentModel.AsyncCompletedEventHandler((object obj, System.ComponentModel.AsyncCompletedEventArgs args) =>
+                        {
+                            count++;
+                            if(count < 3)
+                            {
+                                this.Logs.Add("Files downloaded: " + count + " of 3");
+                            }
+                            else
+                            {
+                                this.downloadingExecutables = false;
+                                this.Logs.Add("Executable download complete");
+                            }
+                        });
+                        Uri url = new Uri("https://prysmaticlabs.com/releases/" + fileName);
+                        webClient.DownloadFileAsync(url, path + @"\prysm\"+fileName);
                     }
-                    this.commands = new string[deleteExistingContent ? 4 : 3];
-                    int cout = 0;
-                    if (deleteExistingContent)
-                    {
-                        this.commands[cout++] = "rmdir /q /s prysm";
-                    }
-                    this.commands[cout++] = pathExistis && !deleteExistingContent ? "cd prysm" : String.Format(@"mkdir prysm && cd prysm");
-                    this.commands[cout++] = String.Format(@"reg add HKCU\Console / v VirtualTerminalLevel / t REG_DWORD / d 1");
-                    this.commands[cout++] = String.Format(@"curl https://raw.githubusercontent.com/prysmaticlabs/prysm/master/prysm.bat --output prysm.bat");
-                    this.Start(true, true);
-                    break;
+                }
             }
         }
 
@@ -193,13 +246,48 @@ namespace LockMyEthTool.Controllers
                 case PROCESS_TYPES.VALIDATOR:
                     this.logOutput = false;
                     this.processIdentifier = "no identifier";
-                    this.fileName = this.ExecutablePath + "\\prysm.bat";
+                    this.fileName = this.ExecutablePath + "\\"+this.getExecutables()[0];
                     this.directory = this.ExecutablePath;
                     this.commands = null;
-                    this.arguments = "validator accounts-v2 import --keys-dir=" + medallaKeyPath + " --wallet-dir=" + this.walletPath;
+                    this.arguments = "accounts-v2 import --keys-dir=" + medallaKeyPath + " --wallet-dir=" + this.walletPath;
                     this.Start(true, true);
                     break;
             }
+        }
+
+        private string[] RequiredFiles()
+        {
+            string[] files = null;
+            if(this.ProcessType == PROCESS_TYPES.ETH_1)
+            {
+                files = new string[1];
+                files[0] = "geth.exe";
+            }
+            else
+            {
+                files = new string[3];
+                files[0] = this.GetExecutableFileName();
+                files[1] = this.GetExecutableFileName() + ".sha256";
+                files[2] = this.GetExecutableFileName() + ".sig";
+            }
+
+            return files;
+        }
+
+        public string[] getExecutables()
+        {
+            // Get the files
+            DirectoryInfo info = new DirectoryInfo(this.executablePath);
+            FileInfo[] files = info.GetFiles();
+            files = Array.FindAll(files, file => file.Name.IndexOf(this.filePrefix) == 0 && file.Name.IndexOf(".exe") == file.Name.Length-4);
+
+            // Sort by creation-time descending 
+            Array.Sort(files, delegate (FileInfo f1, FileInfo f2)
+            {
+                return f2.CreationTime.CompareTo(f1.CreationTime);
+            });
+
+            return Array.ConvertAll<FileInfo, string>(files, file => file.Name);
         }
 
         public bool CheckWalletPath()
@@ -217,19 +305,45 @@ namespace LockMyEthTool.Controllers
             return !this.RequiresDataDir() || !String.IsNullOrWhiteSpace(this.dataDir) && Directory.Exists(this.dataDir);
         }
 
-        private bool CheckExecutablePath()
+        private bool CheckExecutablePath(string path = null)
         {
-            return !String.IsNullOrWhiteSpace(this.executablePath) && Directory.Exists(this.executablePath);
+            if(path == null)
+            {
+                path = this.executablePath;
+            }
+            return !String.IsNullOrWhiteSpace(path) && Directory.Exists(path);
         }
 
         private string GetExecutableFileName()
         {
-            return this.ProcessType == PROCESS_TYPES.ETH_1 ? "geth.exe" : "prysm.bat";
+            string fileName = "";
+            switch (this.ProcessType)
+            {
+                case PROCESS_TYPES.VALIDATOR:
+                    fileName = "validator-" + latestVersion + "-windows-amd64.exe";
+                    break;
+                case PROCESS_TYPES.BEACON_CHAIN:
+                    fileName = "beacon-chain-" + latestVersion + "-windows-amd64.exe";
+                    break;
+                case PROCESS_TYPES.ETH_1:
+                    fileName = "geth.exe";
+                    break;
+            }
+
+            return fileName;
         }
 
-        private bool CheckExecutable()
+        public bool CheckExecutable(string path = null)
         {
-            return this.CheckExecutablePath() && File.Exists(this.executablePath + @"\" + this.GetExecutableFileName());
+            if(this.downloadingExecutables)
+            {
+                return false;
+            }
+            if(path == null)
+            {
+                path = this.executablePath;
+            }
+           return this.CheckExecutablePath(path) && Array.Find(RequiredFiles(), name => !File.Exists(path + @"\" + name)) == null;
         }
 
         public bool AllConfigsSet()
@@ -381,13 +495,16 @@ namespace LockMyEthTool.Controllers
 
         private List<string> Logs = new List<string>();
 
-        public void Start(bool skipCheck = false, bool showCommandPrompt = false)
+        public void Start(bool skipCheck = false, bool showCommandPrompt = false, bool dontStop = false)
         {
             if(skipCheck != true && !this.AllConfigsSet())
             {
                 return;
             }
-            this.Stop();
+            if(!dontStop)
+            {
+                this.Stop();
+            }
             this.process = new Process(); // Declare New Process
             this.process.StartInfo.FileName = this.fileName;
             if(this.arguments != null)
@@ -406,8 +523,10 @@ namespace LockMyEthTool.Controllers
                 this.process.StartInfo.RedirectStandardInput = true;
             }
 
-            if(this.logOutput)
+
+            if(this.logOutput && this.hideCommandPrompt)
             {
+                this.process.StartInfo.RedirectStandardError = true;
                 this.process.StartInfo.RedirectStandardOutput = true;
                 this.process.OutputDataReceived += (object sender, DataReceivedEventArgs e) =>
                 {
@@ -417,11 +536,20 @@ namespace LockMyEthTool.Controllers
                         this.Logs.RemoveAt(0);
                     }
                 };
+                this.process.ErrorDataReceived += (object sender, DataReceivedEventArgs e) =>
+                {
+                    this.Logs.Add(e.Data);
+                    if (this.Logs.Count > 100)
+                    {
+                        this.Logs.RemoveAt(0);
+                    }
+                };
             }
             this.process.Start();
-            if (this.logOutput)
+            if (this.logOutput && this.hideCommandPrompt)
             {
                 this.process.BeginOutputReadLine();
+                this.process.BeginErrorReadLine();
             }
             if (this.commands != null)
             {
@@ -496,7 +624,12 @@ namespace LockMyEthTool.Controllers
 
         public void CheckState(Func<bool, string, string> resultFunction)
         {
-            if (!this.CheckDataDir())
+            if(this.downloadingExecutables)
+            {
+                resultFunction(false, "Downloading executables");
+                return;
+            }
+            else if (!this.CheckDataDir())
             {
                 resultFunction(false, "DataDir required");
                 return;
@@ -516,6 +649,7 @@ namespace LockMyEthTool.Controllers
                 resultFunction(false, "KeyPath required");
                 return;
             }
+
             switch (this.ProcessType)
             {
                 case PROCESS_TYPES.VALIDATOR:
@@ -530,14 +664,7 @@ namespace LockMyEthTool.Controllers
                     }
                     catch
                     {
-                        if(this.Logs.Count > 0)
-                        {
-                            resultFunction(false, String.Join("\n", this.Logs.ToArray()));
-                        }
-                        else
-                        {
-                            resultFunction(false, "Validator is not working properly");
-                        }
+                        resultFunction(false, "Validator is not working properly");
                     }
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
@@ -552,14 +679,7 @@ namespace LockMyEthTool.Controllers
                     }
                     catch
                     {
-                        if (this.Logs.Count > 0)
-                        {
-                            resultFunction(false, String.Join("\n", this.Logs.ToArray()));
-                        }
-                        else
-                        {
-                            resultFunction(false, "Beacon-Chain is not working properly");
-                        }
+                        resultFunction(false, "Beacon-Chain is not working properly");
                     }
                     break;
                 case PROCESS_TYPES.ETH_1:
