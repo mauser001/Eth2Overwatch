@@ -233,7 +233,7 @@ namespace LockMyEthTool.Controllers
                             }
                         });
                         Uri url = new Uri("https://prysmaticlabs.com/releases/" + fileName);
-                        webClient.DownloadFileAsync(url, path + @"\prysm\"+fileName);
+                        webClient.DownloadFileAsync(url, path + @"\"+fileName);
                     }
                 }
             }
