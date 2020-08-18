@@ -201,7 +201,7 @@
             this.PickWalletFolder.Name = "PickWalletFolder";
             this.PickWalletFolder.Size = new System.Drawing.Size(271, 15);
             this.PickWalletFolder.TabIndex = 10;
-            this.PickWalletFolder.Text = "5. Pick a folder where your wallet should be stored";
+            this.PickWalletFolder.Text = "6. Pick a folder where your wallet should be stored";
             // 
             // KeyFileSelect
             // 
@@ -229,7 +229,7 @@
             this.complete.Size = new System.Drawing.Size(156, 15);
             this.complete.TabIndex = 7;
             this.complete.TabStop = true;
-            this.complete.Text = "3. Complete Eth2 launchpad";
+            this.complete.Text = "4. Complete Eth2 launchpad";
             this.complete.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GotoLaunchpadLink_LinkClicked);
             // 
             // PickMedallaKeyFilesLabel
@@ -239,7 +239,7 @@
             this.PickMedallaKeyFilesLabel.Name = "PickMedallaKeyFilesLabel";
             this.PickMedallaKeyFilesLabel.Size = new System.Drawing.Size(245, 15);
             this.PickMedallaKeyFilesLabel.TabIndex = 6;
-            this.PickMedallaKeyFilesLabel.Text = "4. Pick folder containing the Medalla key files";
+            this.PickMedallaKeyFilesLabel.Text = "5. Pick folder containing the Medalla key files";
             // 
             // CreatePasswordFilesButton
             // 
@@ -312,7 +312,6 @@
         private System.Windows.Forms.Button CloseButton;
         private System.Windows.Forms.GroupBox ValidatorGroup;
         private System.Windows.Forms.Button CreatePasswordFilesButton;
-        private System.Windows.Forms.TextBox KeyDescription;
         private System.Windows.Forms.LinkLabel complete;
         private System.Windows.Forms.Label PickMedallaKeyFilesLabel;
         private System.Windows.Forms.Button KeyFileSelect;

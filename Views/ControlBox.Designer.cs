@@ -50,6 +50,9 @@
             this.DataDirSelectButton = new System.Windows.Forms.Button();
             this.WalletDirSelectButton = new System.Windows.Forms.Button();
             this.StateOutput = new System.Windows.Forms.RichTextBox();
+            this.ShowErrorButton = new System.Windows.Forms.Button();
+            this.ShowWarningButton = new System.Windows.Forms.Button();
+            this.ShowInfoButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // OutputText
@@ -59,6 +62,7 @@
             this.OutputText.ReadOnly = true;
             this.OutputText.Size = new System.Drawing.Size(397, 114);
             this.OutputText.TabIndex = 1;
+            this.OutputText.Tag = "";
             this.OutputText.Text = "";
             this.OutputText.TextChanged += new System.EventHandler(this.OutputText_TextChanged);
             // 
@@ -249,12 +253,51 @@
             this.StateOutput.TabIndex = 18;
             this.StateOutput.Text = "";
             // 
+            // ShowErrorButton
+            // 
+            this.ShowErrorButton.BackColor = System.Drawing.Color.RoyalBlue;
+            this.ShowErrorButton.ForeColor = System.Drawing.Color.GhostWhite;
+            this.ShowErrorButton.Location = new System.Drawing.Point(244, 76);
+            this.ShowErrorButton.Name = "ShowErrorButton";
+            this.ShowErrorButton.Size = new System.Drawing.Size(26, 23);
+            this.ShowErrorButton.TabIndex = 19;
+            this.ShowErrorButton.Text = "E";
+            this.ShowErrorButton.UseVisualStyleBackColor = false;
+            this.ShowErrorButton.Click += new System.EventHandler(this.ShowErrorButton_Click);
+            // 
+            // ShowWarningButton
+            // 
+            this.ShowWarningButton.BackColor = System.Drawing.Color.RoyalBlue;
+            this.ShowWarningButton.ForeColor = System.Drawing.Color.GhostWhite;
+            this.ShowWarningButton.Location = new System.Drawing.Point(244, 105);
+            this.ShowWarningButton.Name = "ShowWarningButton";
+            this.ShowWarningButton.Size = new System.Drawing.Size(26, 23);
+            this.ShowWarningButton.TabIndex = 20;
+            this.ShowWarningButton.Text = "W";
+            this.ShowWarningButton.UseVisualStyleBackColor = false;
+            this.ShowWarningButton.Click += new System.EventHandler(this.ShowWarningButton_Click);
+            // 
+            // ShowInfoButton
+            // 
+            this.ShowInfoButton.BackColor = System.Drawing.Color.RoyalBlue;
+            this.ShowInfoButton.ForeColor = System.Drawing.Color.GhostWhite;
+            this.ShowInfoButton.Location = new System.Drawing.Point(244, 134);
+            this.ShowInfoButton.Name = "ShowInfoButton";
+            this.ShowInfoButton.Size = new System.Drawing.Size(26, 23);
+            this.ShowInfoButton.TabIndex = 21;
+            this.ShowInfoButton.Text = "I";
+            this.ShowInfoButton.UseVisualStyleBackColor = false;
+            this.ShowInfoButton.Click += new System.EventHandler(this.ShowInfoButton_Click);
+            // 
             // ControlBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.ShowInfoButton);
+            this.Controls.Add(this.ShowWarningButton);
+            this.Controls.Add(this.ShowErrorButton);
             this.Controls.Add(this.StateOutput);
             this.Controls.Add(this.WalletDirSelectButton);
             this.Controls.Add(this.DataDirSelectButton);
@@ -307,5 +350,8 @@
         private System.Windows.Forms.Button DataDirSelectButton;
         private System.Windows.Forms.Button WalletDirSelectButton;
         private System.Windows.Forms.RichTextBox StateOutput;
+        private System.Windows.Forms.Button ShowErrorButton;
+        private System.Windows.Forms.Button ShowWarningButton;
+        private System.Windows.Forms.Button ShowInfoButton;
     }
 }

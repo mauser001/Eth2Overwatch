@@ -1,5 +1,13 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.2-Beta.3
++ Features  
+  + Added Log-Message Filter (Error, Warning, Info)
+  + Hide Log-Messages if console window is not hidden
++ Bugfixes
+  + Dont't restart processes if healthz state is not awailable, but the process is still running.
++ Update doku
+
 #### Version 1.0.2-Beta.1
 + Refactoring 
   + Loading and executing the validator/beacon chain directly and not via the prysm.bat

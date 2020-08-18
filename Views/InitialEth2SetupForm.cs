@@ -44,17 +44,6 @@ namespace Eth2Overwatch.Views
                 }
             }
 
-            // Create the ToolTip and associate with the Form container.
-            ToolTip toolTip1 = new ToolTip
-            {
-                // Set up the delays for the ToolTip.
-                AutoPopDelay = 5000,
-                InitialDelay = 500,
-                ReshowDelay = 500,
-                // Force the ToolTip text to be displayed whether or not the form is active.
-                ShowAlways = true
-            };
-
         }
 
         private void PickPrysmFolderButton_Click(object sender, EventArgs e)

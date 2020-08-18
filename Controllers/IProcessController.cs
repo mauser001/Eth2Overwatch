@@ -81,6 +81,25 @@ namespace LockMyEthTool.Views
             get;
             set;
         }
+
+        /**
+         * Filter debug messages
+         */
+        bool ShowError
+        {
+            get;
+            set;
+        }
+        bool ShowInfo
+        {
+            get;
+            set;
+        }
+        bool ShowWarning
+        {
+            get;
+            set;
+        }
     }
 }
 

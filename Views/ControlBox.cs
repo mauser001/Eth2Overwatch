@@ -28,6 +28,10 @@ namespace LockMyEthTool.Views
             this.StartButton.Text = "Start " + this.ControlName;
             this.StopButton.Text = "Stop " + this.ControlName;
             this.UpdateControls();
+            this.OutputText.DataBindings.Add("Visible", this.HideCommandPromptCheck, "Checked");
+            this.ShowErrorButton.DataBindings.Add("Visible", this.HideCommandPromptCheck, "Checked");
+            this.ShowWarningButton.DataBindings.Add("Visible", this.HideCommandPromptCheck, "Checked");
+            this.ShowInfoButton.DataBindings.Add("Visible", this.HideCommandPromptCheck, "Checked");
             this.StartTimer(1000);
         }
 
@@ -135,6 +139,23 @@ namespace LockMyEthTool.Views
             {
                 this.StateOutput.Text = text;
                 this.StateOutput.BackColor = backgroundColor;
+                this.OutputText.Text = this.Controller.GetLogText();
+            }
+        }
+
+        private void UpdateOutputText()
+        {
+            if (this.InvokeRequired)
+            {
+                Action act = () =>
+                {
+                    this.OutputText.Text = this.Controller.GetLogText();
+
+                };
+                this.Invoke(act);
+            }
+            else
+            {
                 this.OutputText.Text = this.Controller.GetLogText();
             }
         }
@@ -302,6 +323,47 @@ namespace LockMyEthTool.Views
             {
                 this.Controller.AdditionalCommands = (sender as TextBox).Text;
                 this.CheckState();
+            }
+        }
+
+        private void ShowErrorButton_Click(object sender, EventArgs e)
+        {
+            this.Controller.ShowError = !this.Controller.ShowError;
+            this.SetBackgroundColorForToggleButton(this.ShowErrorButton, this.Controller.ShowError);
+            this.UpdateOutputText();
+        }
+
+        private void ShowWarningButton_Click(object sender, EventArgs e)
+        {
+            this.Controller.ShowWarning = !this.Controller.ShowWarning;
+            this.SetBackgroundColorForToggleButton(this.ShowWarningButton, this.Controller.ShowWarning);
+            this.UpdateOutputText();
+        }
+
+        private void ShowInfoButton_Click(object sender, EventArgs e)
+        {
+            this.Controller.ShowInfo = !this.Controller.ShowInfo;
+            this.SetBackgroundColorForToggleButton(this.ShowInfoButton, this.Controller.ShowInfo);
+            this.UpdateOutputText();
+        }
+        private void SetBackgroundColorForToggleButton(Button toggleButton, bool show)
+        {
+            Color backClor = show ? Color.RoyalBlue : Color.Transparent;
+            Color foreColor = show ? Color.GhostWhite : Color.Black;
+
+            if (toggleButton.InvokeRequired)
+            {
+                Action act = () =>
+                {
+                    toggleButton.BackColor = backClor;
+                    toggleButton.ForeColor = foreColor;
+                };
+                toggleButton.Invoke(act);
+            }
+            else
+            {
+                toggleButton.BackColor = backClor;
+                toggleButton.ForeColor = foreColor;
             }
         }
     }

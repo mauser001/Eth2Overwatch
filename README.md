@@ -39,17 +39,17 @@ Download the Eth2Overwatch.exe in a folder and start ist.
 
 ### Setting
 + ##### Initial Eth2 Setup (can also be downloaded to accquire updates)
-  + Press the "Initial Eth2 setup" btton
-  + Select a folder wehre the prysm.bat file should be stored
-  + Press "2. Download prysm.bat" to download the file
-    + If you check 'Delete existing files' all content in the prysm folder will be deletet. This is recomended for updates!
+  + Press the "Eth2 setup ..." btton
+  + Select a folder wehre the the prysm executable files (beacon chain and validator) will be stored
+  + Press "2. Download beacon chain executable" to download the file
+  + Press "3. Download validator executable" to download the file
   + Import Medalla account
-    + Complete the Medalla lauchpad account creation: https://medalla.launchpad.ethereum.org/overview
-    + Pick the folder where you store your medalla keys
-    + Pick a folder where to store your wallet
-    + Click on 'Import Medalla account' to import the account
-    + Enter your medalla key password.
-    + If you get the message, that at least 1 account was imported then your are good to go.
+    + 4. Complete the Medalla lauchpad account creation: https://medalla.launchpad.ethereum.org/overview
+    + 5. Pick the folder where you store your medalla keys
+    + 6. Pick a folder where to store your wallet
+    + 7. Click on 'Import Medalla account' to import the account
+      + Enter your medalla key password.
+      + If you get the message, that at least 1 account was imported then your are good to go.
 + ##### Global: 
   + Use Görli test net: (atm. only for Eth1, as Eth2 is only on test net). If you deactive this checkbox you could run the eth1 main net node.
   + [not working atm] Connect with Eth1 node. 

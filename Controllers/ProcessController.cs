@@ -20,7 +20,6 @@ namespace LockMyEthTool.Controllers
         private string[] commands;
         private string arguments = null;
         private string processIdentifier = null;
-        private SecureString password = null;
         private bool autoStart = false;
         private string dataDir = "";
         private string executablePath = "";
@@ -34,6 +33,9 @@ namespace LockMyEthTool.Controllers
         private string latestVersion = "";
         private string filePrefix = "";
         private bool downloadingExecutables = false;
+        private bool showError = true;
+        private bool showWarning = true;
+        private bool showInfo = true;
 
         public ProcessController(PROCESS_TYPES ProcessType)
         {
@@ -55,17 +57,6 @@ namespace LockMyEthTool.Controllers
                     this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_Validator;
 
                     this.useGoerliTestnet = Eth2OverwatchSettings.Default.UseGoerliTestnet;
-                    try
-                    {
-                        if (Eth2OverwatchSettings.Default.ValidatorPassword != String.Empty)
-                        {
-                            this.password = Secure.DecryptString(Eth2OverwatchSettings.Default.ValidatorPassword);
-                        }
-                    }
-                    catch
-                    {
-                        this.password = null;
-                    }
                     this.GetPrysmVersion();                   
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
@@ -142,7 +133,7 @@ namespace LockMyEthTool.Controllers
                     this.directory = this.executablePath;
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
-                    this.commands[0] = String.Format(this.getExecutables()[0] + " --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + add);
+                    this.commands[0] = String.Format(this.GetExecutables()[0] + " --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + add);
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     this.processIdentifier = "beacon";
@@ -151,7 +142,7 @@ namespace LockMyEthTool.Controllers
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
                     var connectTo = useLocalEth1Node ? " --http-web3provider=http://127.0.0.1:8545/" : "";
-                    this.commands[1] = String.Format(this.getExecutables()[0] + @" --datadir=" + this.dataDir + connectTo + add);
+                    this.commands[1] = String.Format(this.GetExecutables()[0] + @" --datadir=" + this.dataDir + connectTo + add);
                     break;
                 case PROCESS_TYPES.ETH_1:
                     this.processIdentifier = "geth";
@@ -194,6 +185,7 @@ namespace LockMyEthTool.Controllers
             return this.latestVersion;
         }
 
+
         public void DownloadExecutable(string path = null)
         {
             this.Logs = new List<string>();
@@ -206,7 +198,7 @@ namespace LockMyEthTool.Controllers
                 }
                 else
                 {
-                    path = path + @"\prysm";
+                    path += @"\prysm";
                 }
                 bool pathExistis = Directory.Exists(path);
                 if(!pathExistis)
@@ -217,24 +209,22 @@ namespace LockMyEthTool.Controllers
                 int count = 0;
                 foreach (string fileName in this.RequiredFiles())
                 {
-                    using (WebClient webClient = new WebClient())
+                    using WebClient webClient = new WebClient();
+                    webClient.DownloadFileCompleted += new System.ComponentModel.AsyncCompletedEventHandler((object obj, System.ComponentModel.AsyncCompletedEventArgs args) =>
                     {
-                        webClient.DownloadFileCompleted += new System.ComponentModel.AsyncCompletedEventHandler((object obj, System.ComponentModel.AsyncCompletedEventArgs args) =>
+                        count++;
+                        if (count < 3)
                         {
-                            count++;
-                            if(count < 3)
-                            {
-                                this.Logs.Add("Files downloaded: " + count + " of 3");
-                            }
-                            else
-                            {
-                                this.downloadingExecutables = false;
-                                this.Logs.Add("Executable download complete");
-                            }
-                        });
-                        Uri url = new Uri("https://prysmaticlabs.com/releases/" + fileName);
-                        webClient.DownloadFileAsync(url, path + @"\"+fileName);
-                    }
+                            this.Logs.Add("Files downloaded: " + count + " of 3");
+                        }
+                        else
+                        {
+                            this.downloadingExecutables = false;
+                            this.Logs.Add("Executable download complete");
+                        }
+                    });
+                    Uri url = new Uri("https://prysmaticlabs.com/releases/" + fileName);
+                    webClient.DownloadFileAsync(url, path + @"\" + fileName);
                 }
             }
         }
@@ -246,7 +236,7 @@ namespace LockMyEthTool.Controllers
                 case PROCESS_TYPES.VALIDATOR:
                     this.logOutput = false;
                     this.processIdentifier = "no identifier";
-                    this.fileName = this.ExecutablePath + "\\"+this.getExecutables()[0];
+                    this.fileName = this.ExecutablePath + "\\"+this.GetExecutables()[0];
                     this.directory = this.ExecutablePath;
                     this.commands = null;
                     this.arguments = "accounts-v2 import --keys-dir=" + medallaKeyPath + " --wallet-dir=" + this.walletPath;
@@ -257,7 +247,7 @@ namespace LockMyEthTool.Controllers
 
         private string[] RequiredFiles()
         {
-            string[] files = null;
+            string[] files;
             if(this.ProcessType == PROCESS_TYPES.ETH_1)
             {
                 files = new string[1];
@@ -274,7 +264,7 @@ namespace LockMyEthTool.Controllers
             return files;
         }
 
-        public string[] getExecutables()
+        public string[] GetExecutables()
         {
             // Get the files
             DirectoryInfo info = new DirectoryInfo(this.executablePath);
@@ -562,6 +552,27 @@ namespace LockMyEthTool.Controllers
             }
         }
 
+        public bool ProcessIsRunning()
+        {
+            bool running = false;
+            try
+            {
+                Process[] localAll = Process.GetProcesses();
+                foreach (Process proc in localAll)
+                {
+                    if (proc.ProcessName.IndexOf(this.processIdentifier) >= 0)
+                    {
+                        running = !proc.HasExited;
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+            return running;
+        }
+
         public void Stop()
         {
             try
@@ -619,7 +630,44 @@ namespace LockMyEthTool.Controllers
 
         public string GetLogText()
         {
-            return String.Join("\n", this.Logs.ToArray());
+            return String.Join("\n", Array.FindAll(this.Logs.ToArray(), message =>
+            {
+                return !(!this.showInfo && message.IndexOf("level=info") >= 0) && !(!this.showWarning && message.IndexOf("level=warning") >= 0) && !(!this.showError && message.IndexOf("level=error") >= 0);
+            }));
+        }
+
+        public bool ShowError
+        {
+            get
+            {
+                return this.showError;
+            }
+            set
+            {
+                this.showError = value;
+            }
+        }
+        public bool ShowInfo
+        {
+            get
+            {
+                return this.showInfo;
+            }
+            set
+            {
+                this.showInfo = value;
+            }
+        }
+        public bool ShowWarning
+        {
+            get
+            {
+                return this.showWarning;
+            }
+            set
+            {
+                this.showWarning = value;
+            }
         }
 
         public void CheckState(Func<bool, string, string> resultFunction)
@@ -664,7 +712,14 @@ namespace LockMyEthTool.Controllers
                     }
                     catch
                     {
-                        resultFunction(false, "Validator is not working properly");
+                        if(this.ProcessIsRunning())
+                        {
+                            resultFunction(true, "Could not get healthz state, but process is still running.");
+                        }
+                        else
+                        {
+                            resultFunction(false, "Validator is not working properly");
+                        }
                     }
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
@@ -679,7 +734,14 @@ namespace LockMyEthTool.Controllers
                     }
                     catch
                     {
-                        resultFunction(false, "Beacon-Chain is not working properly");
+                        if (this.ProcessIsRunning())
+                        {
+                            resultFunction(true, "Could not get healthz state, but process is still running.");
+                        }
+                        else
+                        {
+                            resultFunction(false, "Beacon-Chain is not working properly");
+                        }
                     }
                     break;
                 case PROCESS_TYPES.ETH_1:
@@ -699,7 +761,15 @@ namespace LockMyEthTool.Controllers
                         }
                         else
                         {
-                            resultFunction(false, "Last block could not be loaded.");
+
+                            if (this.ProcessIsRunning())
+                            {
+                                resultFunction(true, "Could not load last block, but process is still running.");
+                            }
+                            else
+                            {
+                                resultFunction(false, "Last block could not be loaded.");
+                            }
                         }
                     }
                     break;
