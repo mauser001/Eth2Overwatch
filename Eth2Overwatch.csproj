@@ -20,16 +20,52 @@ Eth2 Beacon Chain and Validator  from prysm labs with the medalla testnet</Descr
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Eth2OverwatchKey.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <Version>1.0.2-Beta.3</Version>
-    <AssemblyVersion>1.0.2.3</AssemblyVersion>
-    <FileVersion>1.0.2.3</FileVersion>
+    <Version>1.0.2-Beta.4</Version>
+    <AssemblyVersion>1.0.2.4</AssemblyVersion>
+    <FileVersion>1.0.2.4</FileVersion>
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
+    <PackageReference Include="Google.Api.CommonProtos" Version="2.1.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.13.0" />
+    <PackageReference Include="Google.Protobuf.Tools" Version="3.13.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.31.0" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.23.2" />
+    <PackageReference Include="Grpc.Tools" Version="2.31.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.7" />
     <PackageReference Include="Nethereum.Geth" Version="3.8.0" />
   </ItemGroup>
+
+	<ItemGroup>
+		<Protobuf Include="ExternalProtos\google\api\http.proto" GrpcServices="Client" ProtoRoot="ExternalProtos">
+			<Link>protos/google/api/http.proto</Link>
+		</Protobuf>
+		<Protobuf Include="ExternalProtos\google\api\annotations.proto" GrpcServices="Client" ProtoRoot="ExternalProtos">
+			<Link>protos/google/api/annotations.proto</Link>
+		</Protobuf>
+		<Protobuf Include="ExternalProtos\github.com\gogo\protobuf\gogoproto\gogo.proto" GrpcServices="Client" ProtoRoot="ExternalProtos\">
+		  <Link>protos/github.com/gogo/protobuf/gogoproto/gogo.proto</Link>
+		</Protobuf>
+		<Protobuf Include="..\ethereumapis\eth\v1alpha1\node.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\;ExternalProtos\">
+			<Link>protos/eth/v1alpha1/node.proto</Link>
+		</Protobuf>
+		<Protobuf Include="..\ethereumapis\eth\v1alpha1\attestation.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\;ExternalProtos\">
+			<Link>protos/eth/v1alpha1/attestation.proto</Link>
+		</Protobuf>
+		<Protobuf Include="..\ethereumapis\eth\v1alpha1\beacon_block.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\;ExternalProtos\">
+			<Link>protos/eth/v1alpha1/beacon_block.proto</Link>
+		</Protobuf>
+		<Protobuf Include="..\ethereumapis\eth\v1alpha1\beacon_chain.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\;ExternalProtos\">
+			<Link>protos/eth/v1alpha1/beacon_chain.proto</Link>
+		</Protobuf>
+		<Protobuf Include="..\ethereumapis\eth\v1alpha1\validator.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\;ExternalProtos\">
+			<Link>protos/eth/v1alpha1/validator.proto</Link>
+		</Protobuf>
+	</ItemGroup>
 
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">

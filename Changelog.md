@@ -1,5 +1,10 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.2-Beta.4
++ Features
+  + Added total balance (Summ of all local Validators Balances)
+  + Added Validator state summary
+
 #### Version 1.0.2-Beta.3
 + Features  
   + Added Log-Message Filter (Error, Warning, Info)

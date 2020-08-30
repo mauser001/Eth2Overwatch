@@ -1,4 +1,7 @@
 ﻿using Eth2Overwatch;
+using Eth2Overwatch.Models;
+using Ethereum.Eth.v1alpha1;
+using Grpc.Net.Client;
 using LockMyEthTool.Models;
 using LockMyEthTool.Views;
 using Nethereum.Web3;
@@ -7,7 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Security;
+using System.Net.Http;
 
 namespace LockMyEthTool.Controllers
 {
@@ -36,6 +39,7 @@ namespace LockMyEthTool.Controllers
         private bool showError = true;
         private bool showWarning = true;
         private bool showInfo = true;
+        private Dictionary<string, ValidatorBo> validatorysByKey;
 
         public ProcessController(PROCESS_TYPES ProcessType)
         {
@@ -57,7 +61,7 @@ namespace LockMyEthTool.Controllers
                     this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_Validator;
 
                     this.useGoerliTestnet = Eth2OverwatchSettings.Default.UseGoerliTestnet;
-                    this.GetPrysmVersion();                   
+                    this.GetPrysmVersion();
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     this.filePrefix = "beacon";
@@ -92,7 +96,7 @@ namespace LockMyEthTool.Controllers
                     Eth2OverwatchSettings.Default.HideCommandPrompt_Validator = this.hideCommandPrompt;
                     Eth2OverwatchSettings.Default.AdditionalCommands_Validator = this.additionalCommands;
                     Eth2OverwatchSettings.Default.UseGoerliTestnet = this.useGoerliTestnet;
-                    Eth2OverwatchSettings.Default.WalletPath_Validator= this.walletPath;
+                    Eth2OverwatchSettings.Default.WalletPath_Validator = this.walletPath;
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     Eth2OverwatchSettings.Default.Autostart_BeaconChain = this.autoStart;
@@ -163,7 +167,7 @@ namespace LockMyEthTool.Controllers
 
         public string GetPrysmVersion()
         {
-            if(this.ProcessType == PROCESS_TYPES.ETH_1)
+            if (this.ProcessType == PROCESS_TYPES.ETH_1)
             {
                 return "";
             }
@@ -192,7 +196,7 @@ namespace LockMyEthTool.Controllers
             if (this.ProcessType != PROCESS_TYPES.ETH_1)
             {
                 this.downloadingExecutables = true;
-                if(path == null)
+                if (path == null)
                 {
                     path = this.executablePath;
                 }
@@ -201,7 +205,7 @@ namespace LockMyEthTool.Controllers
                     path += @"\prysm";
                 }
                 bool pathExistis = Directory.Exists(path);
-                if(!pathExistis)
+                if (!pathExistis)
                 {
                     Directory.CreateDirectory(path);
                 }
@@ -236,7 +240,7 @@ namespace LockMyEthTool.Controllers
                 case PROCESS_TYPES.VALIDATOR:
                     this.logOutput = false;
                     this.processIdentifier = "no identifier";
-                    this.fileName = this.ExecutablePath + "\\"+this.GetExecutables()[0];
+                    this.fileName = this.ExecutablePath + "\\" + this.GetExecutables()[0];
                     this.directory = this.ExecutablePath;
                     this.commands = null;
                     this.arguments = "accounts-v2 import --keys-dir=" + medallaKeyPath + " --wallet-dir=" + this.walletPath;
@@ -248,7 +252,7 @@ namespace LockMyEthTool.Controllers
         private string[] RequiredFiles()
         {
             string[] files;
-            if(this.ProcessType == PROCESS_TYPES.ETH_1)
+            if (this.ProcessType == PROCESS_TYPES.ETH_1)
             {
                 files = new string[1];
                 files[0] = "geth.exe";
@@ -269,7 +273,7 @@ namespace LockMyEthTool.Controllers
             // Get the files
             DirectoryInfo info = new DirectoryInfo(this.executablePath);
             FileInfo[] files = info.GetFiles();
-            files = Array.FindAll(files, file => file.Name.IndexOf(this.filePrefix) == 0 && file.Name.IndexOf(".exe") == file.Name.Length-4);
+            files = Array.FindAll(files, file => file.Name.IndexOf(this.filePrefix) == 0 && file.Name.IndexOf(".exe") == file.Name.Length - 4);
 
             // Sort by creation-time descending 
             Array.Sort(files, delegate (FileInfo f1, FileInfo f2)
@@ -297,7 +301,7 @@ namespace LockMyEthTool.Controllers
 
         private bool CheckExecutablePath(string path = null)
         {
-            if(path == null)
+            if (path == null)
             {
                 path = this.executablePath;
             }
@@ -325,15 +329,15 @@ namespace LockMyEthTool.Controllers
 
         public bool CheckExecutable(string path = null)
         {
-            if(this.downloadingExecutables)
+            if (this.downloadingExecutables)
             {
                 return false;
             }
-            if(path == null)
+            if (path == null)
             {
                 path = this.executablePath;
             }
-           return this.CheckExecutablePath(path) && Array.Find(RequiredFiles(), name => !File.Exists(path + @"\" + name)) == null;
+            return this.CheckExecutablePath(path) && Array.Find(RequiredFiles(), name => !File.Exists(path + @"\" + name)) == null;
         }
 
         public bool AllConfigsSet()
@@ -413,7 +417,7 @@ namespace LockMyEthTool.Controllers
             }
             set
             {
-                if(!this.SupportsGoerliTestnet())
+                if (!this.SupportsGoerliTestnet())
                 {
                     return;
                 }
@@ -461,7 +465,7 @@ namespace LockMyEthTool.Controllers
                 this.keyPath = value;
                 SaveConfig();
             }
-            
+
         }
 
         public string WalletPath
@@ -487,17 +491,17 @@ namespace LockMyEthTool.Controllers
 
         public void Start(bool skipCheck = false, bool showCommandPrompt = false, bool dontStop = false)
         {
-            if(skipCheck != true && !this.AllConfigsSet())
+            if (skipCheck != true && !this.AllConfigsSet())
             {
                 return;
             }
-            if(!dontStop)
+            if (!dontStop)
             {
                 this.Stop();
             }
             this.process = new Process(); // Declare New Process
             this.process.StartInfo.FileName = this.fileName;
-            if(this.arguments != null)
+            if (this.arguments != null)
             {
                 this.process.StartInfo.Arguments = this.arguments;
             }
@@ -508,13 +512,13 @@ namespace LockMyEthTool.Controllers
 
             this.process.StartInfo.UseShellExecute = false;
             this.process.StartInfo.CreateNoWindow = showCommandPrompt == false && this.hideCommandPrompt;
-            if(this.commands != null)
+            if (this.commands != null)
             {
                 this.process.StartInfo.RedirectStandardInput = true;
             }
 
 
-            if(this.logOutput && this.hideCommandPrompt)
+            if (this.logOutput && this.hideCommandPrompt)
             {
                 this.process.StartInfo.RedirectStandardError = true;
                 this.process.StartInfo.RedirectStandardOutput = true;
@@ -603,7 +607,7 @@ namespace LockMyEthTool.Controllers
             }
             this.Logs = new List<string>();
         }
-        
+
         public bool RequiresDataDir()
         {
             return this.ProcessType == PROCESS_TYPES.BEACON_CHAIN || this.ProcessType == PROCESS_TYPES.ETH_1;
@@ -672,7 +676,7 @@ namespace LockMyEthTool.Controllers
 
         public void CheckState(Func<bool, string, string> resultFunction)
         {
-            if(this.downloadingExecutables)
+            if (this.downloadingExecutables)
             {
                 resultFunction(false, "Downloading executables");
                 return;
@@ -701,31 +705,107 @@ namespace LockMyEthTool.Controllers
             switch (this.ProcessType)
             {
                 case PROCESS_TYPES.VALIDATOR:
+
                     try
                     {
-                        HttpWebRequest webRequest = HttpWebRequest.CreateHttp("http://localhost:8081/healthz");
+                        if(this.validatorysByKey == null)
+                        {
+                            this.validatorysByKey = new Dictionary<string, ValidatorBo>();
+                        }
 
-                        using HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
-                        using StreamReader streamReader = new StreamReader(webResponse.GetResponseStream());
-                        string response = streamReader.ReadToEnd();
-                        resultFunction(true, response);
+                        if(this.validatorysByKey.Count == 0)
+                        {
+                            HttpWebRequest metricsRequest = HttpWebRequest.CreateHttp("http://localhost:8081/metrics");
+                            using HttpWebResponse metricsResponse = (HttpWebResponse)metricsRequest.GetResponse();
+                            using StreamReader streamReader = new StreamReader(metricsResponse.GetResponseStream());
+                            string metricsText = streamReader.ReadToEnd();
+                            string[] lines = metricsText.Split("\n");
+                            foreach (string line in lines)
+                            {
+                                if (line.IndexOf("validator_statuses{pubkey=") == 0)
+                                {
+                                    string publicKey = line.Split("\"")[1];
+                                    if (!this.validatorysByKey.ContainsKey(publicKey))
+                                    {
+                                        this.validatorysByKey[publicKey] = new ValidatorBo(publicKey);
+                                    }
+                                }
+                            }
+                        }
+
+                        var httpHandler = new System.Net.Http.HttpClientHandler();
+                        httpHandler.ServerCertificateCustomValidationCallback =
+                            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
+                        using var channel = GrpcChannel.ForAddress("http://127.0.0.1:4000", new GrpcChannelOptions { HttpHandler = httpHandler });
+                        var validatorClient = new BeaconNodeValidator.BeaconNodeValidatorClient(channel);
+                        var beaconClient = new BeaconChain.BeaconChainClient(channel);
+                        string result = "";
+                        ValidatorPerformanceRequest performanceRequest = new ValidatorPerformanceRequest();
+                        MultipleValidatorStatusRequest statusRequest = new MultipleValidatorStatusRequest();
+                        foreach (KeyValuePair<string, ValidatorBo> keyValue in this.validatorysByKey)
+                        {
+                            performanceRequest.PublicKeys.Add(keyValue.Value.PublicKeyByteString);
+                            statusRequest.PublicKeys.Add(keyValue.Value.PublicKeyByteString);
+                        }
+
+                        ValidatorPerformanceResponse performance = beaconClient.GetValidatorPerformance(performanceRequest);
+                        ulong balances = 0;
+                        foreach(ulong bal in performance.BalancesAfterEpochTransition)
+                        {
+                            balances += bal;
+                        }
+                        decimal eth = (decimal)balances / 1000000000;
+                        result += "Total Balances: " + eth + "\n";
+
+                        Dictionary<string,int> stateCounter = new Dictionary<string, int>();
+                        MultipleValidatorStatusResponse status = validatorClient.MultipleValidatorStatus(statusRequest);
+                        foreach (ValidatorStatusResponse state in status.Statuses)
+                        {
+                            if(!stateCounter.ContainsKey(state.Status.ToString()))
+                            {
+                                stateCounter[state.Status.ToString()] = 1;
+                            }
+                            else
+                            {
+                                stateCounter[state.Status.ToString()]++;
+                            }
+                        }
+                        foreach (KeyValuePair<string, int> keyValue in stateCounter)
+                        {
+                           if(keyValue.Value > 0)
+                            {
+                                result += "State " + keyValue.Key + ": " + keyValue.Value + "\n";
+                            }
+                        }
+
+                        HttpWebRequest healthzRequest = HttpWebRequest.CreateHttp("http://localhost:8081/healthz");
+
+                        using HttpWebResponse healthzResponse = (HttpWebResponse)healthzRequest.GetResponse();
+                        using StreamReader healthzReader = new StreamReader(healthzResponse.GetResponseStream());
+                        result += healthzReader.ReadToEnd();
+                        resultFunction(true, result);
+                        return;
                     }
                     catch
                     {
-                        if(this.ProcessIsRunning())
+                        if (this.ProcessIsRunning())
                         {
-                            resultFunction(true, "Could not get healthz state, but process is still running.");
+                           resultFunction(true, "Could not get healthz state, but process is still running.");
                         }
                         else
                         {
                             resultFunction(false, "Validator is not working properly");
                         }
                     }
+
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
+
                     try
                     {
-                        HttpWebRequest webRequest = HttpWebRequest.CreateHttp("http://localhost:8080/healthz");
+                         HttpWebRequest webRequest = HttpWebRequest.CreateHttp("http://localhost:8080/healthz");
 
                         using HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
                         using StreamReader streamReader = new StreamReader(webResponse.GetResponseStream());
@@ -755,26 +835,20 @@ namespace LockMyEthTool.Controllers
                     }
                     catch
                     {
-                        if (this.Logs.Count > 0)
+
+                        if (this.ProcessIsRunning())
                         {
-                            resultFunction(false, String.Join("\n", this.Logs.ToArray()));
+                            resultFunction(true, "Could not load last block, but process is still running.");
                         }
                         else
                         {
-
-                            if (this.ProcessIsRunning())
-                            {
-                                resultFunction(true, "Could not load last block, but process is still running.");
-                            }
-                            else
-                            {
-                                resultFunction(false, "Last block could not be loaded.");
-                            }
+                            resultFunction(false, "Last block could not be loaded.");
                         }
                     }
                     break;
             }
-
         }
+
     }
 }
+

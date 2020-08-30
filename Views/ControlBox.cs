@@ -63,6 +63,7 @@ namespace LockMyEthTool.Views
             this.KeyPathInput.Visible = this.KeyPathLabel.Visible = this.KeyPathSelectButton.Visible = this.Controller.RequiresPassword();
             this.DataDirInput.Visible = this.DataDirLabel.Visible = this.DataDirSelectButton.Visible = this.Controller.RequiresDataDir();
             this.WalletDirInput.Visible = this.WalletDirLabel.Visible = this.WalletDirSelectButton.Visible = this.Controller.RequiresWalletPath();
+            this.StateOutput.Height = !this.Controller.HideCommandPrompt ? 170 : 56;
         }
 
         public void ConfigChanged()
@@ -120,6 +121,20 @@ namespace LockMyEthTool.Views
         private void HideCommandPromptCheck_CheckedChanged(object sender, EventArgs e)
         {
             this.Controller.HideCommandPrompt = (sender as CheckBox).Checked;
+
+            if (this.InvokeRequired)
+            {
+                Action act = () =>
+                {
+                    this.StateOutput.Height = !this.Controller.HideCommandPrompt ? 170 : 56;
+
+                };
+                this.Invoke(act);
+            }
+            else
+            {
+                this.StateOutput.Height = !this.Controller.HideCommandPrompt ? 170 : 56;
+            }
         }
 
         private void UpdateText(string text, Color backgroundColor)
