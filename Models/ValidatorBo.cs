@@ -5,17 +5,21 @@ using System.Text;
 
 namespace Eth2Overwatch.Models
 {
-    class ValidatorBo
+    public class ValidatorBo
     {
         private string publicKey;
+        private string publicKeyBase64;
         private Google.Protobuf.ByteString publicKeyByteString;
         private ValidatorStatus state = ValidatorStatus.UnknownStatus;
-        private float balance = 0;
+        private ulong balance = 0;
+        private ulong currentEffectiveBalance;
+        private bool correctlyVoted;
 
         public ValidatorBo(string publicKey)
         {
             this.publicKey = publicKey;
             this.publicKeyByteString = Google.Protobuf.ByteString.CopyFrom(Utils.StringToByteArray(publicKey.Replace("0x", "")));
+            this.publicKeyBase64 = this.publicKeyByteString.ToBase64();
         }
 
         public string PublicKey
@@ -23,6 +27,13 @@ namespace Eth2Overwatch.Models
             get
             {
                 return this.publicKey;
+            }
+        }
+        public string PublicKeyBase64
+        {
+            get
+            {
+                return this.publicKeyBase64;
             }
         }
 
@@ -46,7 +57,7 @@ namespace Eth2Overwatch.Models
             }
         }
 
-        public float Balance
+        public ulong Balance
         {
             get
             {
@@ -55,6 +66,32 @@ namespace Eth2Overwatch.Models
             set
             {
                 this.balance = value;
+            }
+        }
+
+        public ulong CurrentEffectiveBalance {
+
+            get
+            {
+                return this.currentEffectiveBalance;
+            }
+
+            set
+            {
+                this.currentEffectiveBalance = value;
+            }
+        }
+
+        public bool CorrectlyVoted
+        {
+            get
+            {
+                return this.correctlyVoted;
+            }
+
+            set
+            {
+                this.correctlyVoted = value;
             }
         }
     }

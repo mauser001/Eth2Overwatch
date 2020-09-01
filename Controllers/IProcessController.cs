@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Eth2Overwatch.Models;
+using System;
+using System.Collections.Generic;
 
 namespace LockMyEthTool.Views
 {
@@ -35,6 +37,11 @@ namespace LockMyEthTool.Views
         string GetLastVersion();
 
         bool CheckExecutable(string path = null);
+
+        Dictionary<string, ValidatorBo> ValidatorsByKey
+        {
+            get;
+        }
 
         bool Autostart
         {

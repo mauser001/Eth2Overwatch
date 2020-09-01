@@ -12,5 +12,15 @@ namespace Eth2Overwatch.Models
                              .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
                              .ToArray();
         }
+
+        public static string GWeiToEthLabel(ulong gwei)
+        {
+            return GWeiToEth(gwei).ToString();
+        }
+
+        public static decimal GWeiToEth(ulong gwei)
+        {
+            return (decimal)gwei / 1000000000;
+        }
     }
 }

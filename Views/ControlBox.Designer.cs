@@ -53,6 +53,7 @@
             this.ShowErrorButton = new System.Windows.Forms.Button();
             this.ShowWarningButton = new System.Windows.Forms.Button();
             this.ShowInfoButton = new System.Windows.Forms.Button();
+            this.ValidatorDetailsButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // OutputText
@@ -289,12 +290,25 @@
             this.ShowInfoButton.UseVisualStyleBackColor = false;
             this.ShowInfoButton.Click += new System.EventHandler(this.ShowInfoButton_Click);
             // 
+            // ValidatorDetailsButton
+            // 
+            this.ValidatorDetailsButton.BackColor = System.Drawing.Color.RoyalBlue;
+            this.ValidatorDetailsButton.ForeColor = System.Drawing.Color.GhostWhite;
+            this.ValidatorDetailsButton.Location = new System.Drawing.Point(218, 11);
+            this.ValidatorDetailsButton.Name = "ValidatorDetailsButton";
+            this.ValidatorDetailsButton.Size = new System.Drawing.Size(52, 23);
+            this.ValidatorDetailsButton.TabIndex = 22;
+            this.ValidatorDetailsButton.Text = "Details";
+            this.ValidatorDetailsButton.UseVisualStyleBackColor = false;
+            this.ValidatorDetailsButton.Click += new System.EventHandler(this.ValidatorDetailsButton_Click);
+            // 
             // ControlBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.ValidatorDetailsButton);
             this.Controls.Add(this.ShowInfoButton);
             this.Controls.Add(this.ShowWarningButton);
             this.Controls.Add(this.ShowErrorButton);
@@ -329,6 +343,7 @@
 
         #endregion
 
+        private System.Windows.Forms.Button ValidatorDetailsButton;
         private System.Windows.Forms.CheckBox AutostartCheck;
         private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.Button StopButton;

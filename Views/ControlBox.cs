@@ -1,4 +1,5 @@
-﻿using Nethereum.Contracts;
+﻿using Eth2Overwatch.Views;
+using Nethereum.Contracts;
 using System;
 using System.Drawing;
 using System.Threading;
@@ -64,6 +65,7 @@ namespace LockMyEthTool.Views
             this.DataDirInput.Visible = this.DataDirLabel.Visible = this.DataDirSelectButton.Visible = this.Controller.RequiresDataDir();
             this.WalletDirInput.Visible = this.WalletDirLabel.Visible = this.WalletDirSelectButton.Visible = this.Controller.RequiresWalletPath();
             this.StateOutput.Height = !this.Controller.HideCommandPrompt ? 170 : 56;
+            this.UpdateValidatorDetailsButton();
         }
 
         public void ConfigChanged()
@@ -146,7 +148,7 @@ namespace LockMyEthTool.Views
                     this.StateOutput.Text = text;
                     this.StateOutput.BackColor = backgroundColor;
                     this.OutputText.Text = this.Controller.GetLogText();
-                    
+
                 };
                 this.Invoke(act);
             }
@@ -155,6 +157,24 @@ namespace LockMyEthTool.Views
                 this.StateOutput.Text = text;
                 this.StateOutput.BackColor = backgroundColor;
                 this.OutputText.Text = this.Controller.GetLogText();
+            }
+        }
+
+        private void UpdateValidatorDetailsButton()
+        {
+            Boolean vis = this.Controller.ValidatorsByKey.Count > 0;
+            if (this.ValidatorDetailsButton.InvokeRequired)
+            {
+                Action act = () =>
+                {
+                    this.ValidatorDetailsButton.Visible = vis;
+
+                };
+                this.ValidatorDetailsButton.Invoke(act);
+            }
+            else
+            {
+                this.ValidatorDetailsButton.Visible = vis;
             }
         }
 
@@ -180,6 +200,7 @@ namespace LockMyEthTool.Views
             this.Controller.CheckState((bool success, string result) =>
             {
                 this.UpdateText(result, success ? Color.LightGreen : Color.Red);
+                this.UpdateValidatorDetailsButton();
                 if (result != null && result.IndexOf("Executable download complete") >= 0)
                 {
                     this.StartProcess();
@@ -379,6 +400,14 @@ namespace LockMyEthTool.Views
             {
                 toggleButton.BackColor = backClor;
                 toggleButton.ForeColor = foreColor;
+            }
+        }
+
+        private void ValidatorDetailsButton_Click(object sender, EventArgs e)
+        {
+            using (ValidatorInfoViewer frm = new ValidatorInfoViewer(this.Controller))
+            {
+                frm.ShowDialog(this);
             }
         }
     }

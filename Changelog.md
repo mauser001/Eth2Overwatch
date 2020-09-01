@@ -1,5 +1,9 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.2-Beta.5
++ Features
+  + Added Validator details
+
 #### Version 1.0.2-Beta.4
 + Features
   + Added total balance (Summ of all local Validators Balances)

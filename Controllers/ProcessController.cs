@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 
@@ -39,7 +40,7 @@ namespace LockMyEthTool.Controllers
         private bool showError = true;
         private bool showWarning = true;
         private bool showInfo = true;
-        private Dictionary<string, ValidatorBo> validatorysByKey;
+        private Dictionary<string, ValidatorBo> validatorsByKey = new Dictionary<string, ValidatorBo>();
 
         public ProcessController(PROCESS_TYPES ProcessType)
         {
@@ -674,6 +675,14 @@ namespace LockMyEthTool.Controllers
             }
         }
 
+        public Dictionary<string, ValidatorBo> ValidatorsByKey
+        {
+            get
+            {
+                return this.validatorsByKey;
+            }
+        }
+
         public void CheckState(Func<bool, string, string> resultFunction)
         {
             if (this.downloadingExecutables)
@@ -708,12 +717,7 @@ namespace LockMyEthTool.Controllers
 
                     try
                     {
-                        if(this.validatorysByKey == null)
-                        {
-                            this.validatorysByKey = new Dictionary<string, ValidatorBo>();
-                        }
-
-                        if(this.validatorysByKey.Count == 0)
+                        if(this.validatorsByKey.Count == 0)
                         {
                             HttpWebRequest metricsRequest = HttpWebRequest.CreateHttp("http://localhost:8081/metrics");
                             using HttpWebResponse metricsResponse = (HttpWebResponse)metricsRequest.GetResponse();
@@ -725,9 +729,10 @@ namespace LockMyEthTool.Controllers
                                 if (line.IndexOf("validator_statuses{pubkey=") == 0)
                                 {
                                     string publicKey = line.Split("\"")[1];
-                                    if (!this.validatorysByKey.ContainsKey(publicKey))
+                                    ValidatorBo bo = new ValidatorBo(publicKey);
+                                    if (!this.validatorsByKey.ContainsKey(bo.PublicKeyBase64))
                                     {
-                                        this.validatorysByKey[publicKey] = new ValidatorBo(publicKey);
+                                        this.validatorsByKey[bo.PublicKeyBase64] = bo;
                                     }
                                 }
                             }
@@ -744,34 +749,37 @@ namespace LockMyEthTool.Controllers
                         string result = "";
                         ValidatorPerformanceRequest performanceRequest = new ValidatorPerformanceRequest();
                         MultipleValidatorStatusRequest statusRequest = new MultipleValidatorStatusRequest();
-                        foreach (KeyValuePair<string, ValidatorBo> keyValue in this.validatorysByKey)
+
+                        foreach (KeyValuePair<string, ValidatorBo> keyValue in this.validatorsByKey)
                         {
                             performanceRequest.PublicKeys.Add(keyValue.Value.PublicKeyByteString);
                             statusRequest.PublicKeys.Add(keyValue.Value.PublicKeyByteString);
                         }
 
                         ValidatorPerformanceResponse performance = beaconClient.GetValidatorPerformance(performanceRequest);
-                        ulong balances = 0;
-                        foreach(ulong bal in performance.BalancesAfterEpochTransition)
-                        {
-                            balances += bal;
-                        }
-                        decimal eth = (decimal)balances / 1000000000;
-                        result += "Total Balances: " + eth + "\n";
-
-                        Dictionary<string,int> stateCounter = new Dictionary<string, int>();
                         MultipleValidatorStatusResponse status = validatorClient.MultipleValidatorStatus(statusRequest);
-                        foreach (ValidatorStatusResponse state in status.Statuses)
+
+                        ulong balances = 0;
+                        Dictionary<string, int> stateCounter = new Dictionary<string, int>();
+                        for (int i = 0; i < performance.PublicKeys.Count; i++)
                         {
-                            if(!stateCounter.ContainsKey(state.Status.ToString()))
+                            ValidatorBo bo = this.validatorsByKey[performance.PublicKeys[i].ToBase64()];
+                            bo.Balance = performance.BalancesAfterEpochTransition[i];
+                            bo.CurrentEffectiveBalance = performance.CurrentEffectiveBalances[i];
+                            bo.CorrectlyVoted = performance.CorrectlyVotedHead[i] && performance.CorrectlyVotedSource[i] && performance.CorrectlyVotedTarget[i];
+                            balances += bo.Balance;
+                            bo.State = status.Statuses[i].Status;
+                            if (!stateCounter.ContainsKey(bo.State.ToString()))
                             {
-                                stateCounter[state.Status.ToString()] = 1;
+                                stateCounter[bo.State.ToString()] = 1;
                             }
                             else
                             {
-                                stateCounter[state.Status.ToString()]++;
+                                stateCounter[bo.State.ToString()]++;
                             }
                         }
+
+                        result += "Total Balance: " + Utils.GWeiToEthLabel(balances) + "\n";
                         foreach (KeyValuePair<string, int> keyValue in stateCounter)
                         {
                            if(keyValue.Value > 0)
@@ -790,6 +798,7 @@ namespace LockMyEthTool.Controllers
                     }
                     catch
                     {
+                        this.validatorsByKey.Clear();
                         if (this.ProcessIsRunning())
                         {
                            resultFunction(true, "Could not get healthz state, but process is still running.");
