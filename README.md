@@ -18,6 +18,8 @@ It is not possible to run more then one Eth1 (geth), Eth2 Beacon Chains or Eth2 
 
 If find any spelling errors in the readme -> I write code - not books ;-)
 
+When using this software you agree to the prysm terms of service: https://github.com/prysmaticlabs/prysm/blob/master/TERMS_OF_SERVICE.md
+
 ### Framework and tools used
 + Visiual Studio 2019 Prview.
   + .net Core 3.1

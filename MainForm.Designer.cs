@@ -98,7 +98,7 @@ namespace LockMyEthTool
             this.UseGoerliCheck.Name = "UseGoerliCheck";
             this.UseGoerliCheck.Size = new System.Drawing.Size(167, 19);
             this.UseGoerliCheck.TabIndex = 2;
-            this.UseGoerliCheck.Text = "Use Görli test net (for Eth1)";
+            this.UseGoerliCheck.Text = "Use test net (Medala for Eth2 and Görli for Eth1)";
             this.UseGoerliCheck.UseVisualStyleBackColor = true;
             this.UseGoerliCheck.CheckedChanged += new System.EventHandler(this.UseGoerliCheck_CheckedChanged);
             // 

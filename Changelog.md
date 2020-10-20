@@ -1,5 +1,9 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.3-Beta.1
++ Change: added --medalla flag, when using the testnet
++ Change: added --accept-terms-of-use flag
+
 #### Version 1.0.2-Beta.5
 + Features
   + Added Validator details

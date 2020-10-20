@@ -129,6 +129,7 @@ namespace LockMyEthTool.Controllers
 
             var add = this.additionalCommands.Length > 0 ? " " + this.additionalCommands : "";
             var goerli = this.useGoerliTestnet && this.SupportsGoerliTestnet() ? " --goerli" : "";
+            var medalla = this.useGoerliTestnet ? " --medalla" : "";
 
             switch (this.ProcessType)
             {
@@ -138,7 +139,7 @@ namespace LockMyEthTool.Controllers
                     this.directory = this.executablePath;
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
-                    this.commands[0] = String.Format(this.GetExecutables()[0] + " --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + add);
+                    this.commands[0] = String.Format(this.GetExecutables()[0] + " --accept-terms-of-use --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + medalla + add);
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     this.processIdentifier = "beacon";
@@ -147,7 +148,7 @@ namespace LockMyEthTool.Controllers
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
                     var connectTo = useLocalEth1Node ? " --http-web3provider=http://127.0.0.1:8545/" : "";
-                    this.commands[1] = String.Format(this.GetExecutables()[0] + @" --datadir=" + this.dataDir + connectTo + add);
+                    this.commands[1] = String.Format(this.GetExecutables()[0] + @" --accept-terms-of-use --datadir=" + this.dataDir + connectTo + medalla + add);
                     break;
                 case PROCESS_TYPES.ETH_1:
                     this.processIdentifier = "geth";
