@@ -1,5 +1,10 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.3-Beta.2
++ Fix: Adapted key import according to last prysm changes 
+  + renamed account-v2 to account
+  + added medalla flag to import
+
 #### Version 1.0.3-Beta.1
 + Change: added --medalla flag, when using the testnet
 + Change: added --accept-terms-of-use flag

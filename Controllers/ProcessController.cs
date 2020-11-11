@@ -240,12 +240,13 @@ namespace LockMyEthTool.Controllers
             switch (this.ProcessType)
             {
                 case PROCESS_TYPES.VALIDATOR:
+                    var medalla = this.useGoerliTestnet ? " --medalla" : "";
                     this.logOutput = false;
                     this.processIdentifier = "no identifier";
                     this.fileName = this.ExecutablePath + "\\" + this.GetExecutables()[0];
                     this.directory = this.ExecutablePath;
                     this.commands = null;
-                    this.arguments = "accounts-v2 import --keys-dir=" + medallaKeyPath + " --wallet-dir=" + this.walletPath;
+                    this.arguments = "accounts import --keys-dir=" + medallaKeyPath + " --wallet-dir=" + this.walletPath + medalla;
                     this.Start(true, true);
                     break;
             }

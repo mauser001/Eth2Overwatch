@@ -8,7 +8,7 @@
     <Authors>Alexander Maushammer</Authors>
     <Company>Alexander Maushammer</Company>
     <Product>Windows Tool to watch Eth1 Node, Eth2 Beacon Chain and Eth2 Validator</Product>
-    <Copyright>Free</Copyright>
+    <Copyright>MIT</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Use at own Risk! Do not run other Eth1/Eth2 nodes on the same compupter. It is possible that the Validator Password is exposed in some windows logs, as it is used to call the prism.bat validator in the command line.
 
@@ -20,9 +20,9 @@ Eth2 Beacon Chain and Validator  from prysm labs with the medalla testnet</Descr
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Eth2OverwatchKey.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <Version>1.0.3-Beta.1</Version>
-    <AssemblyVersion>1.0.3.1</AssemblyVersion>
-    <FileVersion>1.0.3.1</FileVersion>
+    <Version>1.0.3-Beta.2</Version>
+    <AssemblyVersion>1.0.3.2</AssemblyVersion>
+    <FileVersion>1.0.3.2</FileVersion>
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 
