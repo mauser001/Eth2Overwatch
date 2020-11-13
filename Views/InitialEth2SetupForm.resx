@@ -61,6 +61,6 @@
     <value>False</value>
   </metadata>
   <data name="KeyDescription.Text" xml:space="preserve">
-    <value>In the cmd window you will be prompted to enter your passwod for the medalla key files. If everything is ok, a message will tell you that your account was imported. Congratulations! You can now stat your beacon chain and validator. </value>
+    <value>In the cmd window you will be prompted to enter your passwod for the key files. If everything is ok, a message will tell you that your account was imported. Congratulations! You can now stat your beacon chain and validator. </value>
   </data>
 </root>

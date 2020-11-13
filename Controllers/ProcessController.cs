@@ -30,8 +30,8 @@ namespace LockMyEthTool.Controllers
         private string walletPath = "";
         private string keyPath = "";
         private bool hideCommandPrompt = false;
-        private bool useLocalEth1Node = false;
-        private bool useGoerliTestnet = false;
+        readonly bool useLocalEth1Node = true;
+        private string eth2TestNet = "";
         private string additionalCommands = "";
         private bool logOutput = true;
         private string latestVersion = "";
@@ -61,7 +61,7 @@ namespace LockMyEthTool.Controllers
                     this.walletPath = Eth2OverwatchSettings.Default.WalletPath_Validator;
                     this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_Validator;
 
-                    this.useGoerliTestnet = Eth2OverwatchSettings.Default.UseGoerliTestnet;
+                    this.eth2TestNet = Eth2OverwatchSettings.Default.Eth2_TestNet;
                     this.GetPrysmVersion();
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
@@ -71,8 +71,7 @@ namespace LockMyEthTool.Controllers
                     this.dataDir = Eth2OverwatchSettings.Default.DataDir_BeaconChain;
                     this.executablePath = Eth2OverwatchSettings.Default.ExecutablePath_BeaconChain;
                     this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_BeaconChain;
-                    this.useLocalEth1Node = Eth2OverwatchSettings.Default.UseLocalEth1Node;
-                    this.useGoerliTestnet = Eth2OverwatchSettings.Default.UseGoerliTestnet;
+                    this.eth2TestNet = Eth2OverwatchSettings.Default.Eth2_TestNet;
                     this.GetPrysmVersion();
                     break;
                 case PROCESS_TYPES.ETH_1:
@@ -81,8 +80,7 @@ namespace LockMyEthTool.Controllers
                     this.dataDir = Eth2OverwatchSettings.Default.DataDir_Eth1;
                     this.executablePath = Eth2OverwatchSettings.Default.ExecutablePath_Eth1;
                     this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_Eth1;
-                    this.useLocalEth1Node = Eth2OverwatchSettings.Default.UseLocalEth1Node;
-                    this.useGoerliTestnet = Eth2OverwatchSettings.Default.UseGoerliTestnet;
+                    this.eth2TestNet = Eth2OverwatchSettings.Default.Eth2_TestNet;
                     break;
             }
         }
@@ -96,7 +94,6 @@ namespace LockMyEthTool.Controllers
                     Eth2OverwatchSettings.Default.KeyPath_Validator = this.keyPath;
                     Eth2OverwatchSettings.Default.HideCommandPrompt_Validator = this.hideCommandPrompt;
                     Eth2OverwatchSettings.Default.AdditionalCommands_Validator = this.additionalCommands;
-                    Eth2OverwatchSettings.Default.UseGoerliTestnet = this.useGoerliTestnet;
                     Eth2OverwatchSettings.Default.WalletPath_Validator = this.walletPath;
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
@@ -128,8 +125,8 @@ namespace LockMyEthTool.Controllers
             }
 
             var add = this.additionalCommands.Length > 0 ? " " + this.additionalCommands : "";
-            var goerli = this.useGoerliTestnet && this.SupportsGoerliTestnet() ? " --goerli" : "";
-            var medalla = this.useGoerliTestnet ? " --medalla" : "";
+            var goerli = string.Empty != this.eth2TestNet && this.SupportsGoerliTestnet() ? " --goerli" : "";
+            var testNet = string.Empty != this.eth2TestNet ? " --" + this.eth2TestNet : "";
 
             switch (this.ProcessType)
             {
@@ -139,7 +136,7 @@ namespace LockMyEthTool.Controllers
                     this.directory = this.executablePath;
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
-                    this.commands[0] = String.Format(this.GetExecutables()[0] + " --accept-terms-of-use --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + medalla + add);
+                    this.commands[0] = String.Format(this.GetExecutables()[0] + " --accept-terms-of-use --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + testNet + add);
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     this.processIdentifier = "beacon";
@@ -148,7 +145,7 @@ namespace LockMyEthTool.Controllers
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
                     var connectTo = useLocalEth1Node ? " --http-web3provider=http://127.0.0.1:8545/" : "";
-                    this.commands[1] = String.Format(this.GetExecutables()[0] + @" --accept-terms-of-use --datadir=" + this.dataDir + connectTo + medalla + add);
+                    this.commands[1] = String.Format(this.GetExecutables()[0] + @" --accept-terms-of-use --datadir=" + this.dataDir + connectTo + testNet + add);
                     break;
                 case PROCESS_TYPES.ETH_1:
                     this.processIdentifier = "geth";
@@ -235,18 +232,18 @@ namespace LockMyEthTool.Controllers
             }
         }
 
-        public void ImportKeys(string medallaKeyPath)
+        public void ImportKeys(string keyPath)
         {
             switch (this.ProcessType)
             {
                 case PROCESS_TYPES.VALIDATOR:
-                    var medalla = this.useGoerliTestnet ? " --medalla" : "";
+                    var testNet = string.Empty != this.eth2TestNet ? " --" + this.eth2TestNet : "";
                     this.logOutput = false;
                     this.processIdentifier = "no identifier";
                     this.fileName = this.ExecutablePath + "\\" + this.GetExecutables()[0];
                     this.directory = this.ExecutablePath;
                     this.commands = null;
-                    this.arguments = "accounts import --keys-dir=" + medallaKeyPath + " --wallet-dir=" + this.walletPath + medalla;
+                    this.arguments = "accounts import --keys-dir=" + keyPath + " --wallet-dir=" + this.walletPath + testNet;
                     this.Start(true, true);
                     break;
             }
@@ -409,35 +406,6 @@ namespace LockMyEthTool.Controllers
             {
 
                 this.additionalCommands = value;
-                SaveConfig();
-            }
-        }
-        public bool UseGoerliTestnet
-        {
-            get
-            {
-                return this.useGoerliTestnet;
-            }
-            set
-            {
-                if (!this.SupportsGoerliTestnet())
-                {
-                    return;
-                }
-                this.useGoerliTestnet = value;
-                SaveConfig();
-            }
-        }
-        public bool UseLocalEth1Node
-        {
-            get
-            {
-                return this.useLocalEth1Node;
-            }
-            set
-            {
-
-                this.useLocalEth1Node = value;
                 SaveConfig();
             }
         }

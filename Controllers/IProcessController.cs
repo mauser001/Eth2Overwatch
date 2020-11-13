@@ -23,7 +23,7 @@ namespace LockMyEthTool.Views
 
         void DownloadExecutable(string path = null);
 
-        void ImportKeys(string medallaKeyPath);
+        void ImportKeys(string keyPath);
 
         void SetPassword(string pw);
         bool RequiresPassword();
@@ -74,16 +74,6 @@ namespace LockMyEthTool.Views
             set;
         }
         string AdditionalCommands
-        {
-            get;
-            set;
-        }
-        bool UseLocalEth1Node
-        {
-            get;
-            set;
-        }
-        bool UseGoerliTestnet
         {
             get;
             set;

@@ -282,11 +282,11 @@ namespace Eth2Overwatch.Views
         {            
             if (String.IsNullOrWhiteSpace(this.KeyFileFolderInput.Text))
             {
-                this.UpdateText("Please pick the folder containing the medalla key files", Color.Red);
+                this.UpdateText("Please pick the folder containing the key files", Color.Red);
             }
             else if (!Directory.Exists(this.KeyFileFolderInput.Text))
             {
-                this.UpdateText("Please pick a valid folder containing the medalla key files", Color.Red);
+                this.UpdateText("Please pick a valid folder containing the key files", Color.Red);
             }
             else if (String.IsNullOrWhiteSpace(this.PickWalletFolderInput.Text))
             {
@@ -318,7 +318,7 @@ namespace Eth2Overwatch.Views
 
         private void GotoLaunchpadLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            string url = "https://medalla.launchpad.ethereum.org/overview";
+            string url = "https://launchpad.ethereum.org/";
             try
             {
                 Process.Start(url);

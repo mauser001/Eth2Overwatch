@@ -1,10 +1,7 @@
 # Eth2Overwatch - Testnet
-Windows tool to manage processes for eth1 (goerli test) node, eth2 beacon chain (Testnet) and eth2 validator (Testnet)
-
-At the moment it is not possible to link the lokal eth1 chain with the beacon chain. The beacon chain conntects to https://goerli.prylabs.net
-
-
-
+Windows tool to manage processes for the prysm eth2 beacon chain, pryms eth2 validator and eth1 geth client.
+The Prysm clients will be downlaoded and used. 
+The Geth client must be updated manually. 
 
 ![alt text](http://maushammer.at/eth2/Eth2Overwatch.png "Screenshot")
 
@@ -27,7 +24,7 @@ When using this software you agree to the prysm terms of service: https://github
   + Nethereum.Geth
 
 ### Requirements/Prerequisites:
-+ Medalla lauchpad account creation completed: https://medalla.launchpad.ethereum.org/overview
++ Lauchpad account creation completed: https://launchpad.ethereum.org/
 + If you want to run a local Eth1 node (not required for eth2)
   + Installed Geth client (I used https://github.com/ethereum/go-ethereum )
 
@@ -45,18 +42,15 @@ Download the Eth2Overwatch.exe in a folder and start ist.
   + Select a folder wehre the the prysm executable files (beacon chain and validator) will be stored
   + Press "2. Download beacon chain executable" to download the file
   + Press "3. Download validator executable" to download the file
-  + Import Medalla account
-    + 4. Complete the Medalla lauchpad account creation: https://medalla.launchpad.ethereum.org/overview
-    + 5. Pick the folder where you store your medalla keys
+  + Import account
+    + 4. Complete the lauchpad account creation: https://launchpad.ethereum.org/
+    + 5. Pick the folder where you store your keys
     + 6. Pick a folder where to store your wallet
-    + 7. Click on 'Import Medalla account' to import the account
-      + Enter your medalla key password.
+    + 7. Click on 'Import account' to import the account
+      + Enter your key password.
       + If you get the message, that at least 1 account was imported then your are good to go.
 + ##### Global: 
-  + Use Görli test net: (atm. only for Eth1, as Eth2 is only on test net). If you deactive this checkbox you could run the eth1 main net node.
-  + [not working atm] Connect with Eth1 node. 
-    + Checked: Local Eth1 client and Eth2 Beacon Chain are connected
-    + Not checked: Eth2 Beacon Chain Connects to default Eth Chain (https://goerli.prylabs.net)
+  + Eth2 Testnet: If empty the clients connect to the main net. If not empty they connect to the specified test net. For eth1 görli is always used.
   + Start on Windows start: If checked the Eth2Overseer starts after win. login.
 + ##### Eth1
   + Start Eth1: Stops all existing Eth1 (geth) processes and starts a new one

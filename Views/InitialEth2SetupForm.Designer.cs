@@ -46,7 +46,7 @@
             this.KeyFileSelect = new System.Windows.Forms.Button();
             this.KeyFileFolderInput = new System.Windows.Forms.TextBox();
             this.complete = new System.Windows.Forms.LinkLabel();
-            this.PickMedallaKeyFilesLabel = new System.Windows.Forms.Label();
+            this.PickKeyFilesLabel = new System.Windows.Forms.Label();
             this.CreatePasswordFilesButton = new System.Windows.Forms.Button();
             this.DownloadValidatorButton = new System.Windows.Forms.Button();
             this.ValidatorReadyLabel = new System.Windows.Forms.Label();
@@ -74,8 +74,7 @@
             this.PickPrysmFolderILabel.Name = "PickPrysmFolderILabel";
             this.PickPrysmFolderILabel.Size = new System.Drawing.Size(492, 15);
             this.PickPrysmFolderILabel.TabIndex = 0;
-            this.PickPrysmFolderILabel.Text = "1. Pick a folder to store the prysm.bat (Executable to run the beacon chain and t" +
-    "he validator)";
+            this.PickPrysmFolderILabel.Text = "1. Pick a folder to store the prysm.bat (Executable to run the beacon chain and the validator)";
             // 
             // PickPrysmFolderInput
             // 
@@ -165,7 +164,7 @@
             this.ValidatorGroup.Controls.Add(this.KeyFileSelect);
             this.ValidatorGroup.Controls.Add(this.KeyFileFolderInput);
             this.ValidatorGroup.Controls.Add(this.complete);
-            this.ValidatorGroup.Controls.Add(this.PickMedallaKeyFilesLabel);
+            this.ValidatorGroup.Controls.Add(this.PickKeyFilesLabel);
             this.ValidatorGroup.Controls.Add(KeyDescription);
             this.ValidatorGroup.Controls.Add(this.CreatePasswordFilesButton);
             this.ValidatorGroup.Enabled = false;
@@ -174,7 +173,7 @@
             this.ValidatorGroup.Size = new System.Drawing.Size(569, 320);
             this.ValidatorGroup.TabIndex = 9;
             this.ValidatorGroup.TabStop = false;
-            this.ValidatorGroup.Text = "Validator Setup (from Medalla launchpad";
+            this.ValidatorGroup.Text = "Validator Setup (from  launchpad";
             // 
             // PickWalletFolderSelect
             // 
@@ -232,14 +231,14 @@
             this.complete.Text = "4. Complete Eth2 launchpad";
             this.complete.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GotoLaunchpadLink_LinkClicked);
             // 
-            // PickMedallaKeyFilesLabel
+            // PickKeyFilesLabel
             // 
-            this.PickMedallaKeyFilesLabel.AutoSize = true;
-            this.PickMedallaKeyFilesLabel.Location = new System.Drawing.Point(15, 54);
-            this.PickMedallaKeyFilesLabel.Name = "PickMedallaKeyFilesLabel";
-            this.PickMedallaKeyFilesLabel.Size = new System.Drawing.Size(245, 15);
-            this.PickMedallaKeyFilesLabel.TabIndex = 6;
-            this.PickMedallaKeyFilesLabel.Text = "5. Pick folder containing the Medalla key files";
+            this.PickKeyFilesLabel.AutoSize = true;
+            this.PickKeyFilesLabel.Location = new System.Drawing.Point(15, 54);
+            this.PickKeyFilesLabel.Name = "PickKeyFilesLabel";
+            this.PickKeyFilesLabel.Size = new System.Drawing.Size(245, 15);
+            this.PickKeyFilesLabel.TabIndex = 6;
+            this.PickKeyFilesLabel.Text = "5. Pick folder containing the  key files";
             // 
             // CreatePasswordFilesButton
             // 
@@ -247,7 +246,7 @@
             this.CreatePasswordFilesButton.Name = "CreatePasswordFilesButton";
             this.CreatePasswordFilesButton.Size = new System.Drawing.Size(180, 24);
             this.CreatePasswordFilesButton.TabIndex = 4;
-            this.CreatePasswordFilesButton.Text = "7. Import Medalla account";
+            this.CreatePasswordFilesButton.Text = "7. Import  account";
             this.CreatePasswordFilesButton.UseVisualStyleBackColor = true;
             this.CreatePasswordFilesButton.Click += new System.EventHandler(this.CreatePasswordFilesButton_Click);
             // 
@@ -313,7 +312,7 @@
         private System.Windows.Forms.GroupBox ValidatorGroup;
         private System.Windows.Forms.Button CreatePasswordFilesButton;
         private System.Windows.Forms.LinkLabel complete;
-        private System.Windows.Forms.Label PickMedallaKeyFilesLabel;
+        private System.Windows.Forms.Label PickKeyFilesLabel;
         private System.Windows.Forms.Button KeyFileSelect;
         private System.Windows.Forms.TextBox KeyFileFolderInput;
         private System.Windows.Forms.Button PickWalletFolderSelect;

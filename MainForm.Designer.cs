@@ -42,10 +42,10 @@ namespace LockMyEthTool
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.ConnectWithEth1Check = new System.Windows.Forms.CheckBox();
-            this.UseGoerliCheck = new System.Windows.Forms.CheckBox();
             this.StartOnStartupCheck = new System.Windows.Forms.CheckBox();
             this.InitialEth2SetupButton = new System.Windows.Forms.Button();
+            this.Eth2TestNetLabel = new System.Windows.Forms.Label();
+            this.Eth2TestNet = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // ValidatorControlBox
@@ -75,33 +75,6 @@ namespace LockMyEthTool
             this.Eth1ControlBox.Size = new System.Drawing.Size(700, 320);
             this.Eth1ControlBox.TabIndex = 0;
             // 
-            // ConnectWithEth1Check
-            // 
-            this.ConnectWithEth1Check.AutoSize = true;
-            this.ConnectWithEth1Check.Checked = true;
-            this.ConnectWithEth1Check.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ConnectWithEth1Check.Location = new System.Drawing.Point(12, 37);
-            this.ConnectWithEth1Check.Name = "ConnectWithEth1Check";
-            this.ConnectWithEth1Check.Size = new System.Drawing.Size(153, 19);
-            this.ConnectWithEth1Check.TabIndex = 1;
-            this.ConnectWithEth1Check.Text = "Connect with Eth1 node";
-            this.ConnectWithEth1Check.UseVisualStyleBackColor = true;
-            this.ConnectWithEth1Check.CheckedChanged += new System.EventHandler(this.ConnectWithEth1Check_CheckedChanged);
-            //this.ConnectWithEth1Check.Enabled = false;
-            // 
-            // UseGoerliCheck
-            // 
-            this.UseGoerliCheck.AutoSize = true;
-            this.UseGoerliCheck.Checked = true;
-            this.UseGoerliCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.UseGoerliCheck.Location = new System.Drawing.Point(12, 12);
-            this.UseGoerliCheck.Name = "UseGoerliCheck";
-            this.UseGoerliCheck.Size = new System.Drawing.Size(167, 19);
-            this.UseGoerliCheck.TabIndex = 2;
-            this.UseGoerliCheck.Text = "Use test net (Medala for Eth2 and Görli for Eth1)";
-            this.UseGoerliCheck.UseVisualStyleBackColor = true;
-            this.UseGoerliCheck.CheckedChanged += new System.EventHandler(this.UseGoerliCheck_CheckedChanged);
-            // 
             // StartOnStartupCheck
             // 
             this.StartOnStartupCheck.AutoSize = true;
@@ -121,9 +94,26 @@ namespace LockMyEthTool
             this.InitialEth2SetupButton.Name = "InitialEth2SetupButton";
             this.InitialEth2SetupButton.Size = new System.Drawing.Size(424, 23);
             this.InitialEth2SetupButton.TabIndex = 4;
-            this.InitialEth2SetupButton.Text = "Eth2 Setup (Download executables and import medalla validator keys)";
+            this.InitialEth2SetupButton.Text = "Eth2 Setup (Download executables and import validator keys)";
             this.InitialEth2SetupButton.UseVisualStyleBackColor = true;
             this.InitialEth2SetupButton.Click += new System.EventHandler(this.InitialEth2SetupButton_Click);
+            // 
+            // Eth2TestNetLabel
+            // 
+            this.Eth2TestNetLabel.AutoSize = true;
+            this.Eth2TestNetLabel.Location = new System.Drawing.Point(12, 25);
+            this.Eth2TestNetLabel.Name = "Eth2TestNetLabel";
+            this.Eth2TestNetLabel.Size = new System.Drawing.Size(185, 15);
+            this.Eth2TestNetLabel.TabIndex = 5;
+            this.Eth2TestNetLabel.Text = "Eth2 testnet (emtpy for main net):";
+            // 
+            // Eth2TestNet
+            // 
+            this.Eth2TestNet.Location = new System.Drawing.Point(203, 22);
+            this.Eth2TestNet.Name = "Eth2Testnet";
+            this.Eth2TestNet.Size = new System.Drawing.Size(164, 23);
+            this.Eth2TestNet.TabIndex = 6;
+            this.Eth2TestNet.TextChanged += new System.EventHandler(this.Eth2Testnet_TextChanged);
             // 
             // MainForm
             // 
@@ -131,10 +121,10 @@ namespace LockMyEthTool
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1415, 650);
+            this.Controls.Add(this.Eth2TestNet);
+            this.Controls.Add(this.Eth2TestNetLabel);
             this.Controls.Add(this.InitialEth2SetupButton);
             this.Controls.Add(this.StartOnStartupCheck);
-            this.Controls.Add(this.UseGoerliCheck);
-            this.Controls.Add(this.ConnectWithEth1Check);
             this.Controls.Add(this.ValidatorControlBox);
             this.Controls.Add(this.BeaconControlBox);
             this.Controls.Add(this.Eth1ControlBox);
@@ -152,10 +142,10 @@ namespace LockMyEthTool
         private ControlBox ValidatorControlBox;
         private ControlBox BeaconControlBox;
         private ControlBox Eth1ControlBox;
-        private System.Windows.Forms.CheckBox ConnectWithEth1Check;
-        private System.Windows.Forms.CheckBox UseGoerliCheck;
         private System.Windows.Forms.CheckBox StartOnStartupCheck;
         private System.Windows.Forms.Button InitialEth2SetupButton;
+        private System.Windows.Forms.Label Eth2TestNetLabel;
+        private System.Windows.Forms.TextBox Eth2TestNet;
     }
 }
 

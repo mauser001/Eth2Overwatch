@@ -36,8 +36,7 @@ namespace LockMyEthTool
 
         private void SetSavedValues()
         {
-            this.ConnectWithEth1Check.Checked = Eth2OverwatchSettings.Default.UseLocalEth1Node;
-            this.UseGoerliCheck.Checked = Eth2OverwatchSettings.Default.UseGoerliTestnet;
+            this.Eth2TestNet.Text = Eth2OverwatchSettings.Default.Eth2_TestNet;
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             this.StartOnStartupCheck.Checked = rk.GetValue(this.AppName) != null;
             if(this.StartOnStartupCheck.Checked)
@@ -50,25 +49,12 @@ namespace LockMyEthTool
             }
         }
 
-        private void ConnectWithEth1Check_CheckedChanged(object sender, EventArgs e)
-        {
-            Eth2OverwatchSettings.Default.UseLocalEth1Node = (sender as CheckBox).Checked;
-            Eth2OverwatchSettings.Default.Save();
-            UpdateBoxConfigs();
-        }
-
         private void UpdateBoxConfigs()
         {
             this.Boxes.ForEach((box) =>
             {
                 box.ConfigChanged();
             });
-        }
-
-        private void UseGoerliCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            Eth2OverwatchSettings.Default.UseGoerliTestnet = (sender as CheckBox).Checked;
-            Eth2OverwatchSettings.Default.Save();
         }
 
         private void StartOnStartupCheck_CheckedChanged(object sender, EventArgs e)
@@ -96,6 +82,13 @@ namespace LockMyEthTool
                 DialogResult res = frm.ShowDialog(this);
                 this.UpdateBoxConfigs();
             }
+        }
+
+        private void Eth2Testnet_TextChanged(object sender, EventArgs e)
+        {
+            Eth2OverwatchSettings.Default.Eth2_TestNet = (sender as TextBox).Text;
+            Eth2OverwatchSettings.Default.Save();
+            this.UpdateBoxConfigs();
         }
     }
 }

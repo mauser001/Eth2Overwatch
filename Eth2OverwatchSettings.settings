@@ -50,10 +50,7 @@
     <Setting Name="AdditionalCommands_Eth1" Type="System.String" Scope="User">
       <Value Profile="(Default)">--lightkdf --cache 16</Value>
     </Setting>
-    <Setting Name="UseLocalEth1Node" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="UseGoerliTestnet" Type="System.Boolean" Scope="User">
+    <Setting Name="Eth2_TestNet" Type="System.String" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="UpdateSettings" Type="System.Boolean" Scope="User">

@@ -1,5 +1,9 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.4-RC.1
++ Fix: Textnet is now cofigurable and no longer fixed with medalla
++ Removed optional connection to prysm görli eth1 node. Local eth1 client is now mandatory.
+
 #### Version 1.0.3-Beta.2
 + Fix: Adapted key import according to last prysm changes 
   + renamed account-v2 to account
