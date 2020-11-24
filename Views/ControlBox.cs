@@ -19,6 +19,7 @@ namespace LockMyEthTool.Views
         {
             this.ControlName = Name;
             this.Controller = Controller;
+            this.retryCount = this.Controller.GetInitialDelay();
             InitializeComponent();
             SetupControlls();
         }
@@ -33,7 +34,7 @@ namespace LockMyEthTool.Views
             this.ShowErrorButton.DataBindings.Add("Visible", this.HideCommandPromptCheck, "Checked");
             this.ShowWarningButton.DataBindings.Add("Visible", this.HideCommandPromptCheck, "Checked");
             this.ShowInfoButton.DataBindings.Add("Visible", this.HideCommandPromptCheck, "Checked");
-            this.StartTimer(1000);
+            this.StartTimer(1000 * this.Controller.GetInitialDelay());
         }
 
         private void UpdateControls()
@@ -225,7 +226,7 @@ namespace LockMyEthTool.Views
                 }
                 else if (success && this.successCounter > 60)
                 {
-                    this.retryCount = 20;
+                    this.retryCount = 12;
                     this.successCounter = 0;
                     if (this.Controller.GetLastVersion() != this.Controller.GetPrysmVersion())
                     {

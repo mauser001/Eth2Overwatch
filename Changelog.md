@@ -1,5 +1,9 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.4-RC.2
++ Fix: added initial delay for validator, that the beacon chain has time to start
++ Change: Modified retry-delays
+
 #### Version 1.0.4-RC.1
 + Fix: Textnet is now cofigurable and no longer fixed with medalla
 + Removed optional connection to prysm görli eth1 node. Local eth1 client is now mandatory.

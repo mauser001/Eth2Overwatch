@@ -249,6 +249,11 @@ namespace LockMyEthTool.Controllers
             }
         }
 
+        public int GetInitialDelay()
+        {
+            return this.ProcessType == PROCESS_TYPES.VALIDATOR ? 2 : 0;
+        }
+
         private string[] RequiredFiles()
         {
             string[] files;

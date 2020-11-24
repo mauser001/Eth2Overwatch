@@ -35,6 +35,7 @@ namespace LockMyEthTool.Views
         bool SupportsGoerliTestnet();
         string GetPrysmVersion();
         string GetLastVersion();
+        int GetInitialDelay();
 
         bool CheckExecutable(string path = null);
 
