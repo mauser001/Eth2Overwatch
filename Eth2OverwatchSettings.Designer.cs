@@ -250,7 +250,52 @@ namespace Eth2Overwatch {
                 this["WalletPath_Validator"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ReportPath
+        {
+            get
+            {
+                return ((string)(this["ReportPath"]));
+            }
+            set
+            {
+                this["ReportPath"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ReportKey
+        {
+            get
+            {
+                return ((string)(this["ReportKey"]));
+            }
+            set
+            {
+                this["ReportKey"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ReportLabel
+        {
+            get
+            {
+                return ((string)(this["ReportLabel"]));
+            }
+            set
+            {
+                this["ReportLabel"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]

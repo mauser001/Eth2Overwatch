@@ -1,5 +1,8 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.5-RC.1
++ Feature: Added the possibility to send report data to external url
+
 #### Version 1.0.4-RC.2
 + Fix: added initial delay for validator, that the beacon chain has time to start
 + Change: Modified retry-delays

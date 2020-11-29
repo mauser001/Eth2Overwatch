@@ -79,6 +79,21 @@ namespace LockMyEthTool.Views
             get;
             set;
         }
+        string ReportPath
+        {
+            get;
+            set;
+        }
+        string ReportKey
+        {
+            get;
+            set;
+        }
+        string ReportLabel
+        {
+            get;
+            set;
+        }
 
         /**
          * Filter debug messages

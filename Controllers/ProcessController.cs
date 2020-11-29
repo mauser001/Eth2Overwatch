@@ -40,6 +40,9 @@ namespace LockMyEthTool.Controllers
         private bool showError = true;
         private bool showWarning = true;
         private bool showInfo = true;
+        private string reportPath = "";
+        private string reportKey = "";
+        private string reportLabel = "";
         private Dictionary<string, ValidatorBo> validatorsByKey = new Dictionary<string, ValidatorBo>();
 
         public ProcessController(PROCESS_TYPES ProcessType)
@@ -62,6 +65,9 @@ namespace LockMyEthTool.Controllers
                     this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_Validator;
 
                     this.eth2TestNet = Eth2OverwatchSettings.Default.Eth2_TestNet;
+                    this.reportPath = Eth2OverwatchSettings.Default.ReportPath;
+                    this.reportKey = Eth2OverwatchSettings.Default.ReportKey;
+                    this.reportLabel = Eth2OverwatchSettings.Default.ReportLabel;
                     this.GetPrysmVersion();
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
@@ -95,6 +101,9 @@ namespace LockMyEthTool.Controllers
                     Eth2OverwatchSettings.Default.HideCommandPrompt_Validator = this.hideCommandPrompt;
                     Eth2OverwatchSettings.Default.AdditionalCommands_Validator = this.additionalCommands;
                     Eth2OverwatchSettings.Default.WalletPath_Validator = this.walletPath;
+                    Eth2OverwatchSettings.Default.ReportPath = this.reportPath;
+                    Eth2OverwatchSettings.Default.ReportLabel = this.reportLabel;
+                    Eth2OverwatchSettings.Default.ReportKey = this.reportKey;
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     Eth2OverwatchSettings.Default.Autostart_BeaconChain = this.autoStart;
@@ -457,6 +466,45 @@ namespace LockMyEthTool.Controllers
                 SaveConfig();
             }
         }
+        public string ReportPath
+        {
+            get
+            {
+                return this.reportPath;
+            }
+            set
+            {
+
+                this.reportPath = value;
+                SaveConfig();
+            }
+        }
+        public string ReportKey
+        {
+            get
+            {
+                return this.reportKey;
+            }
+            set
+            {
+
+                this.reportKey = value;
+                SaveConfig();
+            }
+        }
+        public string ReportLabel
+        {
+            get
+            {
+                return this.reportLabel;
+            }
+            set
+            {
+
+                this.reportLabel = value;
+                SaveConfig();
+            }
+        }
 
         public void UpdateConfig()
         {
@@ -769,6 +817,38 @@ namespace LockMyEthTool.Controllers
                         using StreamReader healthzReader = new StreamReader(healthzResponse.GetResponseStream());
                         result += healthzReader.ReadToEnd();
                         resultFunction(true, result);
+                        if(this.reportPath.Length > 0)
+                        {
+                            try
+                            {
+                                var reportWebRequest = (HttpWebRequest)WebRequest.Create(this.reportPath);
+                                reportWebRequest.ContentType = "application/json";
+                                reportWebRequest.Method = "POST";
+                                ReportBody body = new ReportBody();
+                                body.data = new ReportData();
+                                body.data.Label = this.reportLabel;
+                                body.data.TS = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
+                                body.code = this.reportKey;
+                                body.data.Validators = new List<ReportValidatorInfo>();
+                                foreach (KeyValuePair<string, ValidatorBo> keyValue in ValidatorsByKey)
+                                {
+                                    body.data.Validators.Add(keyValue.Value.ReportInfo);
+                                }
+                                using (var streamWriter = new StreamWriter(reportWebRequest.GetRequestStream()))
+                                {
+                                    string json = Newtonsoft.Json.JsonConvert.SerializeObject(body);
+
+                                    streamWriter.Write(json);
+                                }
+                                using HttpWebResponse reportResponse = (HttpWebResponse)reportWebRequest.GetResponse();
+                                using StreamReader reportResponseReader = new StreamReader(reportResponse.GetResponseStream());
+                                string test = reportResponseReader.ReadToEnd();
+                            }
+                            catch
+                            {
+
+                            }
+                        }
                         return;
                     }
                     catch

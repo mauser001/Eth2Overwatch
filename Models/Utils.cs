@@ -22,5 +22,10 @@ namespace Eth2Overwatch.Models
         {
             return (decimal)gwei / 1000000000;
         }
+
+        public static decimal GWeiToEthRounded(ulong gwei, int decimals)
+        {
+            return Math.Round(GWeiToEth(gwei), decimals);
+        }
     }
 }

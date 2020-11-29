@@ -92,14 +92,13 @@ Download the Eth2Overwatch.exe in a folder and start ist.
   + Result window: Shows the state of the Validator.
     + Green: Connection to the Validator could be established and the health state is shown from: http://localhost:8081/healthz
     + Red: There was an error starting the eth2 Validator
-
+  + Details Button: Open a Window with Details of local validators.
+    + You can specify an external url to send the report data to a remote adress.
+      + The key must match a key defined on the server
+      + PHP Script and example website to display the report data can be found here:
+        https://github.com/mauser001/validator-report
 
 ### Roadmap
 + Design
 + Creating a new Validator account
 + More complex status checking
-+ Displaying of stats
-
-### Known issues/bugs:
-+ Start on Windows Startup does not work
-+ Local connection between eth1 node and beacon chain not working

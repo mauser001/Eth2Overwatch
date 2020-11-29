@@ -43,7 +43,7 @@ namespace Eth2Overwatch.Models
             {
                 return this.publicKeyByteString;
             }
-        } 
+        }
 
         public ValidatorStatus State
         {
@@ -92,6 +92,19 @@ namespace Eth2Overwatch.Models
             set
             {
                 this.correctlyVoted = value;
+            }
+        }
+
+        public ReportValidatorInfo ReportInfo
+        {
+            get
+            {
+                ReportValidatorInfo info = new ReportValidatorInfo();
+                info.Balance = Utils.GWeiToEthRounded(this.balance, 3);
+                info.CorrectlyVoted = this.correctlyVoted;
+                info.CurrentEffectiveBalance = Utils.GWeiToEthRounded(this.currentEffectiveBalance, 3);
+                info.StateText = this.state.ToString();
+                return info;
             }
         }
     }
