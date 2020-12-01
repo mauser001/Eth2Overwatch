@@ -43,6 +43,7 @@ namespace LockMyEthTool
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.StartOnStartupCheck = new System.Windows.Forms.CheckBox();
+            this.UseLocalEth1NodeCheck = new System.Windows.Forms.CheckBox();
             this.InitialEth2SetupButton = new System.Windows.Forms.Button();
             this.Eth2TestNetLabel = new System.Windows.Forms.Label();
             this.Eth2TestNet = new System.Windows.Forms.TextBox();
@@ -74,6 +75,20 @@ namespace LockMyEthTool
             this.Eth1ControlBox.Name = "Eth1ControlBox";
             this.Eth1ControlBox.Size = new System.Drawing.Size(700, 320);
             this.Eth1ControlBox.TabIndex = 0;
+            //
+            // UseLocalEth1NodeCheck
+            //
+            this.UseLocalEth1NodeCheck.AutoSize = true;
+            this.UseLocalEth1NodeCheck.Checked = true;
+            this.UseLocalEth1NodeCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.UseLocalEth1NodeCheck.Location = new System.Drawing.Point(12, 92);
+            this.UseLocalEth1NodeCheck.Name = "UseLocalEth1NodeCheck";
+            this.UseLocalEth1NodeCheck.Size = new System.Drawing.Size(143, 19);
+            this.UseLocalEth1NodeCheck.TabIndex = 3;
+            this.UseLocalEth1NodeCheck.Text = "Use local eth1 node";
+            this.UseLocalEth1NodeCheck.UseVisualStyleBackColor = true;
+            this.UseLocalEth1NodeCheck.CheckedChanged += new System.EventHandler(this.UseLocalEth1NodeCheck_CheckedChanged);
+
             // 
             // StartOnStartupCheck
             // 
@@ -124,6 +139,7 @@ namespace LockMyEthTool
             this.Controls.Add(this.Eth2TestNet);
             this.Controls.Add(this.Eth2TestNetLabel);
             this.Controls.Add(this.InitialEth2SetupButton);
+            this.Controls.Add(this.UseLocalEth1NodeCheck);
             this.Controls.Add(this.StartOnStartupCheck);
             this.Controls.Add(this.ValidatorControlBox);
             this.Controls.Add(this.BeaconControlBox);
@@ -142,6 +158,7 @@ namespace LockMyEthTool
         private ControlBox ValidatorControlBox;
         private ControlBox BeaconControlBox;
         private ControlBox Eth1ControlBox;
+        private System.Windows.Forms.CheckBox UseLocalEth1NodeCheck;
         private System.Windows.Forms.CheckBox StartOnStartupCheck;
         private System.Windows.Forms.Button InitialEth2SetupButton;
         private System.Windows.Forms.Label Eth2TestNetLabel;

@@ -30,7 +30,7 @@ namespace LockMyEthTool.Controllers
         private string walletPath = "";
         private string keyPath = "";
         private bool hideCommandPrompt = false;
-        readonly bool useLocalEth1Node = true;
+        private bool useLocalEth1Node = true;
         private string eth2TestNet = "";
         private string additionalCommands = "";
         private bool logOutput = true;
@@ -78,6 +78,7 @@ namespace LockMyEthTool.Controllers
                     this.executablePath = Eth2OverwatchSettings.Default.ExecutablePath_BeaconChain;
                     this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_BeaconChain;
                     this.eth2TestNet = Eth2OverwatchSettings.Default.Eth2_TestNet;
+                    this.useLocalEth1Node = Eth2OverwatchSettings.Default.UseLocalEth1Node;
                     this.GetPrysmVersion();
                     break;
                 case PROCESS_TYPES.ETH_1:
@@ -87,6 +88,7 @@ namespace LockMyEthTool.Controllers
                     this.executablePath = Eth2OverwatchSettings.Default.ExecutablePath_Eth1;
                     this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_Eth1;
                     this.eth2TestNet = Eth2OverwatchSettings.Default.Eth2_TestNet;
+                    this.useLocalEth1Node = Eth2OverwatchSettings.Default.UseLocalEth1Node;
                     break;
             }
         }

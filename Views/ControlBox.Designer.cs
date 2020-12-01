@@ -297,6 +297,7 @@
             this.ValidatorDetailsButton.Location = new System.Drawing.Point(218, 11);
             this.ValidatorDetailsButton.Name = "ValidatorDetailsButton";
             this.ValidatorDetailsButton.Size = new System.Drawing.Size(52, 23);
+            this.ValidatorDetailsButton.Visible = false;
             this.ValidatorDetailsButton.TabIndex = 22;
             this.ValidatorDetailsButton.Text = "Details";
             this.ValidatorDetailsButton.UseVisualStyleBackColor = false;

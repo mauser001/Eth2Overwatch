@@ -47,6 +47,8 @@ namespace LockMyEthTool
                     this.SetAutoStart(true);
                 }
             }
+            this.UseLocalEth1NodeCheck.Checked = Eth2OverwatchSettings.Default.UseLocalEth1Node;
+
         }
 
         private void UpdateBoxConfigs()
@@ -55,6 +57,16 @@ namespace LockMyEthTool
             {
                 box.ConfigChanged();
             });
+        }
+
+        private void UseLocalEth1NodeCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if(Eth2OverwatchSettings.Default.UseLocalEth1Node != (sender as CheckBox).Checked)
+            {
+                Eth2OverwatchSettings.Default.UseLocalEth1Node = (sender as CheckBox).Checked;
+                Eth2OverwatchSettings.Default.Save();
+                this.UpdateBoxConfigs();
+            }
         }
 
         private void StartOnStartupCheck_CheckedChanged(object sender, EventArgs e)

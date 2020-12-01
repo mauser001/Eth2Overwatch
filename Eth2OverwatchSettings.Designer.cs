@@ -34,7 +34,22 @@ namespace Eth2Overwatch {
                 this["ValidatorPassword"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseLocalEth1Node
+        {
+            get
+            {
+                return ((bool)(this["UseLocalEth1Node"]));
+            }
+            set
+            {
+                this["UseLocalEth1Node"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]

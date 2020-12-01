@@ -163,19 +163,25 @@ namespace LockMyEthTool.Views
 
         private void UpdateValidatorDetailsButton()
         {
-            Boolean vis = this.Controller.ValidatorsByKey.Count > 0;
-            if (this.ValidatorDetailsButton.InvokeRequired)
+            try
             {
-                Action act = () =>
+                Boolean vis = this.Controller.ValidatorsByKey.Count > 0;
+                if (this.ValidatorDetailsButton.InvokeRequired)
+                {
+                    Action act = () =>
+                    {
+                        this.ValidatorDetailsButton.Visible = vis;
+
+                    };
+                    this.ValidatorDetailsButton.Invoke(act);
+                }
+                else
                 {
                     this.ValidatorDetailsButton.Visible = vis;
-
-                };
-                this.ValidatorDetailsButton.Invoke(act);
+                }
             }
-            else
+            catch
             {
-                this.ValidatorDetailsButton.Visible = vis;
             }
         }
 

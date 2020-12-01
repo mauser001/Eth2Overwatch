@@ -1,5 +1,8 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.5-RC.2
++ Feature: (Re)added the checkbox to disable the local eth1 connection
+
 #### Version 1.0.5-RC.1
 + Feature: Added the possibility to send report data to external url
 
