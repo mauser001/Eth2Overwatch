@@ -210,6 +210,7 @@ namespace LockMyEthTool.Views
                 this.UpdateValidatorDetailsButton();
                 if (result != null && result.IndexOf("Executable download complete") >= 0)
                 {
+                    this.Controller.UpdateConfig();
                     this.StartProcess();
                 }
                 else if (!success && this.AutostartCheck.Checked && this.retryCount <= 0)

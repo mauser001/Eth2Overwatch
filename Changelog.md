@@ -1,5 +1,8 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.5-RC.3
++ Bugfix: Reload config after download of now prysm software
+
 #### Version 1.0.5-RC.2
 + Feature: (Re)added the checkbox to disable the local eth1 connection
 
