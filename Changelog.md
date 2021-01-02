@@ -1,5 +1,8 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.5-RC.4
++ Bugfix: Send more reporing Data
+
 #### Version 1.0.5-RC.3
 + Bugfix: Reload config after download of now prysm software
 

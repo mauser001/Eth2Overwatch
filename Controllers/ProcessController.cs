@@ -791,7 +791,10 @@ namespace LockMyEthTool.Controllers
                             ValidatorBo bo = this.validatorsByKey[performance.PublicKeys[i].ToBase64()];
                             bo.Balance = performance.BalancesAfterEpochTransition[i];
                             bo.CurrentEffectiveBalance = performance.CurrentEffectiveBalances[i];
-                            bo.CorrectlyVoted = performance.CorrectlyVotedHead[i] && performance.CorrectlyVotedSource[i] && performance.CorrectlyVotedTarget[i];
+                            bo.CorrectlyVotedHead = performance.CorrectlyVotedHead[i];
+                            bo.CorrectlyVotedSource = performance.CorrectlyVotedSource[i];
+                            bo.CorrectlyVotedTarget = performance.CorrectlyVotedTarget[i];
+                            bo.InclusionDistance = performance.InclusionDistances[i];
                             balances += bo.Balance;
                             bo.State = status.Statuses[i].Status;
                             if (!stateCounter.ContainsKey(bo.State.ToString()))

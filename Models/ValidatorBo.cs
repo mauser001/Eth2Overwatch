@@ -13,7 +13,10 @@ namespace Eth2Overwatch.Models
         private ValidatorStatus state = ValidatorStatus.UnknownStatus;
         private ulong balance = 0;
         private ulong currentEffectiveBalance;
-        private bool correctlyVoted;
+        private bool correctlyVotedTarget;
+        private bool correctlyVotedSource;
+        private bool correctlyVotedHead;
+        private ulong inclusionDistance;
 
         public ValidatorBo(string publicKey)
         {
@@ -86,12 +89,59 @@ namespace Eth2Overwatch.Models
         {
             get
             {
-                return this.correctlyVoted;
+                return this.correctlyVotedHead && this.correctlyVotedSource && this.correctlyVotedTarget;
+            }
+        }
+
+        public bool CorrectlyVotedHead
+        {
+            get
+            {
+                return this.correctlyVotedHead;
             }
 
             set
             {
-                this.correctlyVoted = value;
+                this.correctlyVotedHead = value;
+            }
+        }
+
+        public bool CorrectlyVotedSource
+        {
+            get
+            {
+                return this.correctlyVotedSource;
+            }
+
+            set
+            {
+                this.correctlyVotedSource = value;
+            }
+        }
+
+        public bool CorrectlyVotedTarget
+        {
+            get
+            {
+                return this.correctlyVotedTarget;
+            }
+
+            set
+            {
+                this.correctlyVotedTarget = value;
+            }
+        }
+
+        public ulong InclusionDistance
+        {
+            get
+            {
+                return this.inclusionDistance;
+            }
+
+            set
+            {
+                this.inclusionDistance = value;
             }
         }
 
@@ -101,8 +151,12 @@ namespace Eth2Overwatch.Models
             {
                 ReportValidatorInfo info = new ReportValidatorInfo();
                 info.Balance = Utils.GWeiToEthRounded(this.balance, 3);
-                info.CorrectlyVoted = this.correctlyVoted;
+                info.CorrectlyVoted = this.CorrectlyVoted;
+                info.CorrectlyVotedTarget = this.CorrectlyVotedTarget;
+                info.CorrectlyVotedSource = this.CorrectlyVotedSource;
+                info.CorrectlyVotedHead = this.CorrectlyVotedHead;
                 info.CurrentEffectiveBalance = Utils.GWeiToEthRounded(this.currentEffectiveBalance, 3);
+                info.InclusionDistance = this.InclusionDistance;
                 info.StateText = this.state.ToString();
                 return info;
             }
