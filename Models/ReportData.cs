@@ -8,6 +8,7 @@ namespace Eth2Overwatch.Models
     {
         public long TS;
         public string Label;
+        public string Version;
         public List<ReportValidatorInfo> Validators;
     }
 }

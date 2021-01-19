@@ -1,5 +1,9 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.6-RC.1
++ Display used Version of Validator and Beacon-Chain
++ Report Version of Validator
+
 #### Version 1.0.5-RC.4
 + Bugfix: Send more reporing Data
 

@@ -172,7 +172,7 @@ namespace LockMyEthTool.Controllers
 
         public string GetLastVersion()
         {
-            return this.latestVersion;
+            return this.latestVersion == null ? "" : this.latestVersion;
         }
 
         public string GetPrysmVersion()
@@ -196,7 +196,7 @@ namespace LockMyEthTool.Controllers
             {
                 this.latestVersion = Eth2OverwatchSettings.Default.LastPrysmVersion;
             }
-            return this.latestVersion;
+            return this.latestVersion == null ? "" : this.latestVersion;
         }
 
 
@@ -831,6 +831,7 @@ namespace LockMyEthTool.Controllers
                                 reportWebRequest.Method = "POST";
                                 ReportBody body = new ReportBody();
                                 body.data = new ReportData();
+                                body.data.Version = this.latestVersion;
                                 body.data.Label = this.reportLabel;
                                 body.data.TS = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
                                 body.code = this.reportKey;

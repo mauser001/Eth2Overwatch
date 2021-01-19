@@ -148,8 +148,8 @@ namespace LockMyEthTool.Views
                 {
                     this.StateOutput.Text = text;
                     this.StateOutput.BackColor = backgroundColor;
-                    this.OutputText.Text = this.Controller.GetLogText();
-
+                    this.OutputText.Text = this.Controller.GetLogText(); 
+                    this.TitleLabel.Text = this.ControlName + (this.Controller.GetLastVersion().Length > 0 ? " (" + this.Controller.GetLastVersion() + ")" : "");
                 };
                 this.Invoke(act);
             }
@@ -157,7 +157,7 @@ namespace LockMyEthTool.Views
             {
                 this.StateOutput.Text = text;
                 this.StateOutput.BackColor = backgroundColor;
-                this.OutputText.Text = this.Controller.GetLogText();
+                this.OutputText.Text = this.Controller.GetLogText(); this.TitleLabel.Text = this.ControlName + (this.Controller.GetLastVersion().Length > 0 ? " (" + this.Controller.GetLastVersion() + ")" : "");
             }
         }
 
