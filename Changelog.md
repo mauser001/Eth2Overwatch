@@ -1,5 +1,8 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.6-RC.2
++ Bugfix: try to fix downloading of the new Version
+
 #### Version 1.0.6-RC.1
 + Display used Version of Validator and Beacon-Chain
 + Report Version of Validator

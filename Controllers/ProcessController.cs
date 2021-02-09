@@ -39,6 +39,7 @@ namespace LockMyEthTool.Controllers
         private bool downloadingExecutables = false;
         private bool showError = true;
         private bool showWarning = true;
+        private bool newVersionAvailable = false;
         private bool showInfo = true;
         private string reportPath = "";
         private string reportKey = "";
@@ -234,6 +235,7 @@ namespace LockMyEthTool.Controllers
                         else
                         {
                             this.downloadingExecutables = false;
+                            this.newVersionAvailable = true;
                             this.Logs.Add("Executable download complete");
                         }
                     });
@@ -697,6 +699,29 @@ namespace LockMyEthTool.Controllers
             set
             {
                 this.showWarning = value;
+            }
+        }
+
+        public bool NewVersionAvailable
+        {
+            get
+            {
+                return this.newVersionAvailable;
+            }
+            set
+            {
+                this.newVersionAvailable = value;
+            }
+        }
+        public bool DownloadingExecutables
+        {
+            get
+            {
+                return this.downloadingExecutables;
+            }
+            set
+            {
+                this.downloadingExecutables = value;
             }
         }
 

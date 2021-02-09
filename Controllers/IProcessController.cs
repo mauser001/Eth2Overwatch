@@ -113,6 +113,17 @@ namespace LockMyEthTool.Views
             get;
             set;
         }
+        bool NewVersionAvailable
+        {
+            get;
+            set;
+        }
+
+        bool DownloadingExecutables
+        {
+            get;
+            set;
+        }
     }
 }
 

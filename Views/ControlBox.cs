@@ -208,10 +208,15 @@ namespace LockMyEthTool.Views
             {
                 this.UpdateText(result, success ? Color.LightGreen : Color.Red);
                 this.UpdateValidatorDetailsButton();
-                if (result != null && result.IndexOf("Executable download complete") >= 0)
+                if (this.Controller.NewVersionAvailable)
                 {
                     this.Controller.UpdateConfig();
                     this.StartProcess();
+                    this.Controller.NewVersionAvailable = false;
+                }
+                else if(this.Controller.DownloadingExecutables)
+                {
+                    //Nothing to do here, we just wait until the download is complete
                 }
                 else if (!success && this.AutostartCheck.Checked && this.retryCount <= 0)
                 {
