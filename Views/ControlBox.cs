@@ -66,6 +66,14 @@ namespace LockMyEthTool.Views
             this.DataDirInput.Visible = this.DataDirLabel.Visible = this.DataDirSelectButton.Visible = this.Controller.RequiresDataDir();
             this.WalletDirInput.Visible = this.WalletDirLabel.Visible = this.WalletDirSelectButton.Visible = this.Controller.RequiresWalletPath();
             this.StateOutput.Height = !this.Controller.HideCommandPrompt ? 170 : 56;
+            this.VersionLabel.Visible = this.LatestVersionCheckbox.Visible = this.Controller.SupportsVersion();
+            this.CurrentVersionInput.Visible = this.Controller.SupportsVersion() && !this.Controller.UseLatestVersion;
+            if(this.Controller.SupportsVersion())
+            {
+                this.LatestVersionCheckbox.Checked = this.Controller.UseLatestVersion;
+                this.CurrentVersionInput.Text = this.Controller.CurrentVersion;
+            }
+
             this.UpdateValidatorDetailsButton();
         }
 
@@ -118,7 +126,7 @@ namespace LockMyEthTool.Views
         private void AutostartCheck_CheckedChanged(object sender, EventArgs e)
         {
             this.Controller.Autostart = (sender as CheckBox).Checked;
-            this.CheckState();
+            this.StartTimer(0);
         }
 
         private void HideCommandPromptCheck_CheckedChanged(object sender, EventArgs e)
@@ -142,6 +150,17 @@ namespace LockMyEthTool.Views
 
         private void UpdateText(string text, Color backgroundColor)
         {
+            string title = this.ControlName;
+            if(this.Controller.CurrentVersion.Length > 0)
+            {
+                title += " (" + this.Controller.CurrentVersion;
+                if(this.Controller.CurrentVersion != this.Controller.GetLastVersion())
+                {
+                    title += ", Latest: " + this.Controller.GetLastVersion();
+                }
+                title += ")";
+            }
+
             if (this.InvokeRequired)
             {
                 Action act = () =>
@@ -149,7 +168,9 @@ namespace LockMyEthTool.Views
                     this.StateOutput.Text = text;
                     this.StateOutput.BackColor = backgroundColor;
                     this.OutputText.Text = this.Controller.GetLogText(); 
-                    this.TitleLabel.Text = this.ControlName + (this.Controller.GetLastVersion().Length > 0 ? " (" + this.Controller.GetLastVersion() + ")" : "");
+
+
+                    this.TitleLabel.Text = title;
                 };
                 this.Invoke(act);
             }
@@ -157,7 +178,8 @@ namespace LockMyEthTool.Views
             {
                 this.StateOutput.Text = text;
                 this.StateOutput.BackColor = backgroundColor;
-                this.OutputText.Text = this.Controller.GetLogText(); this.TitleLabel.Text = this.ControlName + (this.Controller.GetLastVersion().Length > 0 ? " (" + this.Controller.GetLastVersion() + ")" : "");
+                this.OutputText.Text = this.Controller.GetLogText(); 
+                this.TitleLabel.Text = title;
             }
         }
 
@@ -218,8 +240,15 @@ namespace LockMyEthTool.Views
                 {
                     //Nothing to do here, we just wait until the download is complete
                 }
+                else if (this.Controller.SupportsVersion() && this.Controller.CheckExecutablePath() && !this.Controller.CheckExecutable())
+                {
+                    this.Controller.Stop();
+                    this.Controller.DownloadExecutable();
+                    this.StartTimer(10000);
+                }
                 else if (!success && this.AutostartCheck.Checked && this.retryCount <= 0)
                 {
+                    this.retryCount = 12;
                     this.StartProcess();
                 }
                 else if (!success)
@@ -229,21 +258,30 @@ namespace LockMyEthTool.Views
                         this.retryCount--;
                     }
 
-                    if (this.Controller.GetLastVersion() != this.Controller.GetPrysmVersion())
+                    string prysmVersion = this.Controller.GetPrysmVersion();
+                    if (this.Controller.GetLastVersion() != prysmVersion)
                     {
-                        this.Controller.Stop();
-                        this.Controller.DownloadExecutable();
+                        if(this.Controller.UseLatestVersion)
+                        {
+                            this.Controller.Stop();
+                        }
+                        this.Controller.DownloadExecutable(prysmVersion);
                     }
+                    
                     this.StartTimer(10000);
                 }
                 else if (success && this.successCounter > 60)
                 {
                     this.retryCount = 12;
                     this.successCounter = 0;
-                    if (this.Controller.GetLastVersion() != this.Controller.GetPrysmVersion())
+                    string prysmVersion = this.Controller.GetPrysmVersion();
+                    if (this.Controller.GetLastVersion() != prysmVersion)
                     {
-                        this.Controller.Stop();
-                        this.Controller.DownloadExecutable();
+                        if (this.Controller.UseLatestVersion)
+                        {
+                            this.Controller.Stop();
+                        }
+                        this.Controller.DownloadExecutable(prysmVersion);
                     }
                 }
                 else if (success)
@@ -281,7 +319,7 @@ namespace LockMyEthTool.Views
             if(this.Controller.KeyPath != (sender as TextBox).Text)
             {
                 this.Controller.KeyPath = (sender as TextBox).Text;
-                this.CheckState();
+                this.StartTimer(0);
             }
         }
 
@@ -292,7 +330,7 @@ namespace LockMyEthTool.Views
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.FileName))
             {
                 this.Controller.KeyPath = this.KeyPathInput.Text = fbd.FileName;
-                this.CheckState();
+                this.StartTimer(0);
             }
         }
 
@@ -301,7 +339,7 @@ namespace LockMyEthTool.Views
             if (this.Controller.DataDir != (sender as TextBox).Text)
             {
                 this.Controller.DataDir = (sender as TextBox).Text;
-                this.CheckState();
+                this.StartTimer(0);
             }
         }
 
@@ -310,7 +348,7 @@ namespace LockMyEthTool.Views
             if (this.Controller.WalletPath != (sender as TextBox).Text)
             {
                 this.Controller.WalletPath = (sender as TextBox).Text;
-                this.CheckState();
+                this.StartTimer(0);
             }
         }
 
@@ -322,7 +360,7 @@ namespace LockMyEthTool.Views
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
                 this.Controller.DataDir = this.DataDirInput.Text = fbd.SelectedPath;
-                this.CheckState();
+                this.StartTimer(0);
             }
 
         }
@@ -335,7 +373,7 @@ namespace LockMyEthTool.Views
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
                 this.Controller.WalletPath = this.WalletDirInput.Text = fbd.SelectedPath;
-                this.CheckState();
+                this.StartTimer(0);
             }
 
         }
@@ -345,7 +383,7 @@ namespace LockMyEthTool.Views
             if(this.Controller.ExecutablePath != (sender as TextBox).Text)
             {
                 this.Controller.ExecutablePath = (sender as TextBox).Text;
-                this.CheckState();
+                this.StartTimer(0);
             }
         }
 
@@ -357,13 +395,8 @@ namespace LockMyEthTool.Views
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
                 this.Controller.ExecutablePath = this.ExecutablePathInput.Text = fbd.SelectedPath;
-                this.CheckState();
+                this.StartTimer(0);
             }
-        }
-
-        private void OutputText_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void AdditionalCommandsInput_TextChanged(object sender, EventArgs e)
@@ -371,7 +404,7 @@ namespace LockMyEthTool.Views
             if (this.Controller.AdditionalCommands != (sender as TextBox).Text)
             {
                 this.Controller.AdditionalCommands = (sender as TextBox).Text;
-                this.CheckState();
+                this.StartTimer(0);
             }
         }
 
@@ -421,6 +454,49 @@ namespace LockMyEthTool.Views
             using (ValidatorInfoViewer frm = new ValidatorInfoViewer(this.Controller))
             {
                 frm.ShowDialog(this);
+            }
+        }
+
+        private void LatestVersionCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(this.Controller.UseLatestVersion != (sender as CheckBox).Checked)
+            {
+                bool updateNeeded = this.Controller.GetLastVersion() != this.Controller.CurrentVersion;
+                this.Controller.UseLatestVersion = (sender as CheckBox).Checked;
+
+                if (this.Controller.UseLatestVersion)
+                {
+                    this.Controller.GetPrysmVersion();
+                    this.UpdateControls();
+                    if(updateNeeded && this.Controller.CheckExecutablePath() && this.Controller.CheckExecutable())
+                    {
+                        this.StartProcess();
+                    }
+                    else
+                    {
+                        this.StartTimer(0);
+                    }
+                }
+                else
+                {
+                    this.UpdateControls();
+                }
+            }
+        }
+
+        private void CurrentVersionInput_TextChanged(object sender, EventArgs e)
+        {
+            if (this.Controller.CurrentVersion != (sender as TextBox).Text)
+            {
+                this.Controller.CurrentVersion = (sender as TextBox).Text;
+                if (this.Controller.CheckExecutablePath() && this.Controller.CheckExecutable())
+                {
+                    this.StartProcess();
+                }
+                else
+                {
+                    this.StartTimer(0);
+                }
             }
         }
     }

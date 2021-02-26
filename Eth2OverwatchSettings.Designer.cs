@@ -322,5 +322,65 @@ namespace Eth2Overwatch {
                 this["LastPrysmVersion"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CurrentPrysmVersion_Validator
+        {
+            get
+            {
+                return ((string)(this["CurrentPrysmVersion_Validator"]));
+            }
+            set
+            {
+                this["CurrentPrysmVersion_Validator"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseLatestVersion_Validator
+        {
+            get
+            {
+                return ((bool)(this["UseLatestVersion_Validator"]));
+            }
+            set
+            {
+                this["UseLatestVersion_Validator"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CurrentPrysmVersion_BeaconChain
+        {
+            get
+            {
+                return ((string)(this["CurrentPrysmVersion_BeaconChain"]));
+            }
+            set
+            {
+                this["CurrentPrysmVersion_BeaconChain"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseLatestVersion_BeaconChain
+        {
+            get
+            {
+                return ((bool)(this["UseLatestVersion_BeaconChain"]));
+            }
+            set
+            {
+                this["UseLatestVersion_BeaconChain"] = value;
+            }
+        }
     }
 }

@@ -54,6 +54,9 @@
             this.ShowWarningButton = new System.Windows.Forms.Button();
             this.ShowInfoButton = new System.Windows.Forms.Button();
             this.ValidatorDetailsButton = new System.Windows.Forms.Button();
+            this.VersionLabel = new System.Windows.Forms.Label();
+            this.LatestVersionCheckbox = new System.Windows.Forms.CheckBox();
+            this.CurrentVersionInput = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // OutputText
@@ -65,7 +68,6 @@
             this.OutputText.TabIndex = 1;
             this.OutputText.Tag = "";
             this.OutputText.Text = "";
-            this.OutputText.TextChanged += new System.EventHandler(this.OutputText_TextChanged);
             // 
             // StartButton
             // 
@@ -297,11 +299,39 @@
             this.ValidatorDetailsButton.Location = new System.Drawing.Point(218, 11);
             this.ValidatorDetailsButton.Name = "ValidatorDetailsButton";
             this.ValidatorDetailsButton.Size = new System.Drawing.Size(52, 23);
-            this.ValidatorDetailsButton.Visible = false;
             this.ValidatorDetailsButton.TabIndex = 22;
             this.ValidatorDetailsButton.Text = "Details";
             this.ValidatorDetailsButton.UseVisualStyleBackColor = false;
+            this.ValidatorDetailsButton.Visible = false;
             this.ValidatorDetailsButton.Click += new System.EventHandler(this.ValidatorDetailsButton_Click);
+            // 
+            // VersionLabel
+            // 
+            this.VersionLabel.AutoSize = true;
+            this.VersionLabel.Location = new System.Drawing.Point(19, 124);
+            this.VersionLabel.Name = "VersionLabel";
+            this.VersionLabel.Size = new System.Drawing.Size(45, 15);
+            this.VersionLabel.TabIndex = 23;
+            this.VersionLabel.Text = "Version";
+            // 
+            // LatestVersionCheckbox
+            // 
+            this.LatestVersionCheckbox.AutoSize = true;
+            this.LatestVersionCheckbox.Location = new System.Drawing.Point(70, 124);
+            this.LatestVersionCheckbox.Name = "LatestVersionCheckbox";
+            this.LatestVersionCheckbox.Size = new System.Drawing.Size(57, 19);
+            this.LatestVersionCheckbox.TabIndex = 24;
+            this.LatestVersionCheckbox.Text = "Latest";
+            this.LatestVersionCheckbox.UseVisualStyleBackColor = true;
+            this.LatestVersionCheckbox.CheckedChanged += new System.EventHandler(this.LatestVersionCheckbox_CheckedChanged);
+            // 
+            // CurrentVersionInput
+            // 
+            this.CurrentVersionInput.Location = new System.Drawing.Point(87, 120);
+            this.CurrentVersionInput.Name = "CurrentVersionInput";
+            this.CurrentVersionInput.Size = new System.Drawing.Size(122, 23);
+            this.CurrentVersionInput.TabIndex = 25;
+            this.CurrentVersionInput.TextChanged += new System.EventHandler(this.CurrentVersionInput_TextChanged);
             // 
             // ControlBox
             // 
@@ -309,6 +339,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.CurrentVersionInput);
+            this.Controls.Add(this.LatestVersionCheckbox);
+            this.Controls.Add(this.VersionLabel);
             this.Controls.Add(this.ValidatorDetailsButton);
             this.Controls.Add(this.ShowInfoButton);
             this.Controls.Add(this.ShowWarningButton);
@@ -369,5 +402,8 @@
         private System.Windows.Forms.Button ShowErrorButton;
         private System.Windows.Forms.Button ShowWarningButton;
         private System.Windows.Forms.Button ShowInfoButton;
+        private System.Windows.Forms.Label VersionLabel;
+        private System.Windows.Forms.CheckBox LatestVersionCheckbox;
+        private System.Windows.Forms.TextBox CurrentVersionInput;
     }
 }

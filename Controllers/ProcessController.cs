@@ -19,6 +19,7 @@ namespace LockMyEthTool.Controllers
     {
         private Process process = null;
         public PROCESS_TYPES ProcessType;
+        private bool dryMode = false; // Used for development
         private string fileName;
         private string directory = null;
         private string[] commands;
@@ -35,7 +36,9 @@ namespace LockMyEthTool.Controllers
         private string additionalCommands = "";
         private bool logOutput = true;
         private string latestVersion = "";
+        private string currentVersion = "";
         private string filePrefix = "";
+        private bool useLatestVersion = true;
         private bool downloadingExecutables = false;
         private bool showError = true;
         private bool showWarning = true;
@@ -54,6 +57,10 @@ namespace LockMyEthTool.Controllers
 
         private void InitConfig()
         {
+            if(this.dryMode && this.executablePath.Length > 0)
+            {
+                return;
+            }
             switch (this.ProcessType)
             {
                 case PROCESS_TYPES.VALIDATOR:
@@ -64,6 +71,8 @@ namespace LockMyEthTool.Controllers
                     this.keyPath = Eth2OverwatchSettings.Default.KeyPath_Validator;
                     this.walletPath = Eth2OverwatchSettings.Default.WalletPath_Validator;
                     this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_Validator;
+                    this.useLatestVersion = Eth2OverwatchSettings.Default.UseLatestVersion_Validator;
+                    this.currentVersion = Eth2OverwatchSettings.Default.CurrentPrysmVersion_Validator;
 
                     this.eth2TestNet = Eth2OverwatchSettings.Default.Eth2_TestNet;
                     this.reportPath = Eth2OverwatchSettings.Default.ReportPath;
@@ -78,6 +87,9 @@ namespace LockMyEthTool.Controllers
                     this.dataDir = Eth2OverwatchSettings.Default.DataDir_BeaconChain;
                     this.executablePath = Eth2OverwatchSettings.Default.ExecutablePath_BeaconChain;
                     this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_BeaconChain;
+                    this.useLatestVersion = Eth2OverwatchSettings.Default.UseLatestVersion_BeaconChain;
+                    this.currentVersion = Eth2OverwatchSettings.Default.CurrentPrysmVersion_BeaconChain;
+
                     this.eth2TestNet = Eth2OverwatchSettings.Default.Eth2_TestNet;
                     this.useLocalEth1Node = Eth2OverwatchSettings.Default.UseLocalEth1Node;
                     this.GetPrysmVersion();
@@ -95,6 +107,11 @@ namespace LockMyEthTool.Controllers
         }
         private void SaveConfig()
         {
+            if(this.dryMode)
+            {
+                InitConfig();
+                return;
+            }
             switch (this.ProcessType)
             {
                 case PROCESS_TYPES.VALIDATOR:
@@ -107,6 +124,8 @@ namespace LockMyEthTool.Controllers
                     Eth2OverwatchSettings.Default.ReportPath = this.reportPath;
                     Eth2OverwatchSettings.Default.ReportLabel = this.reportLabel;
                     Eth2OverwatchSettings.Default.ReportKey = this.reportKey;
+                    Eth2OverwatchSettings.Default.UseLatestVersion_Validator = this.useLatestVersion;
+                    Eth2OverwatchSettings.Default.CurrentPrysmVersion_Validator = this.currentVersion;
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     Eth2OverwatchSettings.Default.Autostart_BeaconChain = this.autoStart;
@@ -114,6 +133,8 @@ namespace LockMyEthTool.Controllers
                     Eth2OverwatchSettings.Default.ExecutablePath_BeaconChain = this.executablePath;
                     Eth2OverwatchSettings.Default.HideCommandPrompt_BeaconChain = this.hideCommandPrompt;
                     Eth2OverwatchSettings.Default.AdditionalCommands_BeaconChain = this.additionalCommands;
+                    Eth2OverwatchSettings.Default.UseLatestVersion_BeaconChain = this.useLatestVersion;
+                    Eth2OverwatchSettings.Default.CurrentPrysmVersion_BeaconChain = this.currentVersion;
                     break;
                 case PROCESS_TYPES.ETH_1:
                     Eth2OverwatchSettings.Default.AutoStart_Eth1 = this.autoStart;
@@ -148,7 +169,7 @@ namespace LockMyEthTool.Controllers
                     this.directory = this.executablePath;
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
-                    this.commands[0] = String.Format(this.GetExecutables()[0] + " --accept-terms-of-use --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + testNet + add);
+                    this.commands[0] = String.Format(this.GetExecutableFileName() + " --accept-terms-of-use --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + testNet + add);
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
                     this.processIdentifier = "beacon";
@@ -157,7 +178,7 @@ namespace LockMyEthTool.Controllers
                     this.commands = new string[2];
                     this.commands[0] = String.Format(@"cd " + this.directory);
                     var connectTo = useLocalEth1Node ? " --http-web3provider=http://127.0.0.1:8545/" : "";
-                    this.commands[1] = String.Format(this.GetExecutables()[0] + @" --accept-terms-of-use --datadir=" + this.dataDir + connectTo + testNet + add);
+                    this.commands[1] = String.Format(this.GetExecutableFileName() + @" --accept-terms-of-use --datadir=" + this.dataDir + connectTo + testNet + add);
                     break;
                 case PROCESS_TYPES.ETH_1:
                     this.processIdentifier = "geth";
@@ -197,16 +218,37 @@ namespace LockMyEthTool.Controllers
             {
                 this.latestVersion = Eth2OverwatchSettings.Default.LastPrysmVersion;
             }
+            if(this.useLatestVersion)
+            {
+                this.currentVersion = this.latestVersion;
+            }
             return this.latestVersion == null ? "" : this.latestVersion;
         }
+        private bool URLExists(string url)
+        {
+            bool result = true;
 
+            WebRequest webRequest = WebRequest.Create(url);
+            webRequest.Timeout = 1200; // miliseconds
+            webRequest.Method = "HEAD";
 
-        public void DownloadExecutable(string path = null)
+            try
+            {
+                webRequest.GetResponse();
+            }
+            catch
+            {
+                result = false;
+            }
+
+            return result;
+        }
+
+        public void DownloadExecutable(string path = null, string version = null)
         {
             this.Logs = new List<string>();
             if (this.ProcessType != PROCESS_TYPES.ETH_1)
             {
-                this.downloadingExecutables = true;
                 if (path == null)
                 {
                     path = this.executablePath;
@@ -222,8 +264,22 @@ namespace LockMyEthTool.Controllers
                 }
 
                 int count = 0;
-                foreach (string fileName in this.RequiredFiles())
+                if(!this.URLExists("https://prysmaticlabs.com/releases/" + this.RequiredFiles(version)[0]))
                 {
+                    this.Logs.Add("File does not exist");
+                    if (this.Logs.Count > 100)
+                    {
+                        this.Logs.RemoveAt(0);
+                    }
+                    return;
+                }
+
+                if (version == null || this.currentVersion == version)
+                {
+                    this.downloadingExecutables = true;
+                }
+                foreach (string fileName in this.RequiredFiles(version))
+                {                    
                     using WebClient webClient = new WebClient();
                     webClient.DownloadFileCompleted += new System.ComponentModel.AsyncCompletedEventHandler((object obj, System.ComponentModel.AsyncCompletedEventArgs args) =>
                     {
@@ -234,8 +290,11 @@ namespace LockMyEthTool.Controllers
                         }
                         else
                         {
-                            this.downloadingExecutables = false;
-                            this.newVersionAvailable = true;
+                            if (version == null || this.currentVersion == version)
+                            {
+                                this.downloadingExecutables = false;
+                                this.newVersionAvailable = true;
+                            }
                             this.Logs.Add("Executable download complete");
                         }
                     });
@@ -267,7 +326,7 @@ namespace LockMyEthTool.Controllers
             return this.ProcessType == PROCESS_TYPES.VALIDATOR ? 2 : 0;
         }
 
-        private string[] RequiredFiles()
+        private string[] RequiredFiles(string version = null)
         {
             string[] files;
             if (this.ProcessType == PROCESS_TYPES.ETH_1)
@@ -278,9 +337,9 @@ namespace LockMyEthTool.Controllers
             else
             {
                 files = new string[3];
-                files[0] = this.GetExecutableFileName();
-                files[1] = this.GetExecutableFileName() + ".sha256";
-                files[2] = this.GetExecutableFileName() + ".sig";
+                files[0] = this.GetExecutableFileName(version);
+                files[1] = this.GetExecutableFileName(version) + ".sha256";
+                files[2] = this.GetExecutableFileName(version) + ".sig";
             }
 
             return files;
@@ -317,7 +376,7 @@ namespace LockMyEthTool.Controllers
             return !this.RequiresDataDir() || !String.IsNullOrWhiteSpace(this.dataDir) && Directory.Exists(this.dataDir);
         }
 
-        private bool CheckExecutablePath(string path = null)
+        public bool CheckExecutablePath(string path = null)
         {
             if (path == null)
             {
@@ -326,16 +385,16 @@ namespace LockMyEthTool.Controllers
             return !String.IsNullOrWhiteSpace(path) && Directory.Exists(path);
         }
 
-        private string GetExecutableFileName()
+        private string GetExecutableFileName(string version = null)
         {
             string fileName = "";
             switch (this.ProcessType)
             {
                 case PROCESS_TYPES.VALIDATOR:
-                    fileName = "validator-" + latestVersion + "-windows-amd64.exe";
+                    fileName = "validator-" + (version != null ? version : this.currentVersion) + "-windows-amd64.exe";
                     break;
                 case PROCESS_TYPES.BEACON_CHAIN:
-                    fileName = "beacon-chain-" + latestVersion + "-windows-amd64.exe";
+                    fileName = "beacon-chain-" + (version != null ? version : this.currentVersion) + "-windows-amd64.exe";
                     break;
                 case PROCESS_TYPES.ETH_1:
                     fileName = "geth.exe";
@@ -355,7 +414,7 @@ namespace LockMyEthTool.Controllers
             {
                 path = this.executablePath;
             }
-            return this.CheckExecutablePath(path) && Array.Find(RequiredFiles(), name => !File.Exists(path + @"\" + name)) == null;
+            return this.CheckExecutablePath(path) && File.Exists(path + @"\" + this.GetExecutableFileName()) && new FileInfo(path + @"\" + this.GetExecutableFileName()).Length > 0;
         }
 
         public bool AllConfigsSet()
@@ -470,6 +529,34 @@ namespace LockMyEthTool.Controllers
                 SaveConfig();
             }
         }
+
+        public string CurrentVersion
+        {
+            get
+            {
+                return this.currentVersion;
+            }
+            set
+            {
+
+                this.currentVersion = value;
+                SaveConfig();
+            }
+        }
+
+        public bool UseLatestVersion
+        {
+            get
+            {
+                return this.useLatestVersion;
+            }
+            set
+            {
+
+                this.useLatestVersion = value;
+                SaveConfig();
+            }
+        }
         public string ReportPath
         {
             get
@@ -526,6 +613,11 @@ namespace LockMyEthTool.Controllers
             if (!dontStop)
             {
                 this.Stop();
+            }
+
+            if (this.dryMode)
+            {
+                return;
             }
             this.process = new Process(); // Declare New Process
             this.process.StartInfo.FileName = this.fileName;
@@ -607,6 +699,10 @@ namespace LockMyEthTool.Controllers
 
         public void Stop()
         {
+            if (this.dryMode)
+            {
+                return;
+            }
             try
             {
                 Process[] localAll = Process.GetProcesses();
@@ -653,6 +749,11 @@ namespace LockMyEthTool.Controllers
         public bool SupportsGoerliTestnet()
         {
             return this.ProcessType == PROCESS_TYPES.ETH_1;
+        }
+
+        public bool SupportsVersion()
+        {
+            return this.ProcessType != PROCESS_TYPES.ETH_1;
         }
 
         public bool SupportsEth1Connection()
@@ -856,7 +957,8 @@ namespace LockMyEthTool.Controllers
                                 reportWebRequest.Method = "POST";
                                 ReportBody body = new ReportBody();
                                 body.data = new ReportData();
-                                body.data.Version = this.latestVersion;
+                                body.data.Version = this.currentVersion;
+                                body.data.LatestVersion = this.latestVersion;
                                 body.data.Label = this.reportLabel;
                                 body.data.TS = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
                                 body.code = this.reportKey;

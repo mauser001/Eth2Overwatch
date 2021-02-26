@@ -72,6 +72,10 @@ Download the Eth2Overwatch.exe in a folder and start ist.
   + Start Beacon: Stops all existing Beacon chain (beacon) processes and starts a new one
   + Stop Beacon: Stops all existing Beacon chain (beacon) processes 
   + Autostart: Starts the Beacon chain Process (if not started) on Start of this Programm
+  + Version:
+    + Latest
+      + Checked: The latest Prysm version is used
+      + Not checked: Enter the version you want to use. The tool will try to download it if not available in the folder.
   + Hide cmd:
     + Checked: Process runs in the background
     + Not checked: cmd window running the Beacon chain process will be visible
@@ -85,6 +89,10 @@ Download the Eth2Overwatch.exe in a folder and start ist.
   + Start Validator: Stops all existing Validator (validator) processes and starts a new one
   + Stop Validator: Stops all existing Validator chain (validator) processes 
   + Autostart: Starts the Validator Process (if not started) on Start of this Programm
+  + Version:
+    + Latest
+      + Checked: The latest Prysm version is used
+      + Not checked: Enter the version you want to use. The tool will try to download it if not available in the folder.
   + Password path: Path to a textfile holding your wallet password (plaintext).
   + Hide cmd:
     + Checked: Process runs in the background

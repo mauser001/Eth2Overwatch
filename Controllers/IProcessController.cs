@@ -21,7 +21,7 @@ namespace LockMyEthTool.Views
 
         void UpdateConfig();
 
-        void DownloadExecutable(string path = null);
+        void DownloadExecutable(string path = null, string version = null);
 
         void ImportKeys(string keyPath);
 
@@ -33,11 +33,13 @@ namespace LockMyEthTool.Views
         bool RequiresWalletPath();
         bool SupportsEth1Connection();
         bool SupportsGoerliTestnet();
+        bool SupportsVersion();
         string GetPrysmVersion();
         string GetLastVersion();
         int GetInitialDelay();
 
         bool CheckExecutable(string path = null);
+        bool CheckExecutablePath(string path = null);
 
         Dictionary<string, ValidatorBo> ValidatorsByKey
         {
@@ -90,6 +92,16 @@ namespace LockMyEthTool.Views
             set;
         }
         string ReportLabel
+        {
+            get;
+            set;
+        }
+        string CurrentVersion
+        {
+            get;
+            set;
+        }
+        bool UseLatestVersion
         {
             get;
             set;

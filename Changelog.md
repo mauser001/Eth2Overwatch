@@ -1,5 +1,8 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.7-RC.1
++ Feature: Added support for custom version
+
 #### Version 1.0.6-RC.2
 + Bugfix: try to fix downloading of the new Version
 
