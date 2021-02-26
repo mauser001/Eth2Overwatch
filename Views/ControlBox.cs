@@ -259,7 +259,7 @@ namespace LockMyEthTool.Views
                     }
 
                     string prysmVersion = this.Controller.GetPrysmVersion();
-                    if (this.Controller.GetLastVersion() != prysmVersion)
+                    if (this.Controller.GetLastVersion() != prysmVersion && !this.Controller.CheckExecutable(prysmVersion))
                     {
                         if(this.Controller.UseLatestVersion)
                         {
@@ -275,7 +275,7 @@ namespace LockMyEthTool.Views
                     this.retryCount = 12;
                     this.successCounter = 0;
                     string prysmVersion = this.Controller.GetPrysmVersion();
-                    if (this.Controller.GetLastVersion() != prysmVersion)
+                    if (this.Controller.GetLastVersion() != prysmVersion && !this.Controller.CheckExecutable(prysmVersion))
                     {
                         if (this.Controller.UseLatestVersion)
                         {
