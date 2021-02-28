@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 
 namespace Eth2Overwatch.Models
 {
@@ -27,5 +28,25 @@ namespace Eth2Overwatch.Models
         {
             return Math.Round(GWeiToEth(gwei), decimals);
         }
+        public static bool URLExists(string url)
+        {
+            bool result = true;
+
+            WebRequest webRequest = WebRequest.Create(url);
+            webRequest.Timeout = 1200; // miliseconds
+            webRequest.Method = "HEAD";
+
+            try
+            {
+                webRequest.GetResponse();
+            }
+            catch
+            {
+                result = false;
+            }
+
+            return result;
+        }
+
     }
 }

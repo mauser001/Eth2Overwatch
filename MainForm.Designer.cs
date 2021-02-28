@@ -1,4 +1,4 @@
-﻿using LockMyEthTool.Controllers;
+﻿using Eth2Overwatch.Controllers;
 using LockMyEthTool.Views;
 
 namespace LockMyEthTool
@@ -25,11 +25,11 @@ namespace LockMyEthTool
 
         private void InitializeCustomComponents()
         {
-            this.ValidatorControlBox = new LockMyEthTool.Views.ControlBox("Validator", new ProcessController(PROCESS_TYPES.VALIDATOR));
+            this.ValidatorControlBox = new LockMyEthTool.Views.ControlBox("Validator", new ValidatorController());
             this.Boxes.Add(this.ValidatorControlBox);
-            this.BeaconControlBox = new LockMyEthTool.Views.ControlBox("Beacon", new ProcessController(PROCESS_TYPES.BEACON_CHAIN));
+            this.BeaconControlBox = new LockMyEthTool.Views.ControlBox("Beacon", new BeaconChainController());
             this.Boxes.Add(this.BeaconControlBox);
-            this.Eth1ControlBox = new LockMyEthTool.Views.ControlBox("Eth 1", new ProcessController(PROCESS_TYPES.ETH_1));
+            this.Eth1ControlBox = new LockMyEthTool.Views.ControlBox("Eth 1", new Eth1Controller());
             this.Boxes.Add(this.Eth1ControlBox);
         }
 

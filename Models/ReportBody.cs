@@ -7,6 +7,6 @@ namespace Eth2Overwatch.Models
     class ReportBody
     {
         public string code;
-        public ReportData data;
+        public ReportData data = new ReportData();
     }
 }

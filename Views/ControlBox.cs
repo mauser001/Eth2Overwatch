@@ -451,10 +451,8 @@ namespace LockMyEthTool.Views
 
         private void ValidatorDetailsButton_Click(object sender, EventArgs e)
         {
-            using (ValidatorInfoViewer frm = new ValidatorInfoViewer(this.Controller))
-            {
-                frm.ShowDialog(this);
-            }
+            using ValidatorInfoViewer frm = new ValidatorInfoViewer(this.Controller);
+            frm.ShowDialog(this);
         }
 
         private void LatestVersionCheckbox_CheckedChanged(object sender, EventArgs e)

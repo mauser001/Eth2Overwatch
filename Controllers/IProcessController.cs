@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace LockMyEthTool.Views
 {
-    enum PROCESS_TYPES
+    public enum PROCESS_TYPES
     {
         VALIDATOR = 0,
         BEACON_CHAIN = 1,
@@ -23,16 +23,11 @@ namespace LockMyEthTool.Views
 
         void DownloadExecutable(string path = null, string version = null);
 
-        void ImportKeys(string keyPath);
-
-        void SetPassword(string pw);
         bool RequiresPassword();
 
         bool RequiresDataDir();
 
         bool RequiresWalletPath();
-        bool SupportsEth1Connection();
-        bool SupportsGoerliTestnet();
         bool SupportsVersion();
         string GetPrysmVersion();
         string GetLastVersion();
@@ -46,6 +41,10 @@ namespace LockMyEthTool.Views
             get;
         }
 
+        PROCESS_TYPES ProcessType
+        {
+            get;
+        }
         bool Autostart
         {
             get;

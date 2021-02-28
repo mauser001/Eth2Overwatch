@@ -1,4 +1,5 @@
-﻿using LockMyEthTool.Controllers;
+﻿using Eth2Overwatch.Controllers;
+using LockMyEthTool.Controllers;
 using LockMyEthTool.Views;
 using Nethereum.Contracts;
 using System;
@@ -19,8 +20,8 @@ namespace Eth2Overwatch.Views
 {
     public partial class InitialEth2SetupForm : Form
     {
-        private readonly IProcessController BeaconController = new ProcessController(PROCESS_TYPES.BEACON_CHAIN);
-        private readonly IProcessController ValidatorController = new ProcessController(PROCESS_TYPES.VALIDATOR);
+        private readonly BeaconChainController BeaconController = new BeaconChainController();
+        private readonly ValidatorController ValidatorController = new ValidatorController();
         private bool prysmDownloaded = false;
         private bool generateKeysActive = false;
 

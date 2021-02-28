@@ -10,7 +10,7 @@ namespace LockMyEthTool
 {
     public partial class MainForm : Form
     {
-        private List<ControlBox> Boxes = new List<ControlBox>();
+        private readonly List<ControlBox> Boxes = new List<ControlBox>();
         public string AppName = "Eth2Overwatch";
         public MainForm()
         {
@@ -89,11 +89,9 @@ namespace LockMyEthTool
 
         private void InitialEth2SetupButton_Click(object sender, EventArgs e)
         {
-            using (InitialEth2SetupForm frm = new InitialEth2SetupForm())
-            {
-                DialogResult res = frm.ShowDialog(this);
-                this.UpdateBoxConfigs();
-            }
+            using InitialEth2SetupForm frm = new InitialEth2SetupForm();
+            DialogResult res = frm.ShowDialog(this);
+            this.UpdateBoxConfigs();
         }
 
         private void Eth2Testnet_TextChanged(object sender, EventArgs e)
