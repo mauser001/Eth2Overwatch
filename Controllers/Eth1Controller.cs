@@ -48,7 +48,7 @@ namespace Eth2Overwatch.Controllers
             this.fileName = "cmd.exe";
             this.directory = this.executablePath;
             this.commands = new string[1];
-            var ipc = useLocalEth1Node ? " --ipcpath=http://127.0.0.1:8545/ --rpc" : "";
+            var ipc = useLocalEth1Node ? " --ipcpath=http://127.0.0.1:8545/ --http" : "";
             this.commands[0] = String.Format(@"geth --datadir=" + this.dataDir + ipc + goerli + add);
         }
 

@@ -1,5 +1,8 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.7-RC.4
++ Changed eth1 flag --rpc to --html
+
 #### Version 1.0.7-RC.3
 + Refactoring: Splitted ProcessController into abstract base and specific controllers 
 
