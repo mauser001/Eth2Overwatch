@@ -277,6 +277,7 @@ namespace Eth2Overwatch.Controllers
             Eth2OverwatchSettings.Default.CurrentPrysmVersion_Validator = this.currentVersion;
 
             Eth2OverwatchSettings.Default.Save();
+            this.UpdateConfig();
         }
         public void ImportKeys(string keyPath)
         {

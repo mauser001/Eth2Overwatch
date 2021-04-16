@@ -146,6 +146,7 @@ namespace Eth2Overwatch.Controllers
             Eth2OverwatchSettings.Default.CurrentPrysmVersion_BeaconChain = this.currentVersion;
 
             Eth2OverwatchSettings.Default.Save();
+            this.UpdateConfig();
         }
     }
 }

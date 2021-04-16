@@ -142,6 +142,7 @@ namespace Eth2Overwatch.Controllers
             Eth2OverwatchSettings.Default.AdditionalCommands_Eth1 = this.additionalCommands;
 
             Eth2OverwatchSettings.Default.Save();
+            this.UpdateConfig();
         }
     }
 }

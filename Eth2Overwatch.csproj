@@ -20,9 +20,9 @@ Eth2 Beacon Chain and Validator from prysm labs (the latest version will be down
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Eth2OverwatchKey.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <Version>1.0.7-RC.4</Version>
-    <AssemblyVersion>1.0.7.3</AssemblyVersion>
-    <FileVersion>1.0.7.3</FileVersion>
+    <Version>1.0.7-RC.5</Version>
+    <AssemblyVersion>1.0.7.5</AssemblyVersion>
+    <FileVersion>1.0.7.5</FileVersion>
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 
