@@ -172,7 +172,6 @@ namespace Eth2Overwatch.Controllers
                     bo.CorrectlyVotedHead = performance.CorrectlyVotedHead[i];
                     bo.CorrectlyVotedSource = performance.CorrectlyVotedSource[i];
                     bo.CorrectlyVotedTarget = performance.CorrectlyVotedTarget[i];
-                    bo.InclusionDistance = performance.InclusionDistances[i];
                     balances += bo.Balance;
                     bo.State = status.Statuses[i].Status;
                     if (!stateCounter.ContainsKey(bo.State.ToString()))

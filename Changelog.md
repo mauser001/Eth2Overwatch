@@ -1,5 +1,8 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.8-RC.1
++ Removed obsolete report flag 'inclusionDistance'
+
 #### Version 1.0.7-RC.5
 + Bugfix for updating config values
 

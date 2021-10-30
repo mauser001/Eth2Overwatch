@@ -13,6 +13,5 @@ namespace Eth2Overwatch.Models
         public bool CorrectlyVotedTarget;
         public bool CorrectlyVotedSource;
         public bool CorrectlyVotedHead;
-        public ulong InclusionDistance;
     }
 }

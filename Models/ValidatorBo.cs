@@ -16,7 +16,6 @@ namespace Eth2Overwatch.Models
         private bool correctlyVotedTarget;
         private bool correctlyVotedSource;
         private bool correctlyVotedHead;
-        private ulong inclusionDistance;
 
         public ValidatorBo(string publicKey)
         {
@@ -132,19 +131,6 @@ namespace Eth2Overwatch.Models
             }
         }
 
-        public ulong InclusionDistance
-        {
-            get
-            {
-                return this.inclusionDistance;
-            }
-
-            set
-            {
-                this.inclusionDistance = value;
-            }
-        }
-
         public ReportValidatorInfo ReportInfo
         {
             get
@@ -156,7 +142,6 @@ namespace Eth2Overwatch.Models
                 info.CorrectlyVotedSource = this.CorrectlyVotedSource;
                 info.CorrectlyVotedHead = this.CorrectlyVotedHead;
                 info.CurrentEffectiveBalance = Utils.GWeiToEthRounded(this.currentEffectiveBalance, 3);
-                info.InclusionDistance = this.InclusionDistance;
                 info.StateText = this.state.ToString();
                 return info;
             }
