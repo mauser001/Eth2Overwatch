@@ -127,9 +127,9 @@ namespace Eth2Overwatch.Controllers
                     string[] lines = metricsText.Split("\n");
                     foreach (string line in lines)
                     {
-                        if (line.IndexOf("validator_statuses{pubkey=") == 0)
+                        if (line.IndexOf("validator_statuses{") == 0)
                         {
-                            string publicKey = line.Split("\"")[1];
+                            string publicKey = line.Split("\"")[3];
                             ValidatorBo bo = new ValidatorBo(publicKey);
                             if (!this.validatorsByKey.ContainsKey(bo.PublicKeyBase64))
                             {

@@ -53,7 +53,7 @@ namespace Eth2Overwatch.Controllers
             this.directory = this.executablePath;
             this.commands = new string[2];
             this.commands[0] = String.Format(@"cd " + this.directory);
-            var connectTo = useLocalEth1Node ? " --http-web3provider=http://127.0.0.1:8545/" : "";
+            var connectTo = useLocalEth1Node ? " --execution-endpoint=//./pipe/geth.ipc" : "";
             this.commands[1] = String.Format(this.GetExecutableFileName() + @" --accept-terms-of-use --datadir=" + this.dataDir + connectTo + testNet + add);
 
         }

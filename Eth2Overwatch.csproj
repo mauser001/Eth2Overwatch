@@ -2,14 +2,13 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net9.0-windows10.0.17763.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Alexander Maushammer</Authors>
     <Company>Alexander Maushammer</Company>
     <Product>Windows Tool to watch Eth1 Node, Eth2 Beacon Chain and Eth2 Validator</Product>
     <Copyright>MIT</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Use at own Risk! Do not run other Eth1/Eth2 nodes on the same compupter. 
 
 Eth2Overwatch is a completly free tool to manage your Geth Eth1, Prysm Eth2 Beacon Chain and Prysm Eth2 Validator clients.
@@ -17,27 +16,27 @@ Its a windows tool to start/stop/auto restart your processes:
 Eth1: Geth (Must be installed manually)
 Eth2 Beacon Chain and Validator from prysm labs (the latest version will be downloaded manually.</Description>
     <PackageTags>Eth1, Eth2, Beaconchain, Validator</PackageTags>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Eth2OverwatchKey.pfx</AssemblyOriginatorKeyFile>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>sgKey.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <Version>1.0.8-RC.1</Version>
-    <AssemblyVersion>1.0.8.1</AssemblyVersion>
-    <FileVersion>1.0.8.1</FileVersion>
+    <Version>1.1.0-RC.1</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Api.CommonProtos" Version="2.1.0" />
-    <PackageReference Include="Google.Protobuf" Version="3.13.0" />
-    <PackageReference Include="Google.Protobuf.Tools" Version="3.13.0" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.31.0" />
-    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.23.2" />
-    <PackageReference Include="Grpc.Tools" Version="2.31.0">
+    <PackageReference Include="Google.Api.CommonProtos" Version="2.16.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.29.1" />
+    <PackageReference Include="Google.Protobuf.Tools" Version="3.29.1" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.67.0" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.67.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.68.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.7" />
-    <PackageReference Include="Nethereum.Geth" Version="3.8.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Nethereum.Geth" Version="4.26.0" />
   </ItemGroup>
 
 	<ItemGroup>
