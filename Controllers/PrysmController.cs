@@ -1,16 +1,17 @@
 ﻿using Eth2Overwatch.Models;
 using LockMyEthTool.Controllers;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Text;
+using System.Net.Http;
+using Eth2Overwatch.OverwatchUtils;
 
 namespace Eth2Overwatch.Controllers
 {
     abstract class PrysmController: BaseProcessController
     {
-        protected string latestVersion = "";
+        protected string latestVersion = ""; 
+        static readonly HttpClient client = new HttpClient();
         public override string GetPrysmVersion()
         {
             try
@@ -82,8 +83,7 @@ namespace Eth2Overwatch.Controllers
             }
             foreach (string fileName in this.RequiredFiles(version))
             {
-                using WebClient webClient = new WebClient();
-                webClient.DownloadFileCompleted += new System.ComponentModel.AsyncCompletedEventHandler((object obj, System.ComponentModel.AsyncCompletedEventArgs args) =>
+                void OnSuccess()
                 {
                     count++;
                     if (count < 3)
@@ -99,9 +99,9 @@ namespace Eth2Overwatch.Controllers
                         }
                         this.Logs.Add("Executable download complete");
                     }
-                });
-                Uri url = new Uri("https://prysmaticlabs.com/releases/" + fileName);
-                webClient.DownloadFileAsync(url, path + @"\" + fileName);
+                }
+
+                WebUtils.DownloadFileAsync("https://prysmaticlabs.com/releases/" + fileName, path + @"\" , fileName, OnSuccess);
             }
         }
     }

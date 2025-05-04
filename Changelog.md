@@ -105,4 +105,7 @@
   + Update libaries
 + Changes
   + Change signature file
+#### Version 1.1.0-RC.2
++ Bugfix
+  + Replace WebClient with HttpClient
   
