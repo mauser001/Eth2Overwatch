@@ -19,9 +19,9 @@ Eth2 Beacon Chain and Validator from prysm labs (the latest version will be down
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>sgKey.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <Version>1.1.0-RC.2</Version>
+    <Version>1.1.0-RC.3</Version>
     <AssemblyVersion>1.1.0</AssemblyVersion>
-    <FileVersion>1.1.0-RC.2</FileVersion>
+    <FileVersion>1.1.0-RC.3</FileVersion>
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 

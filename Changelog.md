@@ -109,3 +109,8 @@
 + Bugfix
   + Replace WebClient with HttpClient
   
+#### Version 1.1.0-RC.3
++ Bugfix
+  + Remove flag --state.scheme=path
+    
+  
