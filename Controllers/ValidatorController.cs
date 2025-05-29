@@ -1,14 +1,16 @@
 ﻿using Eth2Overwatch.Models;
+using Eth2Overwatch.OverwatchUtils;
 using Ethereum.Eth.v1alpha1;
 using Grpc.Net.Client;
 using LockMyEthTool.Controllers;
 using LockMyEthTool.Views;
 using Nethereum.Web3;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Http;
+using static Ethereum.Eth.v1alpha1.Deposit.Types;
 
 namespace Eth2Overwatch.Controllers
 {
@@ -120,10 +122,7 @@ namespace Eth2Overwatch.Controllers
             {
                 if (this.validatorsByKey.Count == 0)
                 {
-                    HttpWebRequest metricsRequest = HttpWebRequest.CreateHttp("http://localhost:8081/metrics");
-                    using HttpWebResponse metricsResponse = (HttpWebResponse)metricsRequest.GetResponse();
-                    using StreamReader streamReader = new StreamReader(metricsResponse.GetResponseStream());
-                    string metricsText = streamReader.ReadToEnd();
+                    string metricsText = WebUtils.FetchInfo("http://localhost:8081/metrics");
                     string[] lines = metricsText.Split("\n");
                     foreach (string line in lines)
                     {
@@ -193,20 +192,12 @@ namespace Eth2Overwatch.Controllers
                     }
                 }
 
-                HttpWebRequest healthzRequest = HttpWebRequest.CreateHttp("http://localhost:8081/healthz");
-
-                using HttpWebResponse healthzResponse = (HttpWebResponse)healthzRequest.GetResponse();
-                using StreamReader healthzReader = new StreamReader(healthzResponse.GetResponseStream());
-                result += healthzReader.ReadToEnd();
+                result += WebUtils.FetchInfo("http://localhost:8081/healthz");
                 resultFunction(true, result);
                 if (this.reportPath.Length > 0)
                 {
                     try
-                    {
-                        
-                        var reportWebRequest = (HttpWebRequest)WebRequest.Create(this.reportPath);
-                        reportWebRequest.ContentType = "application/json";
-                        reportWebRequest.Method = "POST";
+                    {                        
                         ReportBody body = new ReportBody();
                         body.data.Version = this.currentVersion;
                         body.data.LatestVersion = this.latestVersion;
@@ -218,15 +209,7 @@ namespace Eth2Overwatch.Controllers
                         {
                             body.data.Validators.Add(keyValue.Value.ReportInfo);
                         }
-                        using (var streamWriter = new StreamWriter(reportWebRequest.GetRequestStream()))
-                        {
-                            string json = Newtonsoft.Json.JsonConvert.SerializeObject(body);
-
-                            streamWriter.Write(json);
-                        }
-                        using HttpWebResponse reportResponse = (HttpWebResponse)reportWebRequest.GetResponse();
-                        using StreamReader reportResponseReader = new StreamReader(reportResponse.GetResponseStream());
-                        string test = reportResponseReader.ReadToEnd();
+                        WebUtils.SendData(this.reportPath, JsonConvert.SerializeObject(body));
                     }
                     catch
                     {

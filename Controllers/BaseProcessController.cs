@@ -1,6 +1,4 @@
-﻿using Eth2Overwatch;
-using Eth2Overwatch.Models;
-using LockMyEthTool.Models;
+﻿using Eth2Overwatch.Models;
 using LockMyEthTool.Views;
 using System;
 using System.Collections.Generic;

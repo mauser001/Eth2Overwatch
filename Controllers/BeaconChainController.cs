@@ -1,7 +1,6 @@
-﻿using LockMyEthTool.Views;
+﻿using Eth2Overwatch.OverwatchUtils;
+using LockMyEthTool.Views;
 using System;
-using System.IO;
-using System.Net;
 
 namespace Eth2Overwatch.Controllers
 {
@@ -108,13 +107,8 @@ namespace Eth2Overwatch.Controllers
             }
 
             try
-            {
-                HttpWebRequest webRequest = HttpWebRequest.CreateHttp("http://localhost:8080/healthz");
-
-                using HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
-                using StreamReader streamReader = new StreamReader(webResponse.GetResponseStream());
-                string response = streamReader.ReadToEnd();
-                resultFunction(true, response);
+            {               
+                resultFunction(true, WebUtils.FetchInfo("http://localhost:8080/healthz"));
             }
             catch
             {

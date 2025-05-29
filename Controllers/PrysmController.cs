@@ -1,9 +1,6 @@
-﻿using Eth2Overwatch.Models;
-using LockMyEthTool.Controllers;
+﻿using LockMyEthTool.Controllers;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Net.Http;
 using Eth2Overwatch.OverwatchUtils;
 
 namespace Eth2Overwatch.Controllers
@@ -11,17 +8,11 @@ namespace Eth2Overwatch.Controllers
     abstract class PrysmController: BaseProcessController
     {
         protected string latestVersion = ""; 
-        static readonly HttpClient client = new HttpClient();
         public override string GetPrysmVersion()
         {
             try
             {
-                HttpWebRequest webRequest = HttpWebRequest.CreateHttp("https://prysmaticlabs.com/releases/latest");
-
-                HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
-                StreamReader streamReader = new StreamReader(webResponse.GetResponseStream());
-
-                this.latestVersion = streamReader.ReadToEnd().Replace("\n", "");
+                this.latestVersion = WebUtils.FetchInfo("https://prysmaticlabs.com/releases/latest").Replace("\n", "");
                 Eth2OverwatchSettings.Default.LastPrysmVersion = this.latestVersion;
             }
             catch
@@ -67,7 +58,7 @@ namespace Eth2Overwatch.Controllers
             }
 
             int count = 0;
-            if (!Utils.URLExists("https://prysmaticlabs.com/releases/" + this.RequiredFiles(version)[0]))
+            if (!WebUtils.URLExists("https://prysmaticlabs.com/releases/" + this.RequiredFiles(version)[0]))
             {
                 this.Logs.Add("File does not exist");
                 if (this.Logs.Count > 100)
