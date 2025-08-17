@@ -113,8 +113,11 @@
 + Bugfix
   + Remove flag --state.scheme=path
     
-    
 #### Version 1.1.0-RC.4
 + Bugfix
   + increase download timout
   + replace Webclient
+
+#### Version 1.2.0-RC.1
++ Feature
+  + Add time sync
