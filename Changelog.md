@@ -121,3 +121,8 @@
 #### Version 1.2.0-RC.1
 + Feature
   + Add time sync
+
+#### Version 1.2.0-RC.2
++ Bugfix
+  + catch download error to prevent app crash
+  + validate version input if it is a valid verion

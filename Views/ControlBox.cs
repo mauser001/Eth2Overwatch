@@ -484,7 +484,8 @@ namespace LockMyEthTool.Views
 
         private void CurrentVersionInput_TextChanged(object sender, EventArgs e)
         {
-            if (this.Controller.CurrentVersion != (sender as TextBox).Text)
+            System.Diagnostics.Debug.WriteLine($"Is valid version: {this.Controller.IsValidVersion((sender as TextBox).Text)}");
+            if (this.Controller.CurrentVersion != (sender as TextBox).Text && this.Controller.IsValidVersion((sender as TextBox).Text))
             {
                 this.Controller.CurrentVersion = (sender as TextBox).Text;
                 if (this.Controller.CheckExecutablePath() && this.Controller.CheckExecutable())

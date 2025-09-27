@@ -51,16 +51,24 @@ namespace Eth2Overwatch.OverwatchUtils
         public static async void DownloadFileAsync(string uri
              , string outputPath, string fileName, Action success)
         {
+            try
+            {
+                if (!Uri.TryCreate(uri, UriKind.Absolute, out Uri uriResult))
+                    throw new InvalidOperationException("URI is invalid.");
 
-            if (!Uri.TryCreate(uri, UriKind.Absolute, out Uri uriResult))
-                throw new InvalidOperationException("URI is invalid.");
+                using var cts = new CancellationTokenSource();
+                cts.CancelAfter(TimeSpan.FromMinutes(60));
+                byte[] fileBytes = await _httpClient.GetByteArrayAsync(uri);
+                await File.WriteAllBytesAsync(outputPath + fileName, fileBytes, cts.Token);
 
-            using var cts = new CancellationTokenSource();
-            cts.CancelAfter(TimeSpan.FromMinutes(60));
-            byte[] fileBytes = await _httpClient.GetByteArrayAsync(uri);
-            await File.WriteAllBytesAsync(outputPath+fileName, fileBytes, cts.Token);
+                success();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error occurred: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
+            }
 
-            success();
         }
     }
 }

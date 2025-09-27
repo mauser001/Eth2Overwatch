@@ -105,6 +105,11 @@ namespace LockMyEthTool.Controllers
             return !String.IsNullOrWhiteSpace(path) && Directory.Exists(path);
         }
 
+        public virtual bool IsValidVersion(string version = null)
+        {
+            return false;
+        }
+
         protected virtual string GetExecutableFileName(string version = null)
         {
             return "geth.exe";

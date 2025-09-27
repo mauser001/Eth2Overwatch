@@ -1,7 +1,8 @@
-﻿using LockMyEthTool.Controllers;
+﻿using Eth2Overwatch.OverwatchUtils;
+using LockMyEthTool.Controllers;
 using System.Collections.Generic;
 using System.IO;
-using Eth2Overwatch.OverwatchUtils;
+using System.Text.RegularExpressions;
 
 namespace Eth2Overwatch.Controllers
 {
@@ -38,6 +39,12 @@ namespace Eth2Overwatch.Controllers
         protected override string GetExecutableFileName(string version = null)
         {
             return ProcessIdentifier + "-" + (version ?? this.currentVersion) + "-windows-amd64.exe";
+        }
+
+        public override bool IsValidVersion(string version = null)
+        {
+            var pattern = @"^v\d+\.\d+\.\d+$";
+            return Regex.IsMatch(version, pattern);
         }
 
         public override void DownloadExecutable(string path = null, string version = null)
