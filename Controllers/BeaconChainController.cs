@@ -1,7 +1,6 @@
-﻿using LockMyEthTool.Views;
+﻿using Eth2Overwatch.OverwatchUtils;
+using LockMyEthTool.Views;
 using System;
-using System.IO;
-using System.Net;
 
 namespace Eth2Overwatch.Controllers
 {
@@ -53,7 +52,7 @@ namespace Eth2Overwatch.Controllers
             this.directory = this.executablePath;
             this.commands = new string[2];
             this.commands[0] = String.Format(@"cd " + this.directory);
-            var connectTo = useLocalEth1Node ? " --http-web3provider=http://127.0.0.1:8545/" : "";
+            var connectTo = useLocalEth1Node ? " --execution-endpoint=//./pipe/geth.ipc" : "";
             this.commands[1] = String.Format(this.GetExecutableFileName() + @" --accept-terms-of-use --datadir=" + this.dataDir + connectTo + testNet + add);
 
         }
@@ -108,13 +107,8 @@ namespace Eth2Overwatch.Controllers
             }
 
             try
-            {
-                HttpWebRequest webRequest = HttpWebRequest.CreateHttp("http://localhost:8080/healthz");
-
-                using HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
-                using StreamReader streamReader = new StreamReader(webResponse.GetResponseStream());
-                string response = streamReader.ReadToEnd();
-                resultFunction(true, response);
+            {               
+                resultFunction(true, WebUtils.FetchInfo("http://localhost:8080/healthz"));
             }
             catch
             {

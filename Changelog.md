@@ -1,5 +1,8 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.0.8-RC.2
++ Fixed local IPC connection 
+
 #### Version 1.0.8-RC.1
 + Removed obsolete report flag 'inclusionDistance'
 
@@ -43,7 +46,7 @@
 
 #### Version 1.0.4-RC.1
 + Fix: Textnet is now cofigurable and no longer fixed with medalla
-+ Removed optional connection to prysm görli eth1 node. Local eth1 client is now mandatory.
++ Removed optional connection to prysm gï¿½rli eth1 node. Local eth1 client is now mandatory.
 
 #### Version 1.0.3-Beta.2
 + Fix: Adapted key import according to last prysm changes 
@@ -95,3 +98,31 @@
 #### Version 1.0.1-Beta.2
 + Bugfix
   + Addapted changes from prysm v18
+#### Version 1.1.0-RC.1
++ Bugfix
+  + Addapted changes from prysm v5.2.0
++ Chors
+  + Update libaries
++ Changes
+  + Change signature file
+#### Version 1.1.0-RC.2
++ Bugfix
+  + Replace WebClient with HttpClient
+  
+#### Version 1.1.0-RC.3
++ Bugfix
+  + Remove flag --state.scheme=path
+    
+#### Version 1.1.0-RC.4
++ Bugfix
+  + increase download timout
+  + replace Webclient
+
+#### Version 1.2.0-RC.1
++ Feature
+  + Add time sync
+
+#### Version 1.2.0-RC.2
++ Bugfix
+  + catch download error to prevent app crash
+  + validate version input if it is a valid verion

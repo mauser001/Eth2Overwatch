@@ -54,7 +54,7 @@ Download the Eth2Overwatch.exe in a folder and start ist.
   + Start on Windows start: If checked the Eth2Overseer starts after win. login.
   + Use local eth1 connection:
     + If enabled: Make sure you also use the eth1 node with the overseer
-    + If disabled: You will need to define a --http-web3provider in the additional commands of the beacon chain window
+    + If disabled: You will need to define a --execution-endpoin in the additional commands of the beacon chain window
 + ##### Eth1
   + Start Eth1: Stops all existing Eth1 (geth) processes and starts a new one
   + Stop Eth1: Stops all existing Eth1 (geth) processes 

@@ -1,26 +1,19 @@
-﻿using Eth2Overwatch.Models;
+﻿using Eth2Overwatch.OverwatchUtils;
 using LockMyEthTool.Controllers;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Eth2Overwatch.Controllers
 {
     abstract class PrysmController: BaseProcessController
     {
-        protected string latestVersion = "";
+        protected string latestVersion = ""; 
         public override string GetPrysmVersion()
         {
             try
             {
-                HttpWebRequest webRequest = HttpWebRequest.CreateHttp("https://prysmaticlabs.com/releases/latest");
-
-                HttpWebResponse webResponse = (HttpWebResponse)webRequest.GetResponse();
-                StreamReader streamReader = new StreamReader(webResponse.GetResponseStream());
-
-                this.latestVersion = streamReader.ReadToEnd().Replace("\n", "");
+                this.latestVersion = WebUtils.FetchInfo("https://prysmaticlabs.com/releases/latest").Replace("\n", "");
                 Eth2OverwatchSettings.Default.LastPrysmVersion = this.latestVersion;
             }
             catch
@@ -48,6 +41,12 @@ namespace Eth2Overwatch.Controllers
             return ProcessIdentifier + "-" + (version ?? this.currentVersion) + "-windows-amd64.exe";
         }
 
+        public override bool IsValidVersion(string version = null)
+        {
+            var pattern = @"^v\d+\.\d+\.\d+$";
+            return Regex.IsMatch(version, pattern);
+        }
+
         public override void DownloadExecutable(string path = null, string version = null)
         {
             this.Logs = new List<string>();
@@ -66,7 +65,7 @@ namespace Eth2Overwatch.Controllers
             }
 
             int count = 0;
-            if (!Utils.URLExists("https://prysmaticlabs.com/releases/" + this.RequiredFiles(version)[0]))
+            if (!WebUtils.URLExists("https://prysmaticlabs.com/releases/" + this.RequiredFiles(version)[0]))
             {
                 this.Logs.Add("File does not exist");
                 if (this.Logs.Count > 100)
@@ -82,8 +81,7 @@ namespace Eth2Overwatch.Controllers
             }
             foreach (string fileName in this.RequiredFiles(version))
             {
-                using WebClient webClient = new WebClient();
-                webClient.DownloadFileCompleted += new System.ComponentModel.AsyncCompletedEventHandler((object obj, System.ComponentModel.AsyncCompletedEventArgs args) =>
+                void OnSuccess()
                 {
                     count++;
                     if (count < 3)
@@ -99,9 +97,9 @@ namespace Eth2Overwatch.Controllers
                         }
                         this.Logs.Add("Executable download complete");
                     }
-                });
-                Uri url = new Uri("https://prysmaticlabs.com/releases/" + fileName);
-                webClient.DownloadFileAsync(url, path + @"\" + fileName);
+                }
+
+                WebUtils.DownloadFileAsync("https://prysmaticlabs.com/releases/" + fileName, path + @"\" , fileName, OnSuccess);
             }
         }
     }

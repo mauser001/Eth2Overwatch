@@ -1,4 +1,5 @@
 ﻿using Eth2Overwatch;
+using Eth2Overwatch.OverwatchUtils;
 using Eth2Overwatch.Views;
 using LockMyEthTool.Views;
 using System;
@@ -12,6 +13,7 @@ namespace LockMyEthTool
     {
         private readonly List<ControlBox> Boxes = new List<ControlBox>();
         public string AppName = "Eth2Overwatch";
+        private TimeSyncService _timeSync;
         public MainForm()
         {
             Trace.AutoFlush = true;
@@ -23,6 +25,7 @@ namespace LockMyEthTool
                 Eth2OverwatchSettings.Default.UpdateSettings = false;
                 Eth2OverwatchSettings.Default.Save();
             }
+            _timeSync = new TimeSyncService(600000);
 
             InitializeCustomComponents();
             InitializeComponent();

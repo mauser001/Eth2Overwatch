@@ -35,6 +35,7 @@ namespace LockMyEthTool.Views
 
         bool CheckExecutable(string path = null);
         bool CheckExecutablePath(string path = null);
+        bool IsValidVersion(string version = null);
 
         Dictionary<string, ValidatorBo> ValidatorsByKey
         {

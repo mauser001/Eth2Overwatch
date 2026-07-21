@@ -1,6 +1,4 @@
-﻿using Eth2Overwatch;
-using Eth2Overwatch.Models;
-using LockMyEthTool.Models;
+﻿using Eth2Overwatch.Models;
 using LockMyEthTool.Views;
 using System;
 using System.Collections.Generic;
@@ -105,6 +103,11 @@ namespace LockMyEthTool.Controllers
                 path = this.executablePath;
             }
             return !String.IsNullOrWhiteSpace(path) && Directory.Exists(path);
+        }
+
+        public virtual bool IsValidVersion(string version = null)
+        {
+            return false;
         }
 
         protected virtual string GetExecutableFileName(string version = null)
