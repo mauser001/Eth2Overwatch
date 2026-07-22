@@ -15,13 +15,27 @@ namespace LockMyEthTool.Views
         private readonly string ControlName;
         private int retryCount = 0;
         private int successCounter = 0;
+        private int stateCheckRunning = 0;
         public ControlBox(string Name, IProcessController Controller)
         {
             this.ControlName = Name;
             this.Controller = Controller;
             this.retryCount = this.Controller.GetInitialDelay();
+            this.Disposed += (sender, args) =>
+            {
+                this.StopTimer();
+                this.Controller.Dispose();
+            };
             InitializeComponent();
             SetupControlls();
+        }
+
+        public IProcessController ProcessController
+        {
+            get
+            {
+                return this.Controller;
+            }
         }
 
         private void SetupControlls()
@@ -30,10 +44,10 @@ namespace LockMyEthTool.Views
             this.StartButton.Text = "Start " + this.ControlName;
             this.StopButton.Text = "Stop " + this.ControlName;
             this.UpdateControls();
-            this.OutputText.DataBindings.Add("Visible", this.HideCommandPromptCheck, "Checked");
-            this.ShowErrorButton.DataBindings.Add("Visible", this.HideCommandPromptCheck, "Checked");
-            this.ShowWarningButton.DataBindings.Add("Visible", this.HideCommandPromptCheck, "Checked");
-            this.ShowInfoButton.DataBindings.Add("Visible", this.HideCommandPromptCheck, "Checked");
+            this.OutputText.Visible = true;
+            this.ShowErrorButton.Visible = true;
+            this.ShowWarningButton.Visible = true;
+            this.ShowInfoButton.Visible = true;
             this.StartTimer(1000 * this.Controller.GetInitialDelay());
         }
 
@@ -56,7 +70,6 @@ namespace LockMyEthTool.Views
         private void SetInitStates()
         {
             this.AutostartCheck.Checked = this.Controller.Autostart;
-            this.HideCommandPromptCheck.Checked = this.Controller.HideCommandPrompt;
             this.DataDirInput.Text = this.Controller.DataDir;
             this.ExecutablePathInput.Text = this.Controller.ExecutablePath;
             this.KeyPathInput.Text = this.Controller.KeyPath;
@@ -65,10 +78,10 @@ namespace LockMyEthTool.Views
             this.KeyPathInput.Visible = this.KeyPathLabel.Visible = this.KeyPathSelectButton.Visible = this.Controller.RequiresPassword();
             this.DataDirInput.Visible = this.DataDirLabel.Visible = this.DataDirSelectButton.Visible = this.Controller.RequiresDataDir();
             this.WalletDirInput.Visible = this.WalletDirLabel.Visible = this.WalletDirSelectButton.Visible = this.Controller.RequiresWalletPath();
-            this.StateOutput.Height = !this.Controller.HideCommandPrompt ? 170 : 56;
+            this.StateOutput.Height = 56;
             this.VersionLabel.Visible = this.LatestVersionCheckbox.Visible = this.Controller.SupportsVersion();
             this.CurrentVersionInput.Visible = this.Controller.SupportsVersion() && !this.Controller.UseLatestVersion;
-            if(this.Controller.SupportsVersion())
+            if (this.Controller.SupportsVersion())
             {
                 this.LatestVersionCheckbox.Checked = this.Controller.UseLatestVersion;
                 this.CurrentVersionInput.Text = this.Controller.CurrentVersion;
@@ -106,9 +119,21 @@ namespace LockMyEthTool.Views
         private void TaskCheckState(Object stateInfo)
         {
             this.StartTimer(20000); // we alwas want to restart the timer because it got stuck after some time in auto-loop
+            if (Interlocked.Exchange(ref this.stateCheckRunning, 1) == 1)
+            {
+                return;
+            }
+
             Task.Run(() =>
             {
-                this.CheckState();
+                try
+                {
+                    this.CheckState();
+                }
+                finally
+                {
+                    Interlocked.Exchange(ref this.stateCheckRunning, 0);
+                }
             }).ConfigureAwait(false);
         }
 
@@ -129,32 +154,13 @@ namespace LockMyEthTool.Views
             this.StartTimer(0);
         }
 
-        private void HideCommandPromptCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            this.Controller.HideCommandPrompt = (sender as CheckBox).Checked;
-
-            if (this.InvokeRequired)
-            {
-                Action act = () =>
-                {
-                    this.StateOutput.Height = !this.Controller.HideCommandPrompt ? 170 : 56;
-
-                };
-                this.Invoke(act);
-            }
-            else
-            {
-                this.StateOutput.Height = !this.Controller.HideCommandPrompt ? 170 : 56;
-            }
-        }
-
         private void UpdateText(string text, Color backgroundColor)
         {
             string title = this.ControlName;
-            if(this.Controller.CurrentVersion.Length > 0)
+            if (this.Controller.CurrentVersion.Length > 0)
             {
                 title += " (" + this.Controller.CurrentVersion;
-                if(this.Controller.CurrentVersion != this.Controller.GetLastVersion())
+                if (this.Controller.CurrentVersion != this.Controller.GetLastVersion())
                 {
                     title += ", Latest: " + this.Controller.GetLastVersion();
                 }
@@ -167,7 +173,7 @@ namespace LockMyEthTool.Views
                 {
                     this.StateOutput.Text = text;
                     this.StateOutput.BackColor = backgroundColor;
-                    this.OutputText.Text = this.Controller.GetLogText(); 
+                    this.OutputText.Text = this.Controller.GetLogText();
 
 
                     this.TitleLabel.Text = title;
@@ -178,7 +184,7 @@ namespace LockMyEthTool.Views
             {
                 this.StateOutput.Text = text;
                 this.StateOutput.BackColor = backgroundColor;
-                this.OutputText.Text = this.Controller.GetLogText(); 
+                this.OutputText.Text = this.Controller.GetLogText();
                 this.TitleLabel.Text = title;
             }
         }
@@ -226,17 +232,30 @@ namespace LockMyEthTool.Views
 
         public void CheckState()
         {
+            if (this.Controller.IsShuttingDown)
+            {
+                this.UpdateText("Shutting down...", Color.Beige);
+                return;
+            }
+
             this.Controller.CheckState((bool success, string result) =>
             {
                 this.UpdateText(result, success ? Color.LightGreen : Color.Red);
                 this.UpdateValidatorDetailsButton();
+
+                if (this.Controller.IsShuttingDown)
+                {
+                    this.UpdateText("Shutting down...", Color.Beige);
+                    return "";
+                }
+
                 if (this.Controller.NewVersionAvailable)
                 {
                     this.Controller.UpdateConfig();
                     this.StartProcess();
                     this.Controller.NewVersionAvailable = false;
                 }
-                else if(this.Controller.DownloadingExecutables)
+                else if (this.Controller.DownloadingExecutables)
                 {
                     //Nothing to do here, we just wait until the download is complete
                 }
@@ -261,13 +280,13 @@ namespace LockMyEthTool.Views
                     string prysmVersion = this.Controller.GetPrysmVersion();
                     if (this.Controller.GetLastVersion() != prysmVersion && !this.Controller.CheckExecutable(prysmVersion))
                     {
-                        if(this.Controller.UseLatestVersion)
+                        if (this.Controller.UseLatestVersion)
                         {
                             this.Controller.Stop();
                         }
                         this.Controller.DownloadExecutable(prysmVersion);
                     }
-                    
+
                     this.StartTimer(10000);
                 }
                 else if (success && this.successCounter > 60)
@@ -316,7 +335,7 @@ namespace LockMyEthTool.Views
 
         private void KeyPathInput_TextChanged(object sender, EventArgs e)
         {
-            if(this.Controller.KeyPath != (sender as TextBox).Text)
+            if (this.Controller.KeyPath != (sender as TextBox).Text)
             {
                 this.Controller.KeyPath = (sender as TextBox).Text;
                 this.StartTimer(0);
@@ -380,7 +399,7 @@ namespace LockMyEthTool.Views
 
         private void ExecutablePathInput_TextChanged(object sender, EventArgs e)
         {
-            if(this.Controller.ExecutablePath != (sender as TextBox).Text)
+            if (this.Controller.ExecutablePath != (sender as TextBox).Text)
             {
                 this.Controller.ExecutablePath = (sender as TextBox).Text;
                 this.StartTimer(0);
@@ -457,7 +476,7 @@ namespace LockMyEthTool.Views
 
         private void LatestVersionCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-            if(this.Controller.UseLatestVersion != (sender as CheckBox).Checked)
+            if (this.Controller.UseLatestVersion != (sender as CheckBox).Checked)
             {
                 bool updateNeeded = this.Controller.GetLastVersion() != this.Controller.CurrentVersion;
                 this.Controller.UseLatestVersion = (sender as CheckBox).Checked;
@@ -466,7 +485,7 @@ namespace LockMyEthTool.Views
                 {
                     this.Controller.GetPrysmVersion();
                     this.UpdateControls();
-                    if(updateNeeded && this.Controller.CheckExecutablePath() && this.Controller.CheckExecutable())
+                    if (updateNeeded && this.Controller.CheckExecutablePath() && this.Controller.CheckExecutable())
                     {
                         this.StartProcess();
                     }

@@ -1,4 +1,5 @@
 ﻿using Eth2Overwatch.Models;
+using Eth2Overwatch.OverwatchUtils;
 using LockMyEthTool.Views;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,8 @@ namespace LockMyEthTool.Controllers
 {
     abstract class BaseProcessController : IProcessController
     {
+        private const int GracefulStopTimeoutMs = 5000;
+
         protected Process process = null;
         protected readonly bool dryMode = false; // Used for development
         protected string fileName;
@@ -20,7 +23,6 @@ namespace LockMyEthTool.Controllers
         protected string executablePath = "";
         protected string walletPath = "";
         protected string keyPath = "";
-        protected bool hideCommandPrompt = false;
         protected bool useLocalEth1Node = true;
         protected string eth2TestNet = "";
         protected string additionalCommands = "";
@@ -36,10 +38,51 @@ namespace LockMyEthTool.Controllers
         protected string reportKey = "";
         protected string reportLabel = "";
         protected Dictionary<string, ValidatorBo> validatorsByKey = new Dictionary<string, ValidatorBo>();
+        private readonly ProcessLogStore logStore;
+        private bool disposed;
+        private volatile bool isShuttingDown;
 
         public BaseProcessController()
         {
+            this.logStore = new ProcessLogStore(() =>
+            {
+                string processName = this.ProcessIdentifier;
+                if (String.IsNullOrWhiteSpace(processName))
+                {
+                    processName = this.ProcessType.ToString().ToLowerInvariant();
+                }
+
+                return processName;
+            });
             this.Init();
+        }
+
+        ~BaseProcessController()
+        {
+            this.Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                // Intentionally do not stop managed processes on Overseer shutdown.
+                // Closing the UI must not impact already running clients.
+                this.logStore.Dispose();
+            }
+
+            this.disposed = true;
         }
 
         public abstract PROCESS_TYPES ProcessType
@@ -49,7 +92,7 @@ namespace LockMyEthTool.Controllers
 
         protected virtual string ProcessIdentifier
         {
-            get 
+            get
             {
                 return "";
             }
@@ -58,6 +101,7 @@ namespace LockMyEthTool.Controllers
         private void Init()
         {
             InitConfig();
+            this.logStore.LoadRecentFromFile();
 
             if (!AllConfigsSet())
             {
@@ -146,20 +190,6 @@ namespace LockMyEthTool.Controllers
                 SaveConfig();
             }
         }
-        public bool HideCommandPrompt
-        {
-            get
-            {
-                return this.hideCommandPrompt;
-            }
-            set
-            {
-
-                this.hideCommandPrompt = value;
-                SaveConfig();
-            }
-        }
-
         public string DataDir
         {
             get
@@ -303,14 +333,21 @@ namespace LockMyEthTool.Controllers
             this.Init();
         }
 
-        protected List<string> Logs = new List<string>();
-
         public void Start(bool skipCheck = false, bool showCommandPrompt = false, bool dontStop = false)
         {
             if (skipCheck != true && !this.AllConfigsSet())
             {
                 return;
             }
+
+            // When Overseer restarts, there is no tracked Process instance. If a matching
+            // process is already running, do not interrupt it just to start again.
+            if (!dontStop && this.process == null && this.ProcessIsRunning())
+            {
+                this.logStore.LoadRecentFromFile();
+                return;
+            }
+
             if (!dontStop)
             {
                 this.Stop();
@@ -332,36 +369,25 @@ namespace LockMyEthTool.Controllers
             }
 
             this.process.StartInfo.UseShellExecute = false;
-            this.process.StartInfo.CreateNoWindow = showCommandPrompt == false && this.hideCommandPrompt;
-            if (this.commands != null)
-            {
-                this.process.StartInfo.RedirectStandardInput = true;
-            }
+            this.process.StartInfo.CreateNoWindow = showCommandPrompt == false;
+            this.process.StartInfo.RedirectStandardInput = true;
 
 
-            if (this.logOutput && this.hideCommandPrompt)
+            if (this.logOutput)
             {
                 this.process.StartInfo.RedirectStandardError = true;
                 this.process.StartInfo.RedirectStandardOutput = true;
                 this.process.OutputDataReceived += (object sender, DataReceivedEventArgs e) =>
                 {
-                    this.Logs.Add(e.Data);
-                    if (this.Logs.Count > 100)
-                    {
-                        this.Logs.RemoveAt(0);
-                    }
+                    this.logStore.Append(e.Data);
                 };
                 this.process.ErrorDataReceived += (object sender, DataReceivedEventArgs e) =>
                 {
-                    this.Logs.Add(e.Data);
-                    if (this.Logs.Count > 100)
-                    {
-                        this.Logs.RemoveAt(0);
-                    }
+                    this.logStore.Append(e.Data);
                 };
             }
             this.process.Start();
-            if (this.logOutput && this.hideCommandPrompt)
+            if (this.logOutput)
             {
                 this.process.BeginOutputReadLine();
                 this.process.BeginErrorReadLine();
@@ -371,6 +397,10 @@ namespace LockMyEthTool.Controllers
                 using StreamWriter sw = process.StandardInput;
                 foreach (string command in this.commands)
                 {
+                    if (String.IsNullOrWhiteSpace(command))
+                    {
+                        continue;
+                    }
                     sw.WriteLine(command);
                     System.Threading.Thread.Sleep(500);
                 }
@@ -379,15 +409,25 @@ namespace LockMyEthTool.Controllers
 
         public bool ProcessIsRunning()
         {
-            bool running = false;
             try
             {
+                string identifier = this.ProcessIdentifier ?? "";
+                if (String.IsNullOrWhiteSpace(identifier))
+                {
+                    return false;
+                }
+
                 Process[] localAll = Process.GetProcesses();
                 foreach (Process proc in localAll)
                 {
-                    if (proc.ProcessName.IndexOf(this.ProcessIdentifier) >= 0)
+                    if (proc.ProcessName.IndexOf(identifier, StringComparison.OrdinalIgnoreCase) < 0)
                     {
-                        running = !proc.HasExited;
+                        continue;
+                    }
+
+                    if (!proc.HasExited)
+                    {
+                        return true;
                     }
                 }
             }
@@ -395,7 +435,7 @@ namespace LockMyEthTool.Controllers
             {
 
             }
-            return running;
+            return false;
         }
 
         public void Stop()
@@ -404,33 +444,68 @@ namespace LockMyEthTool.Controllers
             {
                 return;
             }
+            this.isShuttingDown = true;
+            Process trackedProcess = this.process;
+            bool trackedProcessKilledByScan = false;
             try
             {
+                string identifier = this.ProcessIdentifier ?? "";
                 Process[] localAll = Process.GetProcesses();
                 foreach (Process proc in localAll)
                 {
-                    if (proc.ProcessName.IndexOf(this.ProcessIdentifier) >= 0)
+                    if (!String.IsNullOrWhiteSpace(identifier) && proc.ProcessName.IndexOf(identifier, StringComparison.OrdinalIgnoreCase) >= 0)
                     {
+                        if (proc.HasExited)
+                        {
+                            continue;
+                        }
+
+                        if (trackedProcess != null && proc.Id == trackedProcess.Id)
+                        {
+                            trackedProcessKilledByScan = true;
+                        }
 
                         Trace.WriteLine(String.Format("We found a {0}-> {1}", this.ProcessIdentifier, proc.ProcessName));
-                        proc.Kill();
+                        if (!this.TryGracefulStop(proc))
+                        {
+                            proc.Kill();
+                        }
                         proc.Dispose();
                         proc.Close();
                     }
                 }
-                if (this.process != null)
+
+                if (trackedProcess != null && !trackedProcessKilledByScan)
                 {
-                    process.Kill();
-                    process.Dispose();
-                    process.Close();
-                    process = null;
+                    if (!trackedProcess.HasExited && !this.TryGracefulStop(trackedProcess))
+                    {
+                        trackedProcess.Kill();
+                    }
                 }
             }
             catch
             {
 
             }
-            this.Logs = new List<string>();
+            finally
+            {
+                if (trackedProcess != null)
+                {
+                    try
+                    {
+                        trackedProcess.Dispose();
+                        trackedProcess.Close();
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                this.process = null;
+                this.isShuttingDown = false;
+            }
+            this.logStore.ClearInMemory();
+            this.logStore.FlushPendingToFile();
         }
 
         public abstract bool RequiresDataDir();
@@ -443,12 +518,72 @@ namespace LockMyEthTool.Controllers
 
         public abstract void CheckState(Func<bool, string, string> resultFunction);
 
+        protected void ClearProcessLogs()
+        {
+            this.logStore.ClearInMemory();
+        }
+
+        protected void AddProcessLog(string message)
+        {
+            this.logStore.Append(message);
+        }
+
+        private bool TryGracefulStop(Process targetProcess)
+        {
+            if (targetProcess == null)
+            {
+                return true;
+            }
+
+            try
+            {
+                if (targetProcess.HasExited)
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return true;
+            }
+
+            try
+            {
+                // Best-effort for processes with a message loop/window.
+                if (targetProcess.CloseMainWindow() && targetProcess.WaitForExit(GracefulStopTimeoutMs))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+
+            }
+
+            try
+            {
+                // Best-effort for the tracked process started by Overseer.
+                if (this.process != null && targetProcess.Id == this.process.Id)
+                {
+                    targetProcess.StandardInput.WriteLine("exit");
+                    targetProcess.StandardInput.Flush();
+                    if (targetProcess.WaitForExit(GracefulStopTimeoutMs))
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+
+            return false;
+        }
+
         public string GetLogText()
         {
-            return String.Join("\n", Array.FindAll(this.Logs.ToArray(), message =>
-            {
-                return !(!this.showInfo && message.IndexOf("level=info") >= 0) && !(!this.showWarning && message.IndexOf("level=warning") >= 0) && !(!this.showError && message.IndexOf("level=error") >= 0);
-            }));
+            return this.logStore.GetFilteredText(this.showInfo, this.showWarning, this.showError);
         }
 
         public bool ShowError
@@ -505,6 +640,14 @@ namespace LockMyEthTool.Controllers
             set
             {
                 this.downloadingExecutables = value;
+            }
+        }
+
+        public bool IsShuttingDown
+        {
+            get
+            {
+                return this.isShuttingDown;
             }
         }
 

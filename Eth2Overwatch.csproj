@@ -19,14 +19,13 @@ Eth2 Beacon Chain and Validator from prysm labs (the latest version will be down
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>sgKey.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <Version>1.2.0-RC.2</Version>
-    <AssemblyVersion>1.2.0</AssemblyVersion>
-    <FileVersion>1.2.0-RC.2</FileVersion>
+    <Version>1.3.0-RC.1</Version>
+    <AssemblyVersion>1.3.0.0</AssemblyVersion>
+    <FileVersion>1.3.0.0</FileVersion>
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Api.CommonProtos" Version="2.16.0" />
     <PackageReference Include="Google.Protobuf" Version="3.29.1" />
     <PackageReference Include="Google.Protobuf.Tools" Version="3.29.1" />
     <PackageReference Include="Grpc.Net.Client" Version="2.67.0" />
@@ -40,28 +39,31 @@ Eth2 Beacon Chain and Validator from prysm labs (the latest version will be down
   </ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="ExternalProtos\google\api\http.proto" GrpcServices="Client" ProtoRoot="ExternalProtos">
+    <Protobuf Include="ExternalProtos\google\api\http.proto" GrpcServices="Client" ProtoRoot="ExternalProtos">
 			<Link>protos/google/api/http.proto</Link>
 		</Protobuf>
-		<Protobuf Include="ExternalProtos\google\api\annotations.proto" GrpcServices="Client" ProtoRoot="ExternalProtos">
+    <Protobuf Include="ExternalProtos\google\api\annotations.proto" GrpcServices="Client" ProtoRoot="ExternalProtos">
 			<Link>protos/google/api/annotations.proto</Link>
 		</Protobuf>
-		<Protobuf Include="ExternalProtos\github.com\gogo\protobuf\gogoproto\gogo.proto" GrpcServices="Client" ProtoRoot="ExternalProtos\">
+    <Protobuf Include="ExternalProtos\github.com\gogo\protobuf\gogoproto\gogo.proto" GrpcServices="Client" ProtoRoot="ExternalProtos">
 		  <Link>protos/github.com/gogo/protobuf/gogoproto/gogo.proto</Link>
 		</Protobuf>
-		<Protobuf Include="..\ethereumapis\eth\v1alpha1\node.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\;ExternalProtos\">
+    <Protobuf Include="..\ethereumapis\eth\ext\options.proto" GrpcServices="None" ProtoRoot="..\ethereumapis\" AdditionalImportDirs="ExternalProtos">
+      <Link>protos/eth/ext/options.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\ethereumapis\eth\v1alpha1\node.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\" AdditionalImportDirs="ExternalProtos">
 			<Link>protos/eth/v1alpha1/node.proto</Link>
 		</Protobuf>
-		<Protobuf Include="..\ethereumapis\eth\v1alpha1\attestation.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\;ExternalProtos\">
+    <Protobuf Include="..\ethereumapis\eth\v1alpha1\attestation.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\" AdditionalImportDirs="ExternalProtos">
 			<Link>protos/eth/v1alpha1/attestation.proto</Link>
 		</Protobuf>
-		<Protobuf Include="..\ethereumapis\eth\v1alpha1\beacon_block.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\;ExternalProtos\">
+    <Protobuf Include="..\ethereumapis\eth\v1alpha1\beacon_block.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\" AdditionalImportDirs="ExternalProtos">
 			<Link>protos/eth/v1alpha1/beacon_block.proto</Link>
 		</Protobuf>
-		<Protobuf Include="..\ethereumapis\eth\v1alpha1\beacon_chain.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\;ExternalProtos\">
+    <Protobuf Include="..\ethereumapis\eth\v1alpha1\beacon_chain.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\" AdditionalImportDirs="ExternalProtos">
 			<Link>protos/eth/v1alpha1/beacon_chain.proto</Link>
 		</Protobuf>
-		<Protobuf Include="..\ethereumapis\eth\v1alpha1\validator.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\;ExternalProtos\">
+    <Protobuf Include="..\ethereumapis\eth\v1alpha1\validator.proto" GrpcServices="Client" ProtoRoot="..\ethereumapis\" AdditionalImportDirs="ExternalProtos">
 			<Link>protos/eth/v1alpha1/validator.proto</Link>
 		</Protobuf>
 	</ItemGroup>

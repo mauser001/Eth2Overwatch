@@ -4,18 +4,17 @@ using Ethereum.Eth.v1alpha1;
 using Grpc.Net.Client;
 using LockMyEthTool.Controllers;
 using LockMyEthTool.Views;
-using Nethereum.Web3;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
 using static Ethereum.Eth.v1alpha1.Deposit.Types;
 
 namespace Eth2Overwatch.Controllers
 {
-    class ValidatorController : PrysmController
-    {        
+    class ValidatorController : PrysmController, IReportContributor
+    {
+        private string lastControllerStatus = "";
+
         public override PROCESS_TYPES ProcessType
         {
             get
@@ -41,7 +40,6 @@ namespace Eth2Overwatch.Controllers
             }
 
             this.autoStart = Eth2OverwatchSettings.Default.Autostart_Validator;
-            this.hideCommandPrompt = Eth2OverwatchSettings.Default.HideCommandPrompt_Validator;
             this.executablePath = Eth2OverwatchSettings.Default.ExecutablePath_Validator;
             this.keyPath = Eth2OverwatchSettings.Default.KeyPath_Validator;
             this.walletPath = Eth2OverwatchSettings.Default.WalletPath_Validator;
@@ -61,11 +59,10 @@ namespace Eth2Overwatch.Controllers
             var add = this.additionalCommands.Length > 0 ? " " + this.additionalCommands : "";
             var testNet = string.Empty != this.eth2TestNet ? " --" + this.eth2TestNet : "";
 
-            this.fileName = "cmd.exe";
+            this.fileName = Path.Combine(this.executablePath, this.GetExecutableFileName());
             this.directory = this.executablePath;
-            this.commands = new string[2];
-            this.commands[0] = String.Format(@"cd " + this.directory);
-            this.commands[0] = String.Format(this.GetExecutableFileName() + " --accept-terms-of-use --wallet-dir=" + this.walletPath + " --wallet-password-file=" + this.keyPath + testNet + add);
+            this.commands = null;
+            this.arguments = "--accept-terms-of-use --wallet-dir=\"" + this.walletPath + "\" --wallet-password-file=\"" + this.keyPath + "\"" + testNet + add;
 
         }
 
@@ -138,14 +135,9 @@ namespace Eth2Overwatch.Controllers
                     }
                 }
 
-                HttpClientHandler httpHandler = new HttpClientHandler
-                {
-                    ServerCertificateCustomValidationCallback =
-                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                };
                 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
-                using var channel = GrpcChannel.ForAddress("http://127.0.0.1:4000", new GrpcChannelOptions { HttpHandler = httpHandler });
+                using var channel = GrpcChannel.ForAddress("http://127.0.0.1:4000");
                 var validatorClient = new BeaconNodeValidator.BeaconNodeValidatorClient(channel);
                 var beaconClient = new BeaconChain.BeaconChainClient(channel);
                 string result = "";
@@ -154,7 +146,9 @@ namespace Eth2Overwatch.Controllers
 
                 foreach (KeyValuePair<string, ValidatorBo> keyValue in this.validatorsByKey)
                 {
+#pragma warning disable CS0612
                     performanceRequest.PublicKeys.Add(keyValue.Value.PublicKeyByteString);
+#pragma warning restore CS0612
                     statusRequest.PublicKeys.Add(keyValue.Value.PublicKeyByteString);
                 }
 
@@ -193,29 +187,8 @@ namespace Eth2Overwatch.Controllers
                 }
 
                 result += WebUtils.FetchInfo("http://localhost:8081/healthz");
+                this.lastControllerStatus = result;
                 resultFunction(true, result);
-                if (this.reportPath.Length > 0)
-                {
-                    try
-                    {                        
-                        ReportBody body = new ReportBody();
-                        body.data.Version = this.currentVersion;
-                        body.data.LatestVersion = this.latestVersion;
-                        body.data.Label = this.reportLabel;
-                        body.data.TS = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
-                        body.code = this.reportKey;
-                        body.data.Validators = new List<ReportValidatorInfo>();
-                        foreach (KeyValuePair<string, ValidatorBo> keyValue in ValidatorsByKey)
-                        {
-                            body.data.Validators.Add(keyValue.Value.ReportInfo);
-                        }
-                        WebUtils.SendData(this.reportPath, JsonConvert.SerializeObject(body));
-                    }
-                    catch
-                    {
-
-                    }
-                }
                 return;
             }
             catch
@@ -223,10 +196,12 @@ namespace Eth2Overwatch.Controllers
                 this.validatorsByKey.Clear();
                 if (this.ProcessIsRunning())
                 {
+                    this.lastControllerStatus = "Could not get healthz state, but process is still running.";
                     resultFunction(true, "Could not get healthz state, but process is still running.");
                 }
                 else
                 {
+                    this.lastControllerStatus = "Validator is not working properly";
                     resultFunction(false, "Validator is not working properly");
                 }
             }
@@ -235,7 +210,7 @@ namespace Eth2Overwatch.Controllers
 
         public override bool CheckWalletPath()
         {
-            return !String.IsNullOrWhiteSpace(this.walletPath) && Directory.Exists(this.walletPath); 
+            return !String.IsNullOrWhiteSpace(this.walletPath) && Directory.Exists(this.walletPath);
         }
 
         protected override void SaveConfig()
@@ -249,7 +224,6 @@ namespace Eth2Overwatch.Controllers
             Eth2OverwatchSettings.Default.Autostart_Validator = this.autoStart;
             Eth2OverwatchSettings.Default.ExecutablePath_Validator = this.executablePath;
             Eth2OverwatchSettings.Default.KeyPath_Validator = this.keyPath;
-            Eth2OverwatchSettings.Default.HideCommandPrompt_Validator = this.hideCommandPrompt;
             Eth2OverwatchSettings.Default.AdditionalCommands_Validator = this.additionalCommands;
             Eth2OverwatchSettings.Default.WalletPath_Validator = this.walletPath;
             Eth2OverwatchSettings.Default.ReportPath = this.reportPath;
@@ -271,9 +245,26 @@ namespace Eth2Overwatch.Controllers
                     this.fileName = this.ExecutablePath + "\\" + this.GetExecutableFileName();
                     this.directory = this.ExecutablePath;
                     this.commands = null;
-                    this.arguments = "accounts import --keys-dir=" + keyPath + " --wallet-dir=" + this.walletPath + testNet;
+                    this.arguments = "accounts import --keys-dir=\"" + keyPath + "\" --wallet-dir=\"" + this.walletPath + "\"" + testNet;
                     this.Start(true, true, true);
                     break;
+            }
+        }
+
+        public void AddToReport(ReportData data)
+        {
+            if (data == null)
+            {
+                return;
+            }
+
+            data.Version = this.currentVersion;
+            data.LatestVersion = this.latestVersion;
+            data.ControllerStatus = this.lastControllerStatus;
+            data.Validators = new List<ReportValidatorInfo>();
+            foreach (KeyValuePair<string, ValidatorBo> keyValue in this.ValidatorsByKey)
+            {
+                data.Validators.Add(keyValue.Value.ReportInfo);
             }
         }
 

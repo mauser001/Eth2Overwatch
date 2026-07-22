@@ -10,7 +10,7 @@ namespace LockMyEthTool.Views
         BEACON_CHAIN = 1,
         ETH_1 = 2
     }
-    public interface IProcessController
+    public interface IProcessController : IDisposable
     {
         void Start(bool skipCheck = false, bool showCommandPrompt = false, bool dontStop = false);
         void Stop();
@@ -47,11 +47,6 @@ namespace LockMyEthTool.Views
             get;
         }
         bool Autostart
-        {
-            get;
-            set;
-        }
-        bool HideCommandPrompt
         {
             get;
             set;
@@ -135,6 +130,11 @@ namespace LockMyEthTool.Views
         {
             get;
             set;
+        }
+
+        bool IsShuttingDown
+        {
+            get;
         }
     }
 }

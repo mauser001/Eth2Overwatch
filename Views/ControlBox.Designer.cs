@@ -42,7 +42,6 @@
             this.ExecutablePathInput = new System.Windows.Forms.TextBox();
             this.ExecutablePathLabel = new System.Windows.Forms.Label();
             this.TitleLabel = new System.Windows.Forms.Label();
-            this.HideCommandPromptCheck = new System.Windows.Forms.CheckBox();
             this.AdditionalCommandsLabel = new System.Windows.Forms.Label();
             this.AdditionalCommandsInput = new System.Windows.Forms.TextBox();
             this.KeyPathSelectButton = new System.Windows.Forms.Button();
@@ -176,19 +175,6 @@
             this.TitleLabel.Name = "TitleLabel";
             this.TitleLabel.Size = new System.Drawing.Size(0, 15);
             this.TitleLabel.TabIndex = 11;
-            // 
-            // HideCommandPromptCheck
-            // 
-            this.HideCommandPromptCheck.AutoSize = true;
-            this.HideCommandPromptCheck.BackColor = System.Drawing.SystemColors.Control;
-            this.HideCommandPromptCheck.Location = new System.Drawing.Point(11, 98);
-            this.HideCommandPromptCheck.Name = "HideCommandPromptCheck";
-            this.HideCommandPromptCheck.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.HideCommandPromptCheck.Size = new System.Drawing.Size(88, 19);
-            this.HideCommandPromptCheck.TabIndex = 12;
-            this.HideCommandPromptCheck.Text = "Hide cmd";
-            this.HideCommandPromptCheck.UseVisualStyleBackColor = false;
-            this.HideCommandPromptCheck.CheckedChanged += new System.EventHandler(this.HideCommandPromptCheck_CheckedChanged);
             // 
             // AdditionalCommandsLabel
             // 
@@ -353,7 +339,6 @@
             this.Controls.Add(this.KeyPathSelectButton);
             this.Controls.Add(this.AdditionalCommandsInput);
             this.Controls.Add(this.AdditionalCommandsLabel);
-            this.Controls.Add(this.HideCommandPromptCheck);
             this.Controls.Add(this.TitleLabel);
             this.Controls.Add(this.ExecutablePathLabel);
             this.Controls.Add(this.ExecutablePathInput);
@@ -391,7 +376,6 @@
         private System.Windows.Forms.TextBox ExecutablePathInput;
         private System.Windows.Forms.Label ExecutablePathLabel;
         private System.Windows.Forms.Label TitleLabel;
-        private System.Windows.Forms.CheckBox HideCommandPromptCheck;
         private System.Windows.Forms.Label AdditionalCommandsLabel;
         private System.Windows.Forms.TextBox AdditionalCommandsInput;
         private System.Windows.Forms.Button KeyPathSelectButton;

@@ -1,14 +1,13 @@
 ﻿using Eth2Overwatch.OverwatchUtils;
 using LockMyEthTool.Controllers;
-using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
 namespace Eth2Overwatch.Controllers
 {
-    abstract class PrysmController: BaseProcessController
+    abstract class PrysmController : BaseProcessController
     {
-        protected string latestVersion = ""; 
+        protected string latestVersion = "";
         public override string GetPrysmVersion()
         {
             try
@@ -49,7 +48,7 @@ namespace Eth2Overwatch.Controllers
 
         public override void DownloadExecutable(string path = null, string version = null)
         {
-            this.Logs = new List<string>();
+            this.ClearProcessLogs();
             if (path == null)
             {
                 path = this.executablePath;
@@ -67,11 +66,7 @@ namespace Eth2Overwatch.Controllers
             int count = 0;
             if (!WebUtils.URLExists("https://prysmaticlabs.com/releases/" + this.RequiredFiles(version)[0]))
             {
-                this.Logs.Add("File does not exist");
-                if (this.Logs.Count > 100)
-                {
-                    this.Logs.RemoveAt(0);
-                }
+                this.AddProcessLog("File does not exist");
                 return;
             }
 
@@ -86,7 +81,7 @@ namespace Eth2Overwatch.Controllers
                     count++;
                     if (count < 3)
                     {
-                        this.Logs.Add("Files downloaded: " + count + " of 3");
+                        this.AddProcessLog("Files downloaded: " + count + " of 3");
                     }
                     else
                     {
@@ -95,11 +90,11 @@ namespace Eth2Overwatch.Controllers
                             this.downloadingExecutables = false;
                             this.newVersionAvailable = true;
                         }
-                        this.Logs.Add("Executable download complete");
+                        this.AddProcessLog("Executable download complete");
                     }
                 }
 
-                WebUtils.DownloadFileAsync("https://prysmaticlabs.com/releases/" + fileName, path + @"\" , fileName, OnSuccess);
+                WebUtils.DownloadFileAsync("https://prysmaticlabs.com/releases/" + fileName, path + @"\", fileName, OnSuccess);
             }
         }
     }

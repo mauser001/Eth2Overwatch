@@ -1,11 +1,13 @@
-﻿using Eth2Overwatch.OverwatchUtils;
+﻿using Eth2Overwatch.Models;
+using Eth2Overwatch.OverwatchUtils;
 using LockMyEthTool.Views;
 using System;
+using System.IO;
 
 namespace Eth2Overwatch.Controllers
 {
-    class BeaconChainController : PrysmController
-    {        
+    class BeaconChainController : PrysmController, IReportContributor
+    {
         public override PROCESS_TYPES ProcessType
         {
             get
@@ -31,7 +33,6 @@ namespace Eth2Overwatch.Controllers
             }
 
             this.autoStart = Eth2OverwatchSettings.Default.Autostart_BeaconChain;
-            this.hideCommandPrompt = Eth2OverwatchSettings.Default.HideCommandPrompt_BeaconChain;
             this.dataDir = Eth2OverwatchSettings.Default.DataDir_BeaconChain;
             this.executablePath = Eth2OverwatchSettings.Default.ExecutablePath_BeaconChain;
             this.additionalCommands = Eth2OverwatchSettings.Default.AdditionalCommands_BeaconChain;
@@ -48,12 +49,11 @@ namespace Eth2Overwatch.Controllers
             var add = this.additionalCommands.Length > 0 ? " " + this.additionalCommands : "";
             var testNet = string.Empty != this.eth2TestNet ? " --" + this.eth2TestNet : "";
 
-            this.fileName = "cmd.exe";
+            this.fileName = Path.Combine(this.executablePath, this.GetExecutableFileName());
             this.directory = this.executablePath;
-            this.commands = new string[2];
-            this.commands[0] = String.Format(@"cd " + this.directory);
             var connectTo = useLocalEth1Node ? " --execution-endpoint=//./pipe/geth.ipc" : "";
-            this.commands[1] = String.Format(this.GetExecutableFileName() + @" --accept-terms-of-use --datadir=" + this.dataDir + connectTo + testNet + add);
+            this.commands = null;
+            this.arguments = "--accept-terms-of-use --datadir=\"" + this.dataDir + "\"" + connectTo + testNet + add;
 
         }
 
@@ -107,7 +107,7 @@ namespace Eth2Overwatch.Controllers
             }
 
             try
-            {               
+            {
                 resultFunction(true, WebUtils.FetchInfo("http://localhost:8080/healthz"));
             }
             catch
@@ -123,6 +123,27 @@ namespace Eth2Overwatch.Controllers
             }
         }
 
+        public void AddToReport(ReportData data)
+        {
+            if (data == null)
+            {
+                return;
+            }
+
+            try
+            {
+                string healthText = WebUtils.FetchInfo("http://localhost:8080/healthz");
+                data.BeaconHealth = healthText;
+                data.BeaconHealthy = !String.IsNullOrWhiteSpace(healthText)
+                    && healthText.IndexOf("error", StringComparison.OrdinalIgnoreCase) < 0;
+            }
+            catch
+            {
+                data.BeaconHealthy = false;
+                data.BeaconHealth = "unavailable";
+            }
+        }
+
         protected override void SaveConfig()
         {
 
@@ -134,7 +155,6 @@ namespace Eth2Overwatch.Controllers
             Eth2OverwatchSettings.Default.Autostart_BeaconChain = this.autoStart;
             Eth2OverwatchSettings.Default.DataDir_BeaconChain = this.dataDir;
             Eth2OverwatchSettings.Default.ExecutablePath_BeaconChain = this.executablePath;
-            Eth2OverwatchSettings.Default.HideCommandPrompt_BeaconChain = this.hideCommandPrompt;
             Eth2OverwatchSettings.Default.AdditionalCommands_BeaconChain = this.additionalCommands;
             Eth2OverwatchSettings.Default.UseLatestVersion_BeaconChain = this.useLatestVersion;
             Eth2OverwatchSettings.Default.CurrentPrysmVersion_BeaconChain = this.currentVersion;

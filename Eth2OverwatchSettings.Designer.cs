@@ -8,29 +8,36 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Eth2Overwatch {
-    
-    
+namespace Eth2Overwatch
+{
+
+
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
-    internal sealed partial class Eth2OverwatchSettings : global::System.Configuration.ApplicationSettingsBase {
-        
+    internal sealed partial class Eth2OverwatchSettings : global::System.Configuration.ApplicationSettingsBase
+    {
+
         private static Eth2OverwatchSettings defaultInstance = ((Eth2OverwatchSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Eth2OverwatchSettings())));
-        
-        public static Eth2OverwatchSettings Default {
-            get {
+
+        public static Eth2OverwatchSettings Default
+        {
+            get
+            {
                 return defaultInstance;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ValidatorPassword {
-            get {
+        public string ValidatorPassword
+        {
+            get
+            {
                 return ((string)(this["ValidatorPassword"]));
             }
-            set {
+            set
+            {
                 this["ValidatorPassword"] = value;
             }
         }
@@ -53,215 +60,224 @@ namespace Eth2Overwatch {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Autostart_Validator {
-            get {
+        public bool Autostart_Validator
+        {
+            get
+            {
                 return ((bool)(this["Autostart_Validator"]));
             }
-            set {
+            set
+            {
                 this["Autostart_Validator"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Autostart_BeaconChain {
-            get {
+        public bool Autostart_BeaconChain
+        {
+            get
+            {
                 return ((bool)(this["Autostart_BeaconChain"]));
             }
-            set {
+            set
+            {
                 this["Autostart_BeaconChain"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AutoStart_Eth1 {
-            get {
+        public bool AutoStart_Eth1
+        {
+            get
+            {
                 return ((bool)(this["AutoStart_Eth1"]));
             }
-            set {
+            set
+            {
                 this["AutoStart_Eth1"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DataDir_BeaconChain {
-            get {
+        public string DataDir_BeaconChain
+        {
+            get
+            {
                 return ((string)(this["DataDir_BeaconChain"]));
             }
-            set {
+            set
+            {
                 this["DataDir_BeaconChain"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DataDir_Eth1 {
-            get {
+        public string DataDir_Eth1
+        {
+            get
+            {
                 return ((string)(this["DataDir_Eth1"]));
             }
-            set {
+            set
+            {
                 this["DataDir_Eth1"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ExecutablePath_Validator {
-            get {
+        public string ExecutablePath_Validator
+        {
+            get
+            {
                 return ((string)(this["ExecutablePath_Validator"]));
             }
-            set {
+            set
+            {
                 this["ExecutablePath_Validator"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ExecutablePath_BeaconChain {
-            get {
+        public string ExecutablePath_BeaconChain
+        {
+            get
+            {
                 return ((string)(this["ExecutablePath_BeaconChain"]));
             }
-            set {
+            set
+            {
                 this["ExecutablePath_BeaconChain"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ExecutablePath_Eth1 {
-            get {
+        public string ExecutablePath_Eth1
+        {
+            get
+            {
                 return ((string)(this["ExecutablePath_Eth1"]));
             }
-            set {
+            set
+            {
                 this["ExecutablePath_Eth1"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string KeyPath_Validator {
-            get {
+        public string KeyPath_Validator
+        {
+            get
+            {
                 return ((string)(this["KeyPath_Validator"]));
             }
-            set {
+            set
+            {
                 this["KeyPath_Validator"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool HideCommandPrompt_Validator {
-            get {
-                return ((bool)(this["HideCommandPrompt_Validator"]));
-            }
-            set {
-                this["HideCommandPrompt_Validator"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool HideCommandPrompt_BeaconChain {
-            get {
-                return ((bool)(this["HideCommandPrompt_BeaconChain"]));
-            }
-            set {
-                this["HideCommandPrompt_BeaconChain"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool HideCommandPrompt_Eth1 {
-            get {
-                return ((bool)(this["HideCommandPrompt_Eth1"]));
-            }
-            set {
-                this["HideCommandPrompt_Eth1"] = value;
-            }
-        }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AdditionalCommands_Validator {
-            get {
+        public string AdditionalCommands_Validator
+        {
+            get
+            {
                 return ((string)(this["AdditionalCommands_Validator"]));
             }
-            set {
+            set
+            {
                 this["AdditionalCommands_Validator"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AdditionalCommands_BeaconChain {
-            get {
+        public string AdditionalCommands_BeaconChain
+        {
+            get
+            {
                 return ((string)(this["AdditionalCommands_BeaconChain"]));
             }
-            set {
+            set
+            {
                 this["AdditionalCommands_BeaconChain"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("--lightkdf --cache 16")]
-        public string AdditionalCommands_Eth1 {
-            get {
+        public string AdditionalCommands_Eth1
+        {
+            get
+            {
                 return ((string)(this["AdditionalCommands_Eth1"]));
             }
-            set {
+            set
+            {
                 this["AdditionalCommands_Eth1"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public string Eth2_TestNet {
-            get {
+        public string Eth2_TestNet
+        {
+            get
+            {
                 return ((string)(this["Eth2_TestNet"]));
             }
-            set {
+            set
+            {
                 this["Eth2_TestNet"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool UpdateSettings {
-            get {
+        public bool UpdateSettings
+        {
+            get
+            {
                 return ((bool)(this["UpdateSettings"]));
             }
-            set {
+            set
+            {
                 this["UpdateSettings"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string WalletPath_Validator {
-            get {
+        public string WalletPath_Validator
+        {
+            get
+            {
                 return ((string)(this["WalletPath_Validator"]));
             }
-            set {
+            set
+            {
                 this["WalletPath_Validator"] = value;
             }
         }
@@ -314,11 +330,14 @@ namespace Eth2Overwatch {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LastPrysmVersion {
-            get {
+        public string LastPrysmVersion
+        {
+            get
+            {
                 return ((string)(this["LastPrysmVersion"]));
             }
-            set {
+            set
+            {
                 this["LastPrysmVersion"] = value;
             }
         }

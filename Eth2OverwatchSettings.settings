@@ -32,15 +32,6 @@
     <Setting Name="KeyPath_Validator" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="HideCommandPrompt_Validator" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="HideCommandPrompt_BeaconChain" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="HideCommandPrompt_Eth1" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="AdditionalCommands_Validator" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

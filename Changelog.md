@@ -1,5 +1,17 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.3.0-RC.1
++ Stability: Improved process running checks and restart behavior to avoid false positives and unnecessary restarts.
++ Change: Start Eth1/Beacon/Validator directly via executable instead of cmd wrapper.
++ Improvement: Added small persistent rotating logs and restored recent logs after app restart.
++ Cleanup: Removed obsolete Hide cmd option from UI/settings and related controller contract.
++ Build: Updated protobuf import configuration and included missing ext options proto.
++ Performance: Added guard against overlapping periodic controller state checks.
++ Stability: Added bounded HTTP timeouts for status/report requests.
++ Feature: Extended report payload with optional Beacon and Eth1 status/sync fields while remaining backward compatible.
++ Feature: Eth1 state check now shows sync progress (current/highest block) when syncing.
++ Security: Removed broad certificate bypass from local validator gRPC health check path.
+
 #### Version 1.0.8-RC.2
 + Fixed local IPC connection 
 

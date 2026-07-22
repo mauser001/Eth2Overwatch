@@ -28,10 +28,16 @@ namespace Eth2Overwatch.Views
         public InitialEth2SetupForm()
         {
             InitializeComponent();
-            if(!String.IsNullOrWhiteSpace(BeaconController.ExecutablePath) && BeaconController.ExecutablePath.IndexOf(@"\prysm") > 0)
+            this.FormClosed += (sender, args) =>
+            {
+                this.StopTimer();
+                this.BeaconController.Dispose();
+                this.ValidatorController.Dispose();
+            };
+            if (!String.IsNullOrWhiteSpace(BeaconController.ExecutablePath) && BeaconController.ExecutablePath.IndexOf(@"\prysm") > 0)
             {
                 this.PickPrysmFolderInput.Text = BeaconController.ExecutablePath.Substring(0, BeaconController.ExecutablePath.IndexOf(@"\prysm"));
-                if(this.CheckBeaconChain() && this.CheckValidator())
+                if (this.CheckBeaconChain() && this.CheckValidator())
                 {
                     this.UpdateText("Validator and Beaconchain executables are already downloaded", Color.Green);
                 }
@@ -39,7 +45,7 @@ namespace Eth2Overwatch.Views
                 {
                     this.UpdateText("Validator executables are already downloaded you can download the beacon chain executables", Color.Green);
                 }
-                else if(this.CheckBeaconChain())
+                else if (this.CheckBeaconChain())
                 {
                     this.UpdateText("Beaconchain executables are already downloaded you can download the beacon chain executables", Color.Green);
                 }
@@ -66,7 +72,7 @@ namespace Eth2Overwatch.Views
             }
             set
             {
-                if(this.prysmDownloaded != value)
+                if (this.prysmDownloaded != value)
                 {
                     this.prysmDownloaded = value;
                     if (this.InvokeRequired)
@@ -154,7 +160,7 @@ namespace Eth2Overwatch.Views
 
         public void CheckState(Object stateInfo = null)
         {
-            if(this.generateKeysActive)
+            if (this.generateKeysActive)
             {
 
             }
@@ -180,7 +186,7 @@ namespace Eth2Overwatch.Views
                     this.UpdateText(this.BeaconController.GetLogText(), Color.Beige);
                 }
             }).ConfigureAwait(false);
-            
+
         }
 
         private void UpdateText(string text, Color backgroundColor)
@@ -242,7 +248,7 @@ namespace Eth2Overwatch.Views
             {
                 this.UpdateText("prysm folder could not be created", Color.Red);
             }
-            
+
         }
 
         private void PickPrysmFolderInput_TextChanged(object sender, EventArgs e)
@@ -251,7 +257,7 @@ namespace Eth2Overwatch.Views
             {
                 this.UpdateText("prysm.bat is already downloaded", Color.Green);
             }
-            else if(String.IsNullOrWhiteSpace(this.PickPrysmFolderInput.Text))
+            else if (String.IsNullOrWhiteSpace(this.PickPrysmFolderInput.Text))
             {
                 this.UpdateText("Please enter a folder", Color.Red);
             }
@@ -272,7 +278,7 @@ namespace Eth2Overwatch.Views
 
         private void PasswordFilePathInput_TextChanged(object sender, EventArgs e)
         {
-            if(!this.ValidatorDownloaded)
+            if (!this.ValidatorDownloaded)
             {
                 return;
             }
@@ -280,7 +286,7 @@ namespace Eth2Overwatch.Views
         }
 
         private bool CheckPasswordFileFolder()
-        {            
+        {
             if (String.IsNullOrWhiteSpace(this.KeyFileFolderInput.Text))
             {
                 this.UpdateText("Please pick the folder containing the key files", Color.Red);
@@ -308,7 +314,7 @@ namespace Eth2Overwatch.Views
 
         private void CreatePasswordFilesButton_Click(object sender, EventArgs e)
         {
-            if(CheckPasswordFileFolder())
+            if (CheckPasswordFileFolder())
             {
                 this.ValidatorController.ImportKeys(this.KeyFileFolderInput.Text);
                 this.generateKeysActive = true;

@@ -19,7 +19,7 @@ When using this software you agree to the prysm terms of service: https://github
 
 ### Framework and tools used
 + Visiual Studio 2019 Prview.
-  + .net Core 3.1
+  + .NET 9 (Windows)
 + NuGet Packages:
   + Nethereum.Geth
 
@@ -31,7 +31,15 @@ When using this software you agree to the prysm terms of service: https://github
 
 Latest compiled win10 version can be found at:
 https://github.com/mauser001/Eth2Overwatch/tree/master/LatestRelease
-(.net Core 3.1 Framework has to be installed)
+(requires .NET 9 Desktop Runtime)
+
+### Deploy/Publish with VS Code
+From the project root in the VS Code terminal run:
+
+`dotnet publish Eth2Overwatch.csproj -c Release -p:PublishProfile=FolderProfile`
+
+The published files are written to:
+`LatestRelease`
 
 ## Setup
 Download the Eth2Overwatch.exe in a folder and start ist.
@@ -50,7 +58,7 @@ Download the Eth2Overwatch.exe in a folder and start ist.
       + Enter your key password.
       + If you get the message, that at least 1 account was imported then your are good to go.
 + ##### Global: 
-  + Eth2 Testnet: If empty the clients connect to the main net. If not empty they connect to the specified test net. For eth1 görli is always used.
+  + Eth2 Testnet: If empty the clients connect to the main net. If not empty they connect to the specified test net. For eth1 gï¿½rli is always used.
   + Start on Windows start: If checked the Eth2Overseer starts after win. login.
   + Use local eth1 connection:
     + If enabled: Make sure you also use the eth1 node with the overseer
@@ -59,14 +67,12 @@ Download the Eth2Overwatch.exe in a folder and start ist.
   + Start Eth1: Stops all existing Eth1 (geth) processes and starts a new one
   + Stop Eth1: Stops all existing Eth1 (geth) processes 
   + Autostart: Starts the Eth1 Process (if not started) on Start of this Programm
-  + Hide cmd:
-    + Checked: Process runs in the background
-    + Not checked: cmd window running the Eth1 process will be visible
   + Executlabe folder path: Path where the geth.exe is located
   + Data path: Path where the eth1 chain data should be stored
   + Additional commands: Additional command line parameters for calling the geth.exe
   + Result window: Shows the state of the eth1 chain.
-    + Green: Connection to the chain could be established and the latest syncted block is shown
+    + Green: Connection to the chain could be established and the latest synced block is shown.
+    + If syncing, current/highest block and sync progress are shown.
     + Red: There was an error starting the eth1 chain
 + ##### Beacon Chain - Eth2
   + Start Beacon: Stops all existing Beacon chain (beacon) processes and starts a new one
@@ -76,12 +82,9 @@ Download the Eth2Overwatch.exe in a folder and start ist.
     + Latest
       + Checked: The latest Prysm version is used
       + Not checked: Enter the version you want to use. The tool will try to download it if not available in the folder.
-  + Hide cmd:
-    + Checked: Process runs in the background
-    + Not checked: cmd window running the Beacon chain process will be visible
-  + Executlabe folder path: Path where the prysm.bat is located
+  + Executlabe folder path: Path where the beacon-chain executable is located
   + Data path: Path where the eth2 chain data should be stored
-  + Additional commands: Additional command line parameters for calling the prysm.bat
+  + Additional commands: Additional command line parameters for calling the beacon-chain executable
   + Result window: Shows the state of the eth2 chain.
     + Green: Connection to the chain could be established and the health state is shown from: http://localhost:8080/healthz
     + Red: There was an error starting the eth2 beacon chain
@@ -94,18 +97,16 @@ Download the Eth2Overwatch.exe in a folder and start ist.
       + Checked: The latest Prysm version is used
       + Not checked: Enter the version you want to use. The tool will try to download it if not available in the folder.
   + Password path: Path to a textfile holding your wallet password (plaintext).
-  + Hide cmd:
-    + Checked: Process runs in the background
-    + Not checked: cmd window running the Validator process will be visible
-  + Executlabe folder path: Path where the prysm.bat is located
+  + Executlabe folder path: Path where the validator executable is located
   + Wallet path: Path where validator wallet data should be stored
-  + Additional commands: Additional command line parameters for calling the prysm.bat
+  + Additional commands: Additional command line parameters for calling the validator executable
   + Result window: Shows the state of the Validator.
     + Green: Connection to the Validator could be established and the health state is shown from: http://localhost:8081/healthz
     + Red: There was an error starting the eth2 Validator
   + Details Button: Open a Window with Details of local validators.
     + You can specify an external url to send the report data to a remote adress.
       + The key must match a key defined on the server
+      + Report data includes validator information and optional beacon/eth1 status fields.
       + PHP Script and example website to display the report data can be found here:
         https://github.com/mauser001/validator-report
 

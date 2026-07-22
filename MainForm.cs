@@ -5,7 +5,11 @@ using LockMyEthTool.Views;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Timer = System.Threading.Timer;
 
 namespace LockMyEthTool
 {
@@ -14,6 +18,8 @@ namespace LockMyEthTool
         private readonly List<ControlBox> Boxes = new List<ControlBox>();
         public string AppName = "Eth2Overwatch";
         private TimeSyncService _timeSync;
+        private Timer reportTimer;
+        private int reportPublishRunning = 0;
         public MainForm()
         {
             Trace.AutoFlush = true;
@@ -30,6 +36,12 @@ namespace LockMyEthTool
             InitializeCustomComponents();
             InitializeComponent();
             SetSavedValues();
+            StartReportTimer();
+
+            this.FormClosed += (sender, args) =>
+            {
+                StopReportTimer();
+            };
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -42,10 +54,10 @@ namespace LockMyEthTool
             this.Eth2TestNet.Text = Eth2OverwatchSettings.Default.Eth2_TestNet;
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             this.StartOnStartupCheck.Checked = rk.GetValue(this.AppName) != null;
-            if(this.StartOnStartupCheck.Checked)
+            if (this.StartOnStartupCheck.Checked)
             {
                 // If the .exe is moved we store a the new path in the autostart regex
-                if(this.AppName != Process.GetCurrentProcess().MainModule.FileName)
+                if (this.AppName != Process.GetCurrentProcess().MainModule.FileName)
                 {
                     this.SetAutoStart(true);
                 }
@@ -64,7 +76,7 @@ namespace LockMyEthTool
 
         private void UseLocalEth1NodeCheck_CheckedChanged(object sender, EventArgs e)
         {
-            if(Eth2OverwatchSettings.Default.UseLocalEth1Node != (sender as CheckBox).Checked)
+            if (Eth2OverwatchSettings.Default.UseLocalEth1Node != (sender as CheckBox).Checked)
             {
                 Eth2OverwatchSettings.Default.UseLocalEth1Node = (sender as CheckBox).Checked;
                 Eth2OverwatchSettings.Default.Save();
@@ -102,6 +114,49 @@ namespace LockMyEthTool
             Eth2OverwatchSettings.Default.Eth2_TestNet = (sender as TextBox).Text;
             Eth2OverwatchSettings.Default.Save();
             this.UpdateBoxConfigs();
+        }
+
+        private void StartReportTimer()
+        {
+            StopReportTimer();
+            this.reportTimer = new Timer(state =>
+            {
+                if (Interlocked.Exchange(ref this.reportPublishRunning, 1) == 1)
+                {
+                    return;
+                }
+
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        PublishCombinedReport();
+                    }
+                    finally
+                    {
+                        Interlocked.Exchange(ref this.reportPublishRunning, 0);
+                    }
+                });
+            }, null, 10000, 20000);
+        }
+
+        private void StopReportTimer()
+        {
+            if (this.reportTimer != null)
+            {
+                this.reportTimer.Dispose();
+                this.reportTimer = null;
+            }
+        }
+
+        private void PublishCombinedReport()
+        {
+            List<IProcessController> controllers = this.Boxes
+                .Select(box => box.ProcessController)
+                .Where(controller => controller != null)
+                .ToList();
+
+            ReportPublisher.PublishCombinedReport(controllers);
         }
     }
 }
