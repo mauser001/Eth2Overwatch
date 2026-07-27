@@ -35,6 +35,8 @@ namespace LockMyEthTool
 
             InitializeCustomComponents();
             InitializeComponent();
+            this.AutoScroll = true;
+            this.AutoScrollMinSize = new System.Drawing.Size(1415, 650);
             SetSavedValues();
             StartReportTimer();
 

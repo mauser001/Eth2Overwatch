@@ -17,7 +17,7 @@ namespace Eth2Overwatch.Views
             this.CurrentEffectiveBalance.Text = Utils.GWeiToEthLabel(validatorInfo.CurrentEffectiveBalance);
             this.StateValue.Text = validatorInfo.State.ToString();
             Color color = Color.Gray;
-            switch(validatorInfo.State)
+            switch (validatorInfo.State)
             {
                 case ValidatorStatus.Active:
                     color = Color.Green;

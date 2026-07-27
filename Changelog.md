@@ -1,5 +1,8 @@
 # Eth2Overwatch - Changelog
 
+#### Version 1.3.0-RC.2
++ Scrollbars
+
 #### Version 1.3.0-RC.1
 + Stability: Improved process running checks and restart behavior to avoid false positives and unnecessary restarts.
 + Change: Start Eth1/Beacon/Validator directly via executable instead of cmd wrapper.
